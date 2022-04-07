@@ -1,0 +1,194 @@
+{
+  "rulesets":
+          [
+            {
+              "id": 0,
+              "name": "Random",
+              "description": "Agenten entscheiden sich zufällig für einen verfügbaren Auftrag",
+              "rules":
+              {
+                "random": true,
+                "seed": 12345,
+                "criteria": {}
+              }
+
+            },
+            {
+              "id": 1,
+              "name": "Lowest Distance",
+              "description": "Bevorzuge den Auftrag der am dichtesten ist.",
+              "rules":
+              {
+                "criteria": {
+                  "numerical": [
+                    {
+                      "measure": "distance",
+                      "ranking_order": "ASC",
+                      "weight": 1
+                    }
+                  ]
+                }
+              }
+
+            },
+            {
+              "id": 2,
+              "name": "FiFo Global",
+              "description": "Bevorzuge die Aufträge, welche am ältesten sind.",
+              "rules":
+              {
+                "criteria": {
+                  "numerical": [
+                    {
+                      "measure": "start",
+                      "ranking_order": "DESC",
+                      "weight": 1
+                    }
+                  ]
+
+                }
+
+              }
+
+            },
+            {
+              "id": 3,
+              "name": "FiFo Local",
+              "description": "Bevorzuge die Aufträge, die als erstes in der Zelle eingetroffen sind.",
+              "rules":
+              {
+                "criteria": {
+                  "numerical": [
+                    {
+                      "measure": "time_in_cell",
+                      "ranking_order": "DESC",
+                      "weight": 1
+                    }
+                  ]
+                }
+
+              }
+            },
+            {
+              "id": 4,
+              "name": "Due_to",
+              "description": "Bevorzuge die Aufträge die am dringensten sind",
+              "rules":
+              {
+                "criteria": {
+                  "numerical": [
+                    {
+                      "measure": "due_to",
+                      "ranking_order": "ASC",
+                      "weight": 1
+                    }
+                  ]
+
+                }
+
+              }
+
+            },
+            {
+              "id": 5,
+              "name": "Remaining tasks low",
+              "description": "Bevorzuge die Aufträge die am wenigsten verbleibende Schritte benötigen",
+              "rules":
+              {
+                "criteria": {
+                  "numerical": [
+                    {
+                      "measure": "remaining_tasks",
+                      "ranking_order": "ASC",
+                      "weight": 1
+                    }
+                  ]
+
+                }
+
+              }
+
+            },
+            {
+              "id": 6,
+              "name": "Remaining tasks high",
+              "description": "Bevorzuge die Aufträge die am meisten verbleibende Schritte benötigen",
+              "rules":
+              {
+                "criteria": {
+                  "numerical": [
+                    {
+                      "measure": "remaining_tasks",
+                      "ranking_order": "DESC",
+                      "weight": 1
+                    }
+                  ]
+
+                }
+
+              }
+
+            },
+            {
+              "id": 7,
+              "name": "High Complexity",
+              "description": "Bevorzuge die Aufträge die die höchste Komplexität haben",
+              "rules":
+              {
+                "criteria": {
+                  "numerical": [
+                    {
+                      "measure": "complexity",
+                      "ranking_order": "DESC",
+                      "weight": 1
+                    }
+                  ]
+
+                }
+
+              }
+
+            },
+                        {
+              "id": 8,
+              "name": "Low Complexity",
+              "description": "Bevorzuge die Aufträge die die niedrigste Komplexität haben",
+              "rules":
+              {
+                "criteria": {
+                  "numerical": [
+                    {
+                      "measure": "complexity",
+                      "ranking_order": "ASC",
+                      "weight": 1
+                    }
+                  ]
+
+                }
+
+              }
+
+            },
+            {
+              "id": 9,
+              "name": "Reinforcement (70, 11)",
+              "description": "Kalkuliere Action mittels eines Reinforcement Agenten",
+              "rules":
+              {
+                "dynamic": true,
+                "reinforcement_agent": "rein_agent_1"
+              }
+            },
+                        {
+              "id": 10,
+              "name": "Reinforcement Agent (1 Machine, 1 Agent)",
+              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
+              "rules":
+              {
+                "dynamic": true,
+                "reinforcement_agent": "rein_agent_1_1"
+              }
+            }
+          ]
+
+}
