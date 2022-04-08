@@ -25,12 +25,10 @@ class ManufacturingAgent:
         self.env = env
         self.simulation_environment = None
         self.lock = None
-
         # Attributes
         self.ruleset = None
         for ruleset in RuleSet.instances:
             if ruleset.id == ruleset_id:
-                print(ruleset.id)
                 self.ruleset = ruleset  # Reference to the priority ruleset of the agent
                 break
 
@@ -103,6 +101,8 @@ class ManufacturingAgent:
             
             next_task, next_order, destination = self.get_action(cell_state)
             time_tracker.time_action_calc += time.time() - now
+        
+    
 
         # Perform next task if there is one
         if next_task:
@@ -205,6 +205,7 @@ class ManufacturingAgent:
 
         destination = useable_with_free_destination[useable_with_free_destination["order"] == next_order].reset_index(drop=True).loc[0, "_destination"]
 
+        
         if destination:
             return self.env.process(self.item_from_to(next_order, next_order.position, destination)), next_order, destination
         else:
@@ -219,19 +220,19 @@ class ManufacturingAgent:
         :return destination: destination where the order will be brought to"""
 
         smart_agent = self.ruleset.reinforce_agent
-
+        #print("order_state: ",order_state)
         # Convert state to numeric state
         state_numeric = self.state_to_numeric(copy(order_state))
-        
+        # print("state_numeric: ",state_numeric)
         # Get action space
         action_space = range(0, len(state_numeric) + 1)
-        print(len(action_space))
+        # print(len(action_space))
         # Flatten state
         state_flat = list(state_numeric.to_numpy().flatten())
 
         # Get action
         action = smart_agent.get_action(action_space, state_flat)
-        print("action: ",action)
+        # print("smart action: ",action)
 
         if action < len(state_numeric):
             # Normal action

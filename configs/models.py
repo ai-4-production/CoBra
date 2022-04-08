@@ -17,6 +17,7 @@ class ReinforceAgent():
     def get_action(self, action_space, state):
         #print("State: ", list(self.state_to_numeric(copy(state)).to_numpy().flatten()))
         action = random.choice(action_space)
+        print("RL")
         return action
 
     def appendMemory(self, former_state, new_state, action, reward, time_passed):
@@ -24,4 +25,5 @@ class ReinforceAgent():
 
 
 rein_agent_1 = ReinforceAgent(70, 11)
-rein_agent_2 = ReinforceAgent(140, 21)
+rein_agent_1_1 = ReinforceAgent(140, 21)
+rein_agent_1_2 = ReinforceAgent(140, 21)
