@@ -86,8 +86,6 @@ class ReinforceAgent():
 
             Y_sample[0][actions] = next_q_value
             Y_batch = np.append(Y_batch, np.array([Y_sample[0]]), axis=0)
-
-
         
 
 
@@ -99,25 +97,26 @@ class ReinforceAgent():
 
     def get_action(self, action_space, state):
         #print("State: ", list(self.state_to_numeric(copy(state)).to_numpy().flatten()))
-        action = random.choice(action_space)
-        print("RL")
 
         if np.random.rand() <= self.epsilon:
             self.q_value = np.zeros(self.action_size)
+            print("random")
+            return random.randint(0, self.action_size)
             # return random.randrange(self.action_size)
         else:
             q_value = self.model.predict(state.reshape(1, len(state)))
             self.q_value = q_value
-            # return np.argmax(q_value[0])
-        return action    
+            print(self.q_value)
+            print("not random")
+            return np.argmax(q_value[0])
 
-    def appendMemory(self, former_state, new_state, action, reward, time_passed):
+    def appendMemory(self, smart_agent, former_state, new_state, action, reward, time_passed):
         self.memory.append((former_state, action, reward, new_state))
-         if len(agent.memory) >= agent.train_start:
-            if agent.global_step <= agent.target_update:
-                agent.trainModel()
+        if len(smart_agent.memory) >= smart_agent.train_start:
+            if smart_agent.global_step <= smart_agent.target_update:
+                smart_agent.trainModel()
             else:
-                agent.trainModel(True)
+                smart_agent.trainModel(True)
 
 
 

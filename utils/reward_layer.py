@@ -116,4 +116,6 @@ def reward_action(old_state, new_state, order):
 
     reward += sum([value for condition, value in reward_settings if condition])
 
+    print("reward: ", reward)
+
     return reward

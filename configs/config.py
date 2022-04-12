@@ -2,7 +2,7 @@
 
 configuration = {
     "SETUP_FILE": "minimal setup.txt",
-    "SIMULATION_RANGE": 6000,
+    "SIMULATION_RANGE": 1000,
 
     "SEED_MACHINE_INTERRUPTIONS": 29378374,
     "MACHINE_FAILURE_RATE": 20,

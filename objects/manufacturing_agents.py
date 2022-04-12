@@ -240,14 +240,14 @@ class ManufacturingAgent:
             destination = order_state.at[action, "_destination"]
         else:
             # Take no action
-            smart_agent.appendMemory(former_state=state_flat, new_state=state_flat, action=action, reward=0,
+            smart_agent.appendMemory(smart_agent, former_state=state_flat, new_state=state_flat, action=action, reward=0,
                                      time_passed=0)
             return None, None, None, None, None
 
         penalty = reward_layer.evaluate_choice(state_numeric.loc[action])
 
         if penalty < 0:
-            smart_agent.appendMemory(former_state=state_flat, new_state=state_flat, action=action, reward=penalty, time_passed=0)
+            smart_agent.appendMemory(smart_agent, former_state=state_flat, new_state=state_flat, action=action, reward=penalty, time_passed=0)
             return None, None, None, None, None
         else:
             return self.env.process(self.item_from_to(next_order, next_order.position, destination)), next_order, destination, state_flat, action
@@ -267,8 +267,7 @@ class ManufacturingAgent:
 
         reward = reward_layer.reward_action(old_state, new_state, order)
 
-        smart_agent.appendMemory(former_state=old_state_flat, new_state=new_state_flat, action=action, reward=reward,
-                                 time_passed=time_passed)
+        smart_agent.appendMemory(smart_agent, former_state=old_state_flat, new_state=new_state_flat, action=action, reward=reward, time_passed=time_passed)
 
     def add_destinations(self, data):
         """Takes an column of a state and add the destination where the order would go to if chosen by the agent:
