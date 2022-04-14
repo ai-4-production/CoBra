@@ -6,39 +6,39 @@
             "seed_machine_interruptions": 29378374,
             "simulation_results": {
                 "arrived_orders": 200,
-                "processed_quantity": 4,
-                "processed_in_time": 4,
-                "processed_in_time_rate": 100.0,
+                "processed_quantity": 17,
+                "processed_in_time": 2,
+                "processed_in_time_rate": 11.76,
                 "in_time_rate_by_order_type": [
                     [
                         "Produkt A",
-                        100.0
+                        10.0
                     ],
                     [
                         "Produkt B",
-                        100.0
+                        0.0
                     ],
                     [
                         "Produkt C",
-                        100.0
+                        16.67
                     ]
                 ],
                 "processed_by_order_type": [
                     [
                         "Produkt A",
-                        3
+                        10
                     ],
                     [
                         "Produkt B",
-                        0
+                        1
                     ],
                     [
                         "Produkt C",
-                        1
+                        6
                     ]
                 ],
-                "mean_tardiness": 0,
-                "mean_lateness": -45.35
+                "mean_tardiness": 334.51,
+                "mean_lateness": 332.98
             },
             "cells": [
                 {
@@ -46,49 +46,23 @@
                     "level": 0,
                     "parent": 1,
                     "cell_results": {
-                        "mean_time_in_cell": 581.91,
-                        "mean_items_in_cell": 8.73,
-                        "capacity": 19,
-                        "storage_utilization": 45.94
+                        "mean_time_in_cell": 132.87,
+                        "mean_items_in_cell": 2.92,
+                        "capacity": 18,
+                        "storage_utilization": 16.24
                     },
                     "agents": [
                         {
                             "ruleset": "FiFo Global",
                             "agent_results": {
-                                "moving_time": 86.5,
-                                "transportation_time": 49.83,
-                                "waiting_time": 1.49,
-                                "idle_time": 898.41,
-                                "task_time": 101.59,
-                                "started_tasks": 68,
-                                "avg_task_length": 1.49,
-                                "utilization": 0.1
-                            }
-                        },
-                        {
-                            "ruleset": "FiFo Global",
-                            "agent_results": {
-                                "moving_time": 81.83,
-                                "transportation_time": 47.67,
-                                "waiting_time": 1.5,
-                                "idle_time": 904.07,
-                                "task_time": 95.93,
-                                "started_tasks": 63,
-                                "avg_task_length": 1.52,
-                                "utilization": 0.1
-                            }
-                        },
-                        {
-                            "ruleset": "FiFo Global",
-                            "agent_results": {
-                                "moving_time": 64.83,
-                                "transportation_time": 39.0,
-                                "waiting_time": 3.07,
-                                "idle_time": 921.9,
-                                "task_time": 78.1,
-                                "started_tasks": 51,
-                                "avg_task_length": 1.53,
-                                "utilization": 0.08
+                                "moving_time": 682.8,
+                                "transportation_time": 410.67,
+                                "waiting_time": 1.08,
+                                "idle_time": 145.92,
+                                "task_time": 854.08,
+                                "started_tasks": 852,
+                                "avg_task_length": 1.0,
+                                "utilization": 0.85
                             }
                         }
                     ],
@@ -96,52 +70,18 @@
                         {
                             "type": "Schleifen",
                             "machine_results": {
-                                "setup_events": 10,
-                                "setup_time": 50.0,
-                                "idle_time": 832.13,
-                                "processing_time": 115.97,
-                                "processed_quantity": 15,
-                                "finished_quantity": 15,
-                                "time_to_repair": 0,
-                                "failure_events": 0,
-                                "avg_time_between_failure": 0,
-                                "avg_processing_time_between_failure": 0,
-                                "avg_time_to_repair": 0,
-                                "availability": 100.0
-                            }
-                        },
-                        {
-                            "type": "Schleifen",
-                            "machine_results": {
-                                "setup_events": 11,
-                                "setup_time": 55.0,
-                                "idle_time": 787.04,
-                                "processing_time": 119.12,
-                                "processed_quantity": 13,
-                                "finished_quantity": 13,
-                                "time_to_repair": 37.34,
-                                "failure_events": 1,
-                                "avg_time_between_failure": 962.66,
-                                "avg_processing_time_between_failure": 119.12,
-                                "avg_time_to_repair": 37.34,
-                                "availability": 96.27
-                            }
-                        },
-                        {
-                            "type": "Schleifen",
-                            "machine_results": {
-                                "setup_events": 9,
-                                "setup_time": 45.0,
-                                "idle_time": 848.61,
-                                "processing_time": 104.59,
-                                "processed_quantity": 14,
-                                "finished_quantity": 14,
-                                "time_to_repair": 0,
-                                "failure_events": 0,
-                                "avg_time_between_failure": 0,
-                                "avg_processing_time_between_failure": 0,
-                                "avg_time_to_repair": 0,
-                                "availability": 100.0
+                                "setup_events": 45,
+                                "setup_time": 225.0,
+                                "idle_time": 5.4,
+                                "processing_time": 521.09,
+                                "processed_quantity": 64,
+                                "finished_quantity": 63,
+                                "time_to_repair": 240.3,
+                                "failure_events": 7,
+                                "avg_time_between_failure": 108.53,
+                                "avg_processing_time_between_failure": 74.44,
+                                "avg_time_to_repair": 34.33,
+                                "availability": 75.97
                             }
                         }
                     ],
@@ -150,30 +90,30 @@
                             "type": "Input-Buffer",
                             "capacity": 2,
                             "buffer_results": {
-                                "time_full": 8.57,
-                                "overfill_rate": 0.86,
-                                "avg_items_in_storage": 0.06,
-                                "avg_time_in_storage": 66.35
+                                "time_full": 3.5,
+                                "overfill_rate": 0.35,
+                                "avg_items_in_storage": 0.37,
+                                "avg_time_in_storage": 45.24
                             }
                         },
                         {
                             "type": "Output-Buffer",
                             "capacity": 2,
                             "buffer_results": {
-                                "time_full": 902.11,
-                                "overfill_rate": 90.21,
-                                "avg_items_in_storage": 1.85,
-                                "avg_time_in_storage": 63.66
+                                "time_full": 452.19,
+                                "overfill_rate": 45.22,
+                                "avg_items_in_storage": 1.36,
+                                "avg_time_in_storage": 45.05
                             }
                         },
                         {
                             "type": "Storage-Buffer",
-                            "capacity": 3,
+                            "capacity": 10,
                             "buffer_results": {
-                                "time_full": 851.67,
-                                "overfill_rate": 85.17,
-                                "avg_items_in_storage": 2.62,
-                                "avg_time_in_storage": 64.53
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.11,
+                                "avg_time_in_storage": 45.08
                             }
                         }
                     ]
@@ -183,49 +123,23 @@
                     "level": 1,
                     "parent": null,
                     "cell_results": {
-                        "mean_time_in_cell": 332.41,
-                        "mean_items_in_cell": 6.65,
+                        "mean_time_in_cell": 153.48,
+                        "mean_items_in_cell": 3.84,
                         "capacity": 14,
-                        "storage_utilization": 47.49
+                        "storage_utilization": 27.41
                     },
                     "agents": [
                         {
                             "ruleset": "FiFo Global",
                             "agent_results": {
-                                "moving_time": 81.77,
-                                "transportation_time": 43.0,
+                                "moving_time": 910.76,
+                                "transportation_time": 453.5,
                                 "waiting_time": 0,
-                                "idle_time": 911.43,
-                                "task_time": 88.57,
-                                "started_tasks": 34,
-                                "avg_task_length": 2.6,
-                                "utilization": 0.09
-                            }
-                        },
-                        {
-                            "ruleset": "FiFo Global",
-                            "agent_results": {
-                                "moving_time": 77.3,
-                                "transportation_time": 39.1,
-                                "waiting_time": 0,
-                                "idle_time": 916.3,
-                                "task_time": 83.7,
-                                "started_tasks": 32,
-                                "avg_task_length": 2.62,
-                                "utilization": 0.08
-                            }
-                        },
-                        {
-                            "ruleset": "FiFo Global",
-                            "agent_results": {
-                                "moving_time": 51.7,
-                                "transportation_time": 28.8,
-                                "waiting_time": 0,
-                                "idle_time": 943.9,
-                                "task_time": 56.1,
-                                "started_tasks": 22,
-                                "avg_task_length": 2.55,
-                                "utilization": 0.06
+                                "idle_time": 8.84,
+                                "task_time": 991.16,
+                                "started_tasks": 403,
+                                "avg_task_length": 2.46,
+                                "utilization": 0.99
                             }
                         }
                     ],
@@ -235,10 +149,10 @@
                             "type": "Input-Buffer",
                             "capacity": 2,
                             "buffer_results": {
-                                "time_full": 937.53,
-                                "overfill_rate": 93.75,
-                                "avg_items_in_storage": 1.88,
-                                "avg_time_in_storage": 54.99
+                                "time_full": 963.42,
+                                "overfill_rate": 96.34,
+                                "avg_items_in_storage": 1.95,
+                                "avg_time_in_storage": 38.43
                             }
                         },
                         {
@@ -248,37 +162,37 @@
                                 "time_full": 0,
                                 "overfill_rate": 0.0,
                                 "avg_items_in_storage": 0.0,
-                                "avg_time_in_storage": 230.04
+                                "avg_time_in_storage": 50.99
                             }
                         },
                         {
                             "type": "Storage-Buffer",
-                            "capacity": 3,
+                            "capacity": 5,
                             "buffer_results": {
-                                "time_full": 917.24,
-                                "overfill_rate": 91.72,
-                                "avg_items_in_storage": 2.79,
-                                "avg_time_in_storage": 62.14
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.04,
+                                "avg_time_in_storage": 287.58
                             }
                         },
                         {
                             "type": "Interface-Buffer Outgoing",
                             "capacity": 2,
                             "buffer_results": {
-                                "time_full": 8.57,
-                                "overfill_rate": 0.86,
-                                "avg_items_in_storage": 0.06,
-                                "avg_time_in_storage": 66.35
+                                "time_full": 3.5,
+                                "overfill_rate": 0.35,
+                                "avg_items_in_storage": 0.37,
+                                "avg_time_in_storage": 45.24
                             }
                         },
                         {
                             "type": "Interface-Buffer Ingoing",
                             "capacity": 2,
                             "buffer_results": {
-                                "time_full": 902.11,
-                                "overfill_rate": 90.21,
-                                "avg_items_in_storage": 1.85,
-                                "avg_time_in_storage": 63.66
+                                "time_full": 452.19,
+                                "overfill_rate": 45.22,
+                                "avg_items_in_storage": 1.36,
+                                "avg_time_in_storage": 45.05
                             }
                         }
                     ]
@@ -296,14 +210,14 @@
                     "start": 4.003023010835771,
                     "due_to": 148.30302301083577,
                     "item_results": {
-                        "completion_time": 90.64,
+                        "completion_time": 129.23,
                         "tardiness": 0,
-                        "lateness": -53.66,
-                        "transportation_time": 5.0,
-                        "avg_transportation_time": 0.62,
-                        "time_at_machines": 81.77,
-                        "time_in_interface_buffer": 3.0,
-                        "time_in_queue_buffer": 0.87,
+                        "lateness": -15.07,
+                        "transportation_time": 14.67,
+                        "avg_transportation_time": 0.61,
+                        "time_at_machines": 95.03,
+                        "time_in_interface_buffer": 18.13,
+                        "time_in_queue_buffer": 1.4,
                         "production_time": 41.84,
                         "wait_for_repair_time": 0
                     }
@@ -313,16 +227,16 @@
                     "start": 4.012428633230036,
                     "due_to": 157.41242863323004,
                     "item_results": {
-                        "completion_time": 0,
-                        "tardiness": 0,
-                        "lateness": 0,
-                        "transportation_time": 27.33,
-                        "avg_transportation_time": 0.91,
-                        "time_at_machines": 96.67,
-                        "time_in_interface_buffer": 26.06,
-                        "time_in_queue_buffer": 845.93,
+                        "completion_time": 244.62,
+                        "tardiness": 91.22,
+                        "lateness": 91.22,
+                        "transportation_time": 45.47,
+                        "avg_transportation_time": 0.69,
+                        "time_at_machines": 131.07,
+                        "time_in_interface_buffer": 63.89,
+                        "time_in_queue_buffer": 4.2,
                         "production_time": 46.54,
-                        "wait_for_repair_time": 0
+                        "wait_for_repair_time": 29.04
                     }
                 },
                 {
@@ -330,14 +244,14 @@
                     "start": 4.226456367811826,
                     "due_to": 116.22645636781182,
                     "item_results": {
-                        "completion_time": 104.68,
-                        "tardiness": 0,
-                        "lateness": -7.32,
-                        "transportation_time": 12.07,
-                        "avg_transportation_time": 0.8,
-                        "time_at_machines": 74.19,
-                        "time_in_interface_buffer": 12.55,
-                        "time_in_queue_buffer": 5.88,
+                        "completion_time": 147.21,
+                        "tardiness": 35.21,
+                        "lateness": 35.21,
+                        "transportation_time": 27.87,
+                        "avg_transportation_time": 0.66,
+                        "time_at_machines": 63.22,
+                        "time_in_interface_buffer": 49.39,
+                        "time_in_queue_buffer": 6.73,
                         "production_time": 15.2,
                         "wait_for_repair_time": 0
                     }
@@ -347,14 +261,14 @@
                     "start": 14.733451484145178,
                     "due_to": 155.73345148414518,
                     "item_results": {
-                        "completion_time": 65.09,
+                        "completion_time": 130.1,
                         "tardiness": 0,
-                        "lateness": -75.91,
-                        "transportation_time": 4.33,
-                        "avg_transportation_time": 0.54,
-                        "time_at_machines": 57.59,
-                        "time_in_interface_buffer": 2.43,
-                        "time_in_queue_buffer": 0.73,
+                        "lateness": -10.9,
+                        "transportation_time": 21.27,
+                        "avg_transportation_time": 0.64,
+                        "time_at_machines": 64.67,
+                        "time_in_interface_buffer": 40.44,
+                        "time_in_queue_buffer": 3.73,
                         "production_time": 18.98,
                         "wait_for_repair_time": 0
                     }
@@ -364,14 +278,14 @@
                     "start": 21.597731778798646,
                     "due_to": 213.99773177879865,
                     "item_results": {
-                        "completion_time": 0,
-                        "tardiness": 0,
-                        "lateness": 0,
-                        "transportation_time": 18.2,
-                        "avg_transportation_time": 0.79,
-                        "time_at_machines": 938.7,
-                        "time_in_interface_buffer": 11.89,
-                        "time_in_queue_buffer": 9.61,
+                        "completion_time": 418.84,
+                        "tardiness": 226.44,
+                        "lateness": 226.44,
+                        "transportation_time": 99.27,
+                        "avg_transportation_time": 0.7,
+                        "time_at_machines": 102.73,
+                        "time_in_interface_buffer": 201.77,
+                        "time_in_queue_buffer": 15.07,
                         "production_time": 49.78,
                         "wait_for_repair_time": 0
                     }
@@ -381,14 +295,14 @@
                     "start": 21.884864883761512,
                     "due_to": 149.8848648837615,
                     "item_results": {
-                        "completion_time": 83.47,
-                        "tardiness": 0,
-                        "lateness": -44.53,
-                        "transportation_time": 10.53,
-                        "avg_transportation_time": 0.75,
-                        "time_at_machines": 59.22,
-                        "time_in_interface_buffer": 10.53,
-                        "time_in_queue_buffer": 3.19,
+                        "completion_time": 296.75,
+                        "tardiness": 168.75,
+                        "lateness": 168.75,
+                        "transportation_time": 34.13,
+                        "avg_transportation_time": 0.68,
+                        "time_at_machines": 78.33,
+                        "time_in_interface_buffer": 181.09,
+                        "time_in_queue_buffer": 3.2,
                         "production_time": 16.93,
                         "wait_for_repair_time": 0
                     }
@@ -398,16 +312,16 @@
                     "start": 39.99673920656355,
                     "due_to": 215.49673920656355,
                     "item_results": {
-                        "completion_time": 0,
-                        "tardiness": 0,
-                        "lateness": 0,
-                        "transportation_time": 19.93,
-                        "avg_transportation_time": 0.87,
-                        "time_at_machines": 907.85,
-                        "time_in_interface_buffer": 22.0,
-                        "time_in_queue_buffer": 10.22,
-                        "production_time": 35.5,
-                        "wait_for_repair_time": 37.34
+                        "completion_time": 365.44,
+                        "tardiness": 189.94,
+                        "lateness": 189.94,
+                        "transportation_time": 38.87,
+                        "avg_transportation_time": 0.68,
+                        "time_at_machines": 141.81,
+                        "time_in_interface_buffer": 181.17,
+                        "time_in_queue_buffer": 3.6,
+                        "production_time": 47.34,
+                        "wait_for_repair_time": 0
                     }
                 },
                 {
@@ -415,14 +329,14 @@
                     "start": 44.83418984564358,
                     "due_to": 144.83418984564358,
                     "item_results": {
-                        "completion_time": 0,
-                        "tardiness": 0,
-                        "lateness": 0,
-                        "transportation_time": 19.27,
-                        "avg_transportation_time": 0.92,
-                        "time_at_machines": 66.46,
-                        "time_in_interface_buffer": 17.36,
-                        "time_in_queue_buffer": 852.08,
+                        "completion_time": 343.8,
+                        "tardiness": 243.8,
+                        "lateness": 243.8,
+                        "transportation_time": 31.6,
+                        "avg_transportation_time": 0.69,
+                        "time_at_machines": 78.83,
+                        "time_in_interface_buffer": 125.14,
+                        "time_in_queue_buffer": 6.73,
                         "production_time": 22.71,
                         "wait_for_repair_time": 0
                     }
@@ -432,14 +346,14 @@
                     "start": 45.05342851347716,
                     "due_to": 150.05342851347717,
                     "item_results": {
-                        "completion_time": 0,
-                        "tardiness": 0,
-                        "lateness": 0,
-                        "transportation_time": 19.27,
-                        "avg_transportation_time": 0.92,
-                        "time_at_machines": 54.65,
-                        "time_in_interface_buffer": 17.4,
-                        "time_in_queue_buffer": 863.63,
+                        "completion_time": 505.58,
+                        "tardiness": 400.58,
+                        "lateness": 400.58,
+                        "transportation_time": 58.33,
+                        "avg_transportation_time": 0.7,
+                        "time_at_machines": 76.13,
+                        "time_in_interface_buffer": 256.83,
+                        "time_in_queue_buffer": 5.4,
                         "production_time": 16.16,
                         "wait_for_repair_time": 0
                     }
@@ -449,15 +363,15 @@
                     "start": 45.33418519920418,
                     "due_to": 166.33418519920417,
                     "item_results": {
-                        "completion_time": 0,
-                        "tardiness": 0,
-                        "lateness": 0,
-                        "transportation_time": 20.1,
-                        "avg_transportation_time": 1.0,
-                        "time_at_machines": 50.41,
-                        "time_in_interface_buffer": 877.39,
-                        "time_in_queue_buffer": 6.67,
-                        "production_time": 11.87,
+                        "completion_time": 417.1,
+                        "tardiness": 296.1,
+                        "lateness": 296.1,
+                        "transportation_time": 25.67,
+                        "avg_transportation_time": 0.66,
+                        "time_at_machines": 53.99,
+                        "time_in_interface_buffer": 223.51,
+                        "time_in_queue_buffer": 4.13,
+                        "production_time": 17.8,
                         "wait_for_repair_time": 0
                     }
                 },
@@ -466,14 +380,14 @@
                     "start": 46.67271692631125,
                     "due_to": 169.67271692631124,
                     "item_results": {
-                        "completion_time": 0,
-                        "tardiness": 0,
-                        "lateness": 0,
-                        "transportation_time": 23.13,
-                        "avg_transportation_time": 1.01,
-                        "time_at_machines": 889.06,
-                        "time_in_interface_buffer": 21.62,
-                        "time_in_queue_buffer": 19.51,
+                        "completion_time": 507.76,
+                        "tardiness": 384.76,
+                        "lateness": 384.76,
+                        "transportation_time": 35.47,
+                        "avg_transportation_time": 0.68,
+                        "time_at_machines": 51.09,
+                        "time_in_interface_buffer": 205.74,
+                        "time_in_queue_buffer": 3.2,
                         "production_time": 17.08,
                         "wait_for_repair_time": 0
                     }
@@ -483,16 +397,16 @@
                     "start": 57.865728760013944,
                     "due_to": 163.86572876001395,
                     "item_results": {
-                        "completion_time": 0,
-                        "tardiness": 0,
-                        "lateness": 0,
-                        "transportation_time": 25.0,
-                        "avg_transportation_time": 1.09,
-                        "time_at_machines": 877.82,
-                        "time_in_interface_buffer": 22.0,
-                        "time_in_queue_buffer": 17.31,
+                        "completion_time": 665.17,
+                        "tardiness": 559.17,
+                        "lateness": 559.17,
+                        "transportation_time": 49.2,
+                        "avg_transportation_time": 0.7,
+                        "time_at_machines": 165.4,
+                        "time_in_interface_buffer": 164.37,
+                        "time_in_queue_buffer": 9.93,
                         "production_time": 19.68,
-                        "wait_for_repair_time": 0
+                        "wait_for_repair_time": 33.58
                     }
                 },
                 {
@@ -500,16 +414,16 @@
                     "start": 60.1433598276685,
                     "due_to": 227.8433598276685,
                     "item_results": {
-                        "completion_time": 0,
-                        "tardiness": 0,
-                        "lateness": 0,
-                        "transportation_time": 16.6,
-                        "avg_transportation_time": 1.11,
-                        "time_at_machines": 870.21,
-                        "time_in_interface_buffer": 15.47,
-                        "time_in_queue_buffer": 37.58,
-                        "production_time": 16.25,
-                        "wait_for_repair_time": 0
+                        "completion_time": 651.29,
+                        "tardiness": 483.59,
+                        "lateness": 483.59,
+                        "transportation_time": 30.73,
+                        "avg_transportation_time": 0.65,
+                        "time_at_machines": 188.23,
+                        "time_in_interface_buffer": 65.2,
+                        "time_in_queue_buffer": 20.33,
+                        "production_time": 33.41,
+                        "wait_for_repair_time": 71.85
                     }
                 },
                 {
@@ -517,16 +431,16 @@
                     "start": 60.83985165806527,
                     "due_to": 232.43985165806527,
                     "item_results": {
-                        "completion_time": 0,
-                        "tardiness": 0,
-                        "lateness": 0,
-                        "transportation_time": 14.43,
-                        "avg_transportation_time": 1.11,
-                        "time_at_machines": 0,
-                        "time_in_interface_buffer": 879.65,
-                        "time_in_queue_buffer": 45.07,
-                        "production_time": 0,
-                        "wait_for_repair_time": 0
+                        "completion_time": 749.0,
+                        "tardiness": 577.4,
+                        "lateness": 577.4,
+                        "transportation_time": 55.8,
+                        "avg_transportation_time": 0.71,
+                        "time_at_machines": 132.4,
+                        "time_in_interface_buffer": 201.1,
+                        "time_in_queue_buffer": 7.2,
+                        "production_time": 43.84,
+                        "wait_for_repair_time": 34.62
                     }
                 },
                 {
@@ -534,15 +448,15 @@
                     "start": 64.43000107599606,
                     "due_to": 209.43000107599607,
                     "item_results": {
-                        "completion_time": 0,
-                        "tardiness": 0,
-                        "lateness": 0,
-                        "transportation_time": 8.2,
-                        "avg_transportation_time": 0.82,
-                        "time_at_machines": 862.76,
-                        "time_in_interface_buffer": 26.33,
-                        "time_in_queue_buffer": 38.28,
-                        "production_time": 11.16,
+                        "completion_time": 763.41,
+                        "tardiness": 618.41,
+                        "lateness": 618.41,
+                        "transportation_time": 84.73,
+                        "avg_transportation_time": 0.71,
+                        "time_at_machines": 67.5,
+                        "time_in_interface_buffer": 246.53,
+                        "time_in_queue_buffer": 9.33,
+                        "production_time": 16.74,
                         "wait_for_repair_time": 0
                     }
                 },
@@ -551,16 +465,16 @@
                     "start": 64.5603452475938,
                     "due_to": 182.5603452475938,
                     "item_results": {
-                        "completion_time": 0,
-                        "tardiness": 0,
-                        "lateness": 0,
-                        "transportation_time": 1.33,
-                        "avg_transportation_time": 1.33,
-                        "time_at_machines": 0,
-                        "time_in_interface_buffer": 39.67,
-                        "time_in_queue_buffer": 894.24,
-                        "production_time": 0,
-                        "wait_for_repair_time": 0
+                        "completion_time": 806.28,
+                        "tardiness": 688.28,
+                        "lateness": 688.28,
+                        "transportation_time": 22.8,
+                        "avg_transportation_time": 0.67,
+                        "time_at_machines": 123.98,
+                        "time_in_interface_buffer": 245.39,
+                        "time_in_queue_buffer": 5.93,
+                        "production_time": 18.64,
+                        "wait_for_repair_time": 30.74
                     }
                 },
                 {
@@ -571,13 +485,13 @@
                         "completion_time": 0,
                         "tardiness": 0,
                         "lateness": 0,
-                        "transportation_time": 1.33,
-                        "avg_transportation_time": 1.33,
-                        "time_at_machines": 0,
-                        "time_in_interface_buffer": 25.33,
-                        "time_in_queue_buffer": 887.59,
-                        "production_time": 0,
-                        "wait_for_repair_time": 0
+                        "transportation_time": 56.13,
+                        "avg_transportation_time": 0.69,
+                        "time_at_machines": 130.42,
+                        "time_in_interface_buffer": 249.38,
+                        "time_in_queue_buffer": 7.13,
+                        "production_time": 32.49,
+                        "wait_for_repair_time": 40.46
                     }
                 },
                 {
@@ -585,15 +499,15 @@
                     "start": 66.99249403794761,
                     "due_to": 183.9924940379476,
                     "item_results": {
-                        "completion_time": 0,
-                        "tardiness": 0,
-                        "lateness": 0,
-                        "transportation_time": 1.33,
-                        "avg_transportation_time": 1.33,
-                        "time_at_machines": 0,
-                        "time_in_interface_buffer": 5.65,
-                        "time_in_queue_buffer": 888.59,
-                        "production_time": 0,
+                        "completion_time": 840.04,
+                        "tardiness": 723.04,
+                        "lateness": 723.04,
+                        "transportation_time": 14.33,
+                        "avg_transportation_time": 0.62,
+                        "time_at_machines": 79.07,
+                        "time_in_interface_buffer": 251.7,
+                        "time_in_queue_buffer": 3.8,
+                        "production_time": 17.77,
                         "wait_for_repair_time": 0
                     }
                 },
@@ -605,12 +519,12 @@
                         "completion_time": 0,
                         "tardiness": 0,
                         "lateness": 0,
-                        "transportation_time": 0,
-                        "avg_transportation_time": 0,
-                        "time_at_machines": 0,
-                        "time_in_interface_buffer": 889.92,
-                        "time_in_queue_buffer": 0,
-                        "production_time": 0,
+                        "transportation_time": 61.57,
+                        "avg_transportation_time": 0.72,
+                        "time_at_machines": 10.93,
+                        "time_in_interface_buffer": 187.23,
+                        "time_in_queue_buffer": 14.73,
+                        "production_time": 5.39,
                         "wait_for_repair_time": 0
                     }
                 },
@@ -622,12 +536,12 @@
                         "completion_time": 0,
                         "tardiness": 0,
                         "lateness": 0,
-                        "transportation_time": 0,
-                        "avg_transportation_time": 0,
-                        "time_at_machines": 0,
-                        "time_in_interface_buffer": 888.92,
-                        "time_in_queue_buffer": 0,
-                        "production_time": 0,
+                        "transportation_time": 9.27,
+                        "avg_transportation_time": 0.58,
+                        "time_at_machines": 112.86,
+                        "time_in_interface_buffer": 146.0,
+                        "time_in_queue_buffer": 5.13,
+                        "production_time": 22.75,
                         "wait_for_repair_time": 0
                     }
                 },
@@ -639,11 +553,11 @@
                         "completion_time": 0,
                         "tardiness": 0,
                         "lateness": 0,
-                        "transportation_time": 0,
-                        "avg_transportation_time": 0,
+                        "transportation_time": 40.1,
+                        "avg_transportation_time": 0.73,
                         "time_at_machines": 0,
-                        "time_in_interface_buffer": 0,
-                        "time_in_queue_buffer": 0,
+                        "time_in_interface_buffer": 128.76,
+                        "time_in_queue_buffer": 11.0,
                         "production_time": 0,
                         "wait_for_repair_time": 0
                     }
@@ -656,11 +570,11 @@
                         "completion_time": 0,
                         "tardiness": 0,
                         "lateness": 0,
-                        "transportation_time": 0,
-                        "avg_transportation_time": 0,
+                        "transportation_time": 5.9,
+                        "avg_transportation_time": 0.66,
                         "time_at_machines": 0,
-                        "time_in_interface_buffer": 0,
-                        "time_in_queue_buffer": 0,
+                        "time_in_interface_buffer": 164.16,
+                        "time_in_queue_buffer": 0.6,
                         "production_time": 0,
                         "wait_for_repair_time": 0
                     }
@@ -673,11 +587,11 @@
                         "completion_time": 0,
                         "tardiness": 0,
                         "lateness": 0,
-                        "transportation_time": 0,
-                        "avg_transportation_time": 0,
+                        "transportation_time": 1.0,
+                        "avg_transportation_time": 1.0,
                         "time_at_machines": 0,
-                        "time_in_interface_buffer": 0,
-                        "time_in_queue_buffer": 0,
+                        "time_in_interface_buffer": 86.8,
+                        "time_in_queue_buffer": 36.26,
                         "production_time": 0,
                         "wait_for_repair_time": 0
                     }
@@ -693,7 +607,7 @@
                         "transportation_time": 0,
                         "avg_transportation_time": 0,
                         "time_at_machines": 0,
-                        "time_in_interface_buffer": 0,
+                        "time_in_interface_buffer": 38.46,
                         "time_in_queue_buffer": 0,
                         "production_time": 0,
                         "wait_for_repair_time": 0
@@ -710,7 +624,7 @@
                         "transportation_time": 0,
                         "avg_transportation_time": 0,
                         "time_at_machines": 0,
-                        "time_in_interface_buffer": 0,
+                        "time_in_interface_buffer": 37.26,
                         "time_in_queue_buffer": 0,
                         "production_time": 0,
                         "wait_for_repair_time": 0

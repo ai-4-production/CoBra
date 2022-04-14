@@ -27,15 +27,26 @@ class ManufacturingAgent:
         self.lock = None
         # Attributes
         self.ruleset = None
+        self.ruleset_train = None
         for ruleset in RuleSet.instances:
             if ruleset.id == ruleset_id:
-                self.ruleset = ruleset  # Reference to the priority ruleset of the agent
+                self.ruleset = ruleset
+                  # Reference to the priority ruleset of the agent
                 break
+        print(self.ruleset.name)
 
         if not self.ruleset:  # Check if the Agent has a Ruleset selected
             raise Exception(
                 "Atleast one Agent has no ruleset defined. Please choose a ruleset or the agent wont do anything!")
-
+        self.ruleset_assist = None
+        ruleset_assist_id = 2
+        for ruleset in RuleSet.instances:
+            if ruleset.id == ruleset_assist_id:
+                self.ruleset_assist = ruleset
+                  # Reference to the priority ruleset of the agent
+                break
+        print(self.ruleset_assist.name)
+        
         self.ranking_criteria = [criteria["measure"] for criteria in self.ruleset.numerical_criteria]
 
         self.cell = None
@@ -90,15 +101,14 @@ class ManufacturingAgent:
         dest_calc_start = time.time()
         cell_state["_destination"] = cell_state.apply(self.add_destinations, axis=1)
         time_tracker.time_destination_calc += time.time() - dest_calc_start
-
+        dynamic_temp = self.ruleset.dynamic
         # Get action depending on agent ruleset
         if self.ruleset.dynamic:
             now = time.time()
-            next_task, next_order, destination, base_state_flat, action = self.get_smart_action(cell_state)
+            next_task, next_order, destination, base_state_flat, action, dynamic_temp = self.get_smart_action(cell_state)
             time_tracker.time_smart_action_calc += time.time() - now
         else:
             now = time.time()
-            
             next_task, next_order, destination = self.get_action(cell_state)
             time_tracker.time_action_calc += time.time() - now
         
@@ -128,7 +138,7 @@ class ManufacturingAgent:
             self.has_task = False
             self.save_event("end_of_main_process")
 
-            if self.ruleset.dynamic:  # Check rewards
+            if dynamic_temp:  # Check rewards
                 # Get new state
                 state_calc_start = time.time()
                 new_cell_state = self.cell.get_cell_state(requester=self)
@@ -218,39 +228,93 @@ class ManufacturingAgent:
         :return task: simpy process to be performed next
         :return next_order: order to be moved
         :return destination: destination where the order will be brought to"""
-
         smart_agent = self.ruleset.reinforce_agent
-        #print("order_state: ",order_state)
+
         # Convert state to numeric state
         state_numeric = self.state_to_numeric(copy(order_state))
-        # print("state_numeric: ",state_numeric)
+        
         # Get action space
         action_space = range(0, len(state_numeric) + 1)
-        # print(len(action_space))
         # Flatten state
         state_flat = list(state_numeric.to_numpy().flatten())
 
+        action, smart_action = smart_agent.get_action(action_space, state_flat)
         # Get action
-        action = smart_agent.get_action(action_space, state_flat)
-        # print("smart action: ",action)
+        if smart_action:
+            if action < len(state_numeric):
+                # Normal action
+                next_order = order_state.at[action, "order"]
+                destination = order_state.at[action, "_destination"]    
+            else:
+                # Take no action
+                smart_agent.appendMemory(smart_agent, former_state=state_flat, new_state=state_flat, action=action, reward=0,
+                                        time_passed=0)
+                # next_task, next_order, destination = get_action(order_state)
+                # return next_task, next_order, destination, None, None # next_task, next_order, destination, base_state_flat, action
+                return None, None, None, None, None, None # next_task, next_order, destination, base_state_flat, action
+        
+        if smart_action is False: #Fifo from assist rule as defined above
+            order = order_state[(order_state["order"].notnull())]
 
-        if action < len(state_numeric):
-            # Normal action
-            next_order = order_state.at[action, "order"]
-            destination = order_state.at[action, "_destination"]
-        else:
-            # Take no action
-            smart_agent.appendMemory(smart_agent, former_state=state_flat, new_state=state_flat, action=action, reward=0,
-                                     time_passed=0)
-            return None, None, None, None, None
+            useable_orders = order[(order["locked"] == 0) & (order["in_m_input"] == 0) & (order["in_m"] == 0) & (order["in_same_cell"] == 1)]
 
+            if useable_orders.empty:
+                return None, None, None, None, None, None
+
+            useable_with_free_destination = useable_orders[useable_orders["_destination"] != -1]
+
+            if useable_with_free_destination.empty:
+                return None, None, None, None, None, None
+
+            elif len(useable_with_free_destination) == 1:
+                next_order = useable_with_free_destination["order"].iat[0]
+
+            elif self.ruleset_assist.random:  # When Ruleset is random...
+                ranking = useable_with_free_destination.sample(frac=1, random_state=self.ruleset_assist.seed).reset_index(drop=True)
+                next_order = ranking["order"].iat[0]
+            else:
+                criteria = [criteria["measure"] for criteria in self.ruleset_assist.numerical_criteria]
+
+                #ranking = useable_with_free_destination.loc[:, ["order"] + criteria]
+                ranking = useable_with_free_destination.reindex(columns = (["order"] + criteria))
+
+                for criterion in self.ruleset_assist.numerical_criteria:
+                    weight = criterion["weight"]
+                    measure = criterion["measure"]
+                    order = criterion["ranking_order"]
+
+                    max_v = ranking[measure].max()
+                    min_v = ranking[measure].min()
+
+                    # Min Max Normalisation
+                    if order == "ASC":
+                        ranking["WS-" + measure] = weight * div_possible_zero((ranking[measure] - min_v), (max_v - min_v))
+                    else:
+                        ranking["WS-" + measure] = weight * (1 - div_possible_zero((ranking[measure] - min_v), (max_v - min_v)))
+
+                order_scores = ranking.filter(regex="WS-")
+                ranking.loc[:, "Score"] = order_scores.sum(axis=1)
+                ranking.sort_values(by=["Score"], inplace=True)
+
+                next_order = ranking["order"].iat[0]
+                print("next order: ", next_order)
+
+            destination = useable_with_free_destination[useable_with_free_destination["order"] == next_order].reset_index(drop=True).loc[0, "_destination"]
+
+            # next_task, next_order, destination, base_state_flat, action, dynamic_temp
+            if destination:
+                return self.env.process(self.item_from_to(next_order, next_order.position, destination)), next_order, destination, state_flat, action, smart_action
+            else:
+                return None, None, None, 
+                
         penalty = reward_layer.evaluate_choice(state_numeric.loc[action])
+        
 
         if penalty < 0:
             smart_agent.appendMemory(smart_agent, former_state=state_flat, new_state=state_flat, action=action, reward=penalty, time_passed=0)
-            return None, None, None, None, None
+            return None, None, None, None, None, None # next_task, next_order, destination, base_state_flat, action, dynamic_temp
         else:
-            return self.env.process(self.item_from_to(next_order, next_order.position, destination)), next_order, destination, state_flat, action
+            return self.env.process(self.item_from_to(next_order, next_order.position, destination)), next_order, destination, state_flat, action, smart_action
 
     def finished_smart_action(self, old_state, new_state, old_state_flat, order, time_passed, action):
         """Calculate reward for smart action and inform reinforcement agent about the state changes
@@ -266,6 +330,7 @@ class ManufacturingAgent:
         new_state_flat = list(self.state_to_numeric(copy(new_state)).to_numpy().flatten())
 
         reward = reward_layer.reward_action(old_state, new_state, order)
+        print("reward: ", reward)
 
         smart_agent.appendMemory(smart_agent, former_state=old_state_flat, new_state=new_state_flat, action=action, reward=reward, time_passed=time_passed)
 

@@ -6,7 +6,13 @@ normal_state = {"order": ["type", "tasks_finished", "next_task", "locked", "pick
                 "machine": ["failure"],
                 "agent": []}
 
-smart_state = {"order": [
+smart_state = {"order": ["type", "tasks_finished", "next_task", "locked", "picked_up", "in_same_cell", "in_m_input", "in_m", "processing"],
+                "buffer": ["free_slots"],
+                "machine": ["current_setup", "failure"],
+                "agent": []}
+
+
+smart_state_full = {"order": [
                         "start", "due_to", "complexity", "type",
                         "time_in_cell", "locked", "picked_up", "processing", "tasks_finished", "remaining_tasks",
                         "next_task", "distance", "in_m", "in_m_input", "in_same_cell"],

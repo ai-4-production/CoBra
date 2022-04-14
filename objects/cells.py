@@ -147,7 +147,6 @@ class Cell:
         now = time.time()
         occupancy_states = self.add_order_attributes(occupancy_states, requester, criteria["order"] + list(set(ranking_criteria) - set(criteria["order"])))
         time_tracker.time_order_attr_calc += time.time() - now
-
         return occupancy_states
 
     def add_order_attributes(self, occupancy, requester: ManufacturingAgent, attributes: list):

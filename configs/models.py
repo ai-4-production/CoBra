@@ -25,11 +25,12 @@ class ReinforceAgent():
         self.discount_factor = 0.99
         self.learning_rate = 0.01
         self.epsilon = 1.0
-        self.epsilon_decay = 0.99
+        self.epsilon_decay = 0.999
         self.epsilon_min = 0.05
         self.batch_size = 64
         self.train_start = 64
         self.memory = deque(maxlen=1000000)
+        self.global_step = 0
 
         self.model = self.buildModel()
         self.target_model = self.buildModel()
@@ -55,9 +56,8 @@ class ReinforceAgent():
         model.compile(loss='mse', optimizer=RMSprop(lr=self.learning_rate, rho=0.9, epsilon=1e-06))
         model.summary()
         return model
-        return
 
-    def trainModel(self, target=False):
+    def trainModel(self, target):
         mini_batch = random.sample(self.memory, self.batch_size)
         X_batch = np.empty((0, self.state_size), dtype=np.int)
         Y_batch = np.empty((0, self.action_size), dtype=np.int)
@@ -70,11 +70,11 @@ class ReinforceAgent():
             q_value = self.model.predict(states.reshape(1, len(states)))
             self.q_value = q_value
 
+            next_target = self.model.predict(next_states.reshape(1, len(next_states)))
+
             if target:
                 next_target = self.target_model.predict(next_states.reshape(1, len(next_states)))
-
-            else:
-                next_target = self.model.predict(next_states.reshape(1, len(next_states)))
+                self.updateTargetModel()
 
             #missing update target model
             #save model option
@@ -96,27 +96,31 @@ class ReinforceAgent():
             return reward + self.discount_factor * np.amax(next_target)
 
     def get_action(self, action_space, state):
-        #print("State: ", list(self.state_to_numeric(copy(state)).to_numpy().flatten()))
-
-        if np.random.rand() <= self.epsilon:
+        self.global_step = self.global_step + 1
+        if self.epsilon > self.epsilon_min:
+            self.epsilon = self.epsilon * self.epsilon_decay
+        Border = np.random.rand()
+        if Border <= self.epsilon:
+            Smart_action = False
             self.q_value = np.zeros(self.action_size)
-            print("random")
-            return random.randint(0, self.action_size)
+            action = random.randint(0, self.action_size)
+            return action, Smart_action
             # return random.randrange(self.action_size)
         else:
+            Smart_action = True
+            state = np.array(state)
             q_value = self.model.predict(state.reshape(1, len(state)))
             self.q_value = q_value
-            print(self.q_value)
-            print("not random")
-            return np.argmax(q_value[0])
+            return np.argmax(q_value[0]), Smart_action
 
     def appendMemory(self, smart_agent, former_state, new_state, action, reward, time_passed):
+        #smart_agent, former_state=old_state_flat, new_state=new_state_flat, action=action, reward=reward, time_passed=time_passed
         self.memory.append((former_state, action, reward, new_state))
         if len(smart_agent.memory) >= smart_agent.train_start:
-            if smart_agent.global_step <= smart_agent.target_update:
-                smart_agent.trainModel()
-            else:
+            if (smart_agent.global_step % smart_agent.target_update) == 0:
                 smart_agent.trainModel(True)
+            else:
+                smart_agent.trainModel()
 
 
 
@@ -125,5 +129,5 @@ class ReinforceAgent():
 
 
 rein_agent_1 = ReinforceAgent(70, 11)
-rein_agent_1_1 = ReinforceAgent(140, 21)
-rein_agent_1_2 = ReinforceAgent(140, 21)
+rein_agent_1_1 = ReinforceAgent(187, 11)
+rein_agent_1_2 = ReinforceAgent(187, 11)
