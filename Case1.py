@@ -1,3 +1,4 @@
+from tkinter import Y
 import environment
 
 # Start a new simulation
