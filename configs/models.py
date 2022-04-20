@@ -21,14 +21,14 @@ class ReinforceAgent():
         self.state_size = state_size
         self.action_size = action_size
         self.episode_step = 6000
-        self.target_update = 2000
+        self.target_update = 20
         self.discount_factor = 0.99
         self.learning_rate = 0.01
         self.epsilon = 1.0
         self.epsilon_decay = 0.999
         self.epsilon_min = 0.05
-        self.batch_size = 64
-        self.train_start = 64
+        self.batch_size = 32
+        self.train_start = 32
         self.memory = deque(maxlen=1000000)
         self.global_step = 0
 
@@ -69,7 +69,7 @@ class ReinforceAgent():
 
             q_value = self.model.predict(states.reshape(1, len(states)))
             self.q_value = q_value
-
+            print(next_states.shape)
             next_target = self.model.predict(next_states.reshape(1, len(next_states)))
 
             if target:
@@ -116,11 +116,16 @@ class ReinforceAgent():
     def appendMemory(self, smart_agent, former_state, new_state, action, reward, time_passed):
         #smart_agent, former_state=old_state_flat, new_state=new_state_flat, action=action, reward=reward, time_passed=time_passed
         self.memory.append((former_state, action, reward, new_state))
-        if len(smart_agent.memory) >= smart_agent.train_start:
-            if (smart_agent.global_step % smart_agent.target_update) == 0:
-                smart_agent.trainModel(True)
-            else:
-                smart_agent.trainModel()
+        print("former_state: ", former_state)
+        print("action: ", action)
+        print("reward: ", reward)
+        print("new_state: ", new_state)
+        
+        #if len(smart_agent.memory) >= smart_agent.train_start:
+        if (smart_agent.global_step % smart_agent.target_update) == 0:
+            smart_agent.updateTargetModel()
+        if len(smart_agent.memory) >= smart_agent.batch_size:
+            smart_agent.trainModel(True)
 
 
 

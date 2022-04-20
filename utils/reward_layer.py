@@ -15,7 +15,7 @@ def evaluate_choice(choice):
         choice["in_m_input"] == 1,
         choice["in_m"] == 1,
         choice["in_same_cell"] == 0,
-        choice["_destination"] == -1
+        choice["_destination"] == -2
     ]
 
     penalty = -1000 * sum(criteria)
@@ -39,7 +39,7 @@ def reward_action(old_state, new_state, order):
         input_full = False
 
     if new_state[new_state["order"] == order].empty:
-        # A finished order was placed at the main output of the environment
+        # A 2 was placed at the main output of the environment
 
         order_in_machine = False
         order_in_storage = False

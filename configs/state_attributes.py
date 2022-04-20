@@ -19,7 +19,7 @@ smart_state_full = {"order": [
 
                "buffer": ["interface_ingoing", "interface_outgoing", "free_slots"],
 
-               "machine": ["machine_type", "current_setup", "in_setup", "next_setup", "remaining_setup_time", "manufacturing", "failure", "remaining_man_time", "failure_fixed_in"],
+               "machine": ["machine_type", "current_setup", "in_setup", "next_setup", "remainingsetup_time", "manufacturing", "failure", "remaining_man_time", "failure_fixed_in"],
 
                "agent": ["agent_position", "moving", "remaining_moving_time", "next_position", "has_task", "locked_item"]}
 

@@ -29,8 +29,8 @@ class RuleSet:
             self.dynamic = rules['rules']['dynamic']
 
             self.reinforce_agent = eval("configs.models." + rules['rules']['reinforcement_agent'])
-            if train_model:
-                self.reinforce_agent.trainModel()
+            #if train_model:
+            #    self.reinforce_agent.trainModel()
         except:
             self.dynamic = False
             self.reinforce_agent = None
