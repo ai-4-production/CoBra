@@ -69,7 +69,6 @@ class ReinforceAgent():
 
             q_value = self.model.predict(states.reshape(1, len(states)))
             self.q_value = q_value
-            print(next_states.shape)
             next_target = self.model.predict(next_states.reshape(1, len(next_states)))
 
             if target:
@@ -95,7 +94,7 @@ class ReinforceAgent():
         else:
             return reward + self.discount_factor * np.amax(next_target)
 
-    def get_action(self, action_space, state):
+    def get_action(self, state):
         self.global_step = self.global_step + 1
         if self.epsilon > self.epsilon_min:
             self.epsilon = self.epsilon * self.epsilon_decay
@@ -116,10 +115,10 @@ class ReinforceAgent():
     def appendMemory(self, smart_agent, former_state, new_state, action, reward, time_passed):
         #smart_agent, former_state=old_state_flat, new_state=new_state_flat, action=action, reward=reward, time_passed=time_passed
         self.memory.append((former_state, action, reward, new_state))
-        print("former_state: ", former_state)
+        """print("former_state: ", former_state)
         print("action: ", action)
         print("reward: ", reward)
-        print("new_state: ", new_state)
+        print("new_state: ", new_state)"""
         
         #if len(smart_agent.memory) >= smart_agent.train_start:
         if (smart_agent.global_step % smart_agent.target_update) == 0:

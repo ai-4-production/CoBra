@@ -3,6 +3,7 @@ from objects.buffer import Buffer, InterfaceBuffer, QueueBuffer
 from objects.processing_steps import ProcessingStep
 from objects.order import get_order_attributes
 from objects.machines import Machine
+import csv
 import simpy
 import pandas as pd
 from configs import state_attributes
@@ -160,9 +161,7 @@ class Cell:
         current_time = self.env.now
 
         occupancy["attributes"] = occupancy["order"].apply(get_order_attributes, args=(requester, attributes, current_time))
-
         occupancy = occupancy.join(pd.DataFrame(occupancy.pop("attributes").values.tolist()))
-
         return occupancy
 
     def inform_agents(self):

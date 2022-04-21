@@ -232,18 +232,17 @@ class ManufacturingAgent:
         smart_agent = self.ruleset.reinforce_agent
 
         # Convert state to numeric state
-        state_numeric = self.state_to_numeric(copy(order_state))
-        with open('/Users/MPanzer/Documents/state.csv', 'a+', newline='', encoding='utf-8') as file:
-            writer = csv.writer(file)
-            writer.writerow(list([state_numeric]))
-        print("state_numeric: ", state_numeric)
+        state_numeric, state_numeric_updated = self.state_to_numeric(copy(order_state))
+        
+        
         # Get action space
-        action_space = range(0, len(state_numeric) + 1)
+        # action_space = range(0, len(state_numeric) + 1)
         # Flatten state
         state_flat = list(state_numeric.to_numpy().flatten())
-
-        action, smart_action = smart_agent.get_action(action_space, state_flat)
+        state_flat_updated = list(state_numeric_updated.to_numpy().flatten())
+        action, smart_action = smart_agent.get_action(state_flat_updated)
         # Get action
+
 
         if smart_action:
             if action < len(state_numeric):
@@ -311,7 +310,6 @@ class ManufacturingAgent:
                 return None, None, None, None, None, None
                 
         penalty = reward_layer.evaluate_choice(state_numeric.loc[action])
-        print("pentalty: ", penalty, ", smart choice: ", smart_action)
 
         if penalty < 0:
             smart_agent.appendMemory(smart_agent, former_state=state_flat, new_state=state_flat, action=action, reward=penalty, time_passed=0)
@@ -333,7 +331,6 @@ class ManufacturingAgent:
         new_state_flat = list(self.state_to_numeric(copy(new_state)).to_numpy().flatten())
 
         reward = reward_layer.reward_action(old_state, new_state, order)
-        print("reward: ", reward)
 
         smart_agent.appendMemory(smart_agent, former_state=old_state_flat, new_state=new_state_flat, action=action, reward=reward, time_passed=time_passed)
 
@@ -849,6 +846,10 @@ class ManufacturingAgent:
         slot_ids = order_state.pop("slot_id")
         order_state.insert(0, "slot_id", slot_ids)
 
+        
+        a = order_state.loc[:, "pos_type"]
+        
+
         # Get ids for all positions within the cell
         pos_in_cell = order_state["pos"].unique()
         pos_ids = np.arange(1, len(pos_in_cell) + 1)
@@ -877,4 +878,5 @@ class ManufacturingAgent:
         order_state = order_state.fillna(0)
         order_state.loc[order_state["order"] != 0, "order"] = 1
 
-        return order_state
+        order_state_updated = order_state.loc[:, ["due_to"]]
+        return order_state, order_state_updated

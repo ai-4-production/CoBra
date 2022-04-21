@@ -360,5 +360,4 @@ def get_order_attributes(order, requester, attributes: list, now):
     if order:
         for attribute in attributes:
             attr[attribute] = locals()[attribute]()
-
     return attr
