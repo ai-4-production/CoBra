@@ -25,10 +25,10 @@ class ReinforceAgent():
         self.discount_factor = 0.99
         self.learning_rate = 0.01
         self.epsilon = 1.0
-        self.epsilon_decay = 0.999
+        self.epsilon_decay = 0.99
         self.epsilon_min = 0.05
-        self.batch_size = 32
-        self.train_start = 32
+        self.batch_size = 8
+        self.train_start = 8        
         self.memory = deque(maxlen=1000000)
         self.global_step = 0
 
@@ -63,9 +63,9 @@ class ReinforceAgent():
         Y_batch = np.empty((0, self.action_size), dtype=np.int)
         for i in range(self.batch_size):
             states = np.asarray(mini_batch[i][0])
-            next_states = np.asarray(mini_batch[i][1])
-            actions = np.asarray(mini_batch[i][2])
-            rewards = np.asarray(mini_batch[i][3])
+            next_states = np.asarray(mini_batch[i][3])
+            actions = np.asarray(mini_batch[i][1])
+            rewards = np.asarray(mini_batch[i][2])
 
             q_value = self.model.predict(states.reshape(1, len(states)))
             self.q_value = q_value
@@ -85,23 +85,18 @@ class ReinforceAgent():
 
             Y_sample[0][actions] = next_q_value
             Y_batch = np.append(Y_batch, np.array([Y_sample[0]]), axis=0)
-        
-
 
     def getQvalue(self, reward, next_target):
-        if done:
-            return reward
-        else:
-            return reward + self.discount_factor * np.amax(next_target)
+        return reward + self.discount_factor * np.amax(next_target)
 
     def get_action(self, state):
         self.global_step = self.global_step + 1
         if self.epsilon > self.epsilon_min:
             self.epsilon = self.epsilon * self.epsilon_decay
         Border = np.random.rand()
+        
         if Border <= self.epsilon:
             Smart_action = False
-            self.q_value = np.zeros(self.action_size)
             action = random.randint(0, self.action_size)
             return action, Smart_action
             # return random.randrange(self.action_size)
@@ -115,10 +110,6 @@ class ReinforceAgent():
     def appendMemory(self, smart_agent, former_state, new_state, action, reward, time_passed):
         #smart_agent, former_state=old_state_flat, new_state=new_state_flat, action=action, reward=reward, time_passed=time_passed
         self.memory.append((former_state, action, reward, new_state))
-        """print("former_state: ", former_state)
-        print("action: ", action)
-        print("reward: ", reward)
-        print("new_state: ", new_state)"""
         
         #if len(smart_agent.memory) >= smart_agent.train_start:
         if (smart_agent.global_step % smart_agent.target_update) == 0:
@@ -133,5 +124,5 @@ class ReinforceAgent():
 
 
 rein_agent_1 = ReinforceAgent(70, 11)
-rein_agent_1_1 = ReinforceAgent(187, 11)
-rein_agent_1_2 = ReinforceAgent(187, 11)
+rein_agent_1_1 = ReinforceAgent(11, 11)  #current one
+rein_agent_1_2 = ReinforceAgent(11, 11)
