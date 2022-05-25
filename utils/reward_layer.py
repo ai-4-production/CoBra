@@ -1,7 +1,6 @@
 from pickletools import read_int4
 import pandas as pd
-import time
-
+import numpy as np
 
 def evaluate_choice(choice):
     """Take an chosen action and check if this action is valid or should not be performed to save the system stability.
@@ -19,9 +18,8 @@ def evaluate_choice(choice):
         choice["in_same_cell"] == 0,
         choice["_destination"] == -2
     ]
-
+    
     penalty = -200 * sum(criteria)
-
     return penalty
 
 
@@ -115,8 +113,6 @@ def reward_action(old_state, new_state, order, action):
                        (order_in_output, 100),
                        (next_task_in_cell, -50),
                        (order_completed, 50)]
-    print("reward_settings:")
-    print(reward_settings)
 
     reward += sum([value for condition, value in reward_settings if condition])
     
@@ -125,20 +121,41 @@ def reward_action(old_state, new_state, order, action):
 def reward_action_1(old_state, new_state, order, action):
     """Calculate the reward for an agent for the last action he performed
     :return The reward amount"""
-
+    reward = 0
+    reward_due_to = 0
+    
     new_cell_state_due_to = new_state.loc[:, "due_to"]
     old_cell_state_due_to = old_state.loc[:, "due_to"]
-    print("action 2: ", action)
-    print("Type: ", type(old_state))
-    print("1: ", old_state.loc[:, "due_to"])
-    print("1: ", old_state.loc[action, "due_to"])
-    print("2: ","due_to: ", old_state.loc[action, "due_to"].values[0])
-    if old_state.loc[action, "due_to"].values[0] <= old_state.loc[:, "due_to"].mean():
-        reward_due_to = 100
-    else:
-        reward_due_to = -100
-    # base reward
-    reward = 0
+
+    #get due_to values for all orders that have a destination
+    destination = old_state.loc[:, "_destination"]
+    available_destinations = []
+    for i in range(len(destination)): #(2) look for orders on valid places, if not valid; nan
+        if destination[i] == -1:
+            available_destinations.append(np.nan)
+        else:
+            available_destinations.append(1)
+    due_to_values = np.multiply(old_cell_state_due_to, available_destinations)
+
+    try:
+        due_to = old_state.loc[action, "due_to"].values[0]
+    except AttributeError:
+        due_to = old_state.loc[action, "due_to"]
+    
+    relevant_due_tos = [x for x in due_to_values if np.isnan(x) == False]
+
+    try:        
+        if len(relevant_due_tos)>1:
+            if due_to < np.mean(relevant_due_tos):
+                reward_due_to = 400
+            else:
+                reward_due_to = -300
+        else: 
+            reward_due_to = 0
+    except:
+        reward_due_to = 0
+
+    a = old_state.loc[action, "_destination"]
 
     old_pos_type = old_state[old_state["order"] == order]["pos_type"].iloc[0]
 
@@ -224,4 +241,5 @@ def reward_action_1(old_state, new_state, order, action):
                        (order_completed, 50)]
 
     reward += sum([value for condition, value in reward_settings if condition]) + reward_due_to    
+    
     return reward
