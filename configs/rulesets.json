@@ -149,7 +149,7 @@
               }
 
             },
-                        {
+            {
               "id": 8,
               "name": "Low Complexity",
               "description": "Bevorzuge die Aufträge die die niedrigste Komplexität haben",
@@ -189,7 +189,6 @@
                 "reinforcement_agent": "rein_agent_1_1"
               }
             },
-
             {
               "id": 11,
               "name": "Reinforcement Agent (2 Machine,  Agent)",
@@ -198,6 +197,16 @@
               {
                 "dynamic": true,
                 "reinforcement_agent": "rein_agent_1_2"
+              }
+            },
+            {
+              "id": 12,
+              "name": "Reinforcement Agent (1 Maschine, dispatch rules as actions)",
+              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
+              "rules":
+              {
+                "dynamic_dispatch": true,
+                "reinforcement_agent": "rein_agent_dispatch"
               }
             }
           ]
