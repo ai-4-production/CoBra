@@ -240,6 +240,6 @@ def reward_action_1(old_state, new_state, order, action):
                        (next_task_in_cell, -50),
                        (order_completed, 50)]
 
-    reward += sum([value for condition, value in reward_settings if condition]) + reward_due_to    
-    
+    #reward += sum([value for condition, value in reward_settings if condition]) + reward_due_to    
+    reward += reward_due_to    
     return reward

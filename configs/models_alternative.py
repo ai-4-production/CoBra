@@ -14,7 +14,7 @@ from keras.layers import Dense, Dropout, Activation
 
 
 # Dummy class
-class ReinforceAgent():
+class ReinforceAgent_1()):
     def __init__(self, state_size, action_size):
         self.load_model = False
         self.load_episode = 0
@@ -104,23 +104,6 @@ class ReinforceAgent():
             q_value = self.model.predict(state.reshape(1, len(state)))
             self.q_value = q_value
             return q_value, Smart_action
-    
-    def get_dispatch_rule(self, state):
-        self.global_step = self.global_step + 1
-        if self.epsilon > self.epsilon_min:
-            self.epsilon = self.epsilon * self.epsilon_decay
-        epsilon_random = np.random.rand()
-        
-        if epsilon_random <= self.epsilon:
-            action = random.randint(0, self.action_size)
-            return action
-            # return random.randrange(self.action_size)
-        else:
-            state = np.array(state)
-            q_value = self.model.predict(state.reshape(1, len(state)))
-            self.q_value = q_value
-            action = np.argmax(self.q_value[0])       
-            return action
 
     def appendMemory(self, smart_agent, former_state, new_state, action, reward, time_passed):
         #smart_agent, former_state=old_state_flat, new_state=new_state_flat, action=action, reward=reward, time_passed=time_passed
@@ -137,7 +120,4 @@ class ReinforceAgent():
         self.target_model.set_weights(self.model.get_weights())
 
 
-rein_agent_1 = ReinforceAgent(70, 11)
-rein_agent_1_1 = ReinforceAgent(11, 7) #current one 
-rein_agent_1_2 = ReinforceAgent(11, 11)
-rein_agent_dispatch = ReinforceAgent(11, 3) 
+rein_agent_1 = ReinforceAgent(11, 3)  #current one
