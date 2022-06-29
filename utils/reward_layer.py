@@ -22,7 +22,6 @@ def evaluate_choice(choice):
     penalty = -200 * sum(criteria)
     return penalty
 
-
 def reward_action(old_state, new_state, order, action):
     """Calculate the reward for an agent for the last action he performed
     :return The reward amount"""
@@ -146,14 +145,19 @@ def reward_action_1(old_state, new_state, order, action):
 
     try:        
         if len(relevant_due_tos)>1:
-            if due_to < np.mean(relevant_due_tos):
+            if due_to <= np.mean(relevant_due_tos):
                 reward_due_to = 400
             else:
                 reward_due_to = -300
         else: 
-            reward_due_to = 0
+            reward_due_to = 100
     except:
         reward_due_to = 0
+
+    
+
+    
+    print("reward_due_to: ", reward_due_to)
 
     a = old_state.loc[action, "_destination"]
 
@@ -240,6 +244,7 @@ def reward_action_1(old_state, new_state, order, action):
                        (next_task_in_cell, -50),
                        (order_completed, 50)]
 
-    #reward += sum([value for condition, value in reward_settings if condition]) + reward_due_to    
-    reward += reward_due_to    
+    reward_basic = sum([value for condition, value in reward_settings if condition]) + reward_due_to    
+    print("reward: ", sum([value for condition, value in reward_settings if condition])) 
+    reward += reward_due_to + reward_basic
     return reward

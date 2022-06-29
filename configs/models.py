@@ -112,7 +112,7 @@ class ReinforceAgent():
         epsilon_random = np.random.rand()
         
         if epsilon_random <= self.epsilon:
-            action = random.randint(0, self.action_size)
+            action = random.randint(0, self.action_size - 1)
             return action
             # return random.randrange(self.action_size)
         else:

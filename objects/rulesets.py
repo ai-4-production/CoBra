@@ -33,7 +33,18 @@ class RuleSet:
             #    self.reinforce_agent.trainModel()
         except:
             self.dynamic = False
+            self.dynamic_dispatch = False
             self.reinforce_agent = None
+        
+        try:
+            self.dynamic_dispatch = rules['rules']['dynamic_dispatch']
+            print("found")
+            self.reinforce_agent = eval("configs.models." + rules['rules']['reinforcement_agent'])
+            #if train_model:
+            #    self.reinforce_agent.trainModel()
+        except:
+            self.dynamic = False
+            self.reinforce_agent = None 
 
 
 def load_rulesets(train_model):

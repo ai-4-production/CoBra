@@ -12,11 +12,10 @@ configuration = {
     "MACHINE_SETUP_TIME": 5,
     "MACHINE_TIME_LOAD_ITEM": 0.1,
     "MACHINE_TIME_RELEASE_ITEM": 0.1,
-
     "SEED_INCOMING_ORDERS": 10278347,
-    "NUMBER_OF_ORDERS": 200,
-    "ORDER_MINIMAL_LENGTH": 60,
-    "ORDER_MAXIMAL_LENGTH": 80,
+    "NUMBER_OF_ORDERS": 900, 
+    "ORDER_MINIMAL_LENGTH": 0,
+    "ORDER_MAXIMAL_LENGTH": 100,
     "SPREAD_ORDER_COMPLEXITY": 0.1,
 
     "AGENT_SPEED": 3,
@@ -68,7 +67,7 @@ evaluation_measures = {
         "production_time": True,
         "wait_for_repair_time": True
     },
-
+    
     "agent": {
         "moving_time": True,
         "transportation_time": True,

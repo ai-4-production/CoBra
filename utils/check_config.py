@@ -44,7 +44,7 @@ def check_configuration_file(config: dict):
         },
         "ORDER_MINIMAL_LENGTH": {
             "data_type": float,
-            "minimum": 1,
+            "minimum": -10,
             "lower_than": "ORDER_MAXIMAL_LENGTH"
         },
         "ORDER_MAXIMAL_LENGTH": {

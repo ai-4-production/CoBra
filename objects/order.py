@@ -2,6 +2,7 @@
 import json
 from objects.processing_steps import load_processing_steps, ProcessingStep
 import simpy
+import time
 from copy import copy
 import numpy as np
 from objects.machines import Machine
@@ -247,16 +248,29 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
 
     possible_types = OrderType.instances
 
+
     frequency_factors = [order_type.frequency_factor for order_type in possible_types]
     factors_sum = sum(frequency_factors)
     frequency_factors = [factor/factors_sum for factor in frequency_factors]
 
     # Create attributes
-    start_times = np.random.uniform(low=0, high=config['SIMULATION_RANGE'], size=amount)
-    types = np.random.choice(possible_types, amount, p=frequency_factors,  replace=True)
+    start_times_1 = np.random.uniform(low=0, high=config['SIMULATION_RANGE'], size=amount)
+    start_times = np.arange(0, config['SIMULATION_RANGE'], config['SIMULATION_RANGE']/config['NUMBER_OF_ORDERS'])
+    types_1 = np.random.choice(possible_types, amount, p=frequency_factors,  replace=True)
+    types = np.full(amount, possible_types[0])
     duration_factors = np.asarray([order_type.duration_factor for order_type in types])
-    base_lengths = np.random.randint(low=config['ORDER_MINIMAL_LENGTH'], high=config['ORDER_MAXIMAL_LENGTH'], size=amount)
-    complexities = np.random.normal(loc=1, scale=config['SPREAD_ORDER_COMPLEXITY'], size=amount)
+    base_lengths_1 = np.random.randint(low=config['ORDER_MINIMAL_LENGTH'], high=config['ORDER_MAXIMAL_LENGTH'], size=amount)
+    base_lengths_2 = np.full(amount, 20)
+    i = 0
+    base_lengths = []
+    while i < amount:
+        print(i)
+        if i % 2 == 0: base_lengths.append(0)
+        elif i % 3 == 0: base_lengths.append(40)
+        else: base_lengths.append(70)
+        i += 1
+    complexities_1 = np.random.normal(loc=1, scale=config['SPREAD_ORDER_COMPLEXITY'], size=amount)
+    complexities = np.full(amount, 1)
 
     # Check if random complexities are greater than 0
     for complexity in complexities:
