@@ -353,7 +353,6 @@ def simulation_measures(sim_env, measures=[]):
         for o_type in order_types:
             alt_list = [order for order in orders_completed if order.type == o_type]
             result.append((o_type.name.decode("UTF-8"), processed_in_time_rate(alt_list)))
-
         return result
 
     def processed_by_order_type():
