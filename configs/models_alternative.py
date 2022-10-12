@@ -14,7 +14,7 @@ from keras.layers import Dense, Dropout, Activation
 
 
 # Dummy class
-class ReinforceAgent_1()):
+class ReinforceAgent_1():
     def __init__(self, state_size, action_size):
         self.load_model = False
         self.load_episode = 0
