@@ -1,3 +1,4 @@
+from objects.manufacturing_agents import ManufacturingAgent
 from objects.order import load_order_types, order_arrivals, Order
 import time
 from objects.rulesets import load_rulesets
@@ -119,11 +120,12 @@ def simulation(runs=1, show_progress=False, save_log=True,
 
         if show_progress:
             env.process(show_progress_func(env, simulation_environment))
-
+        # print("cells.ManufacturingAgent.instances: ", cells.ManufacturingAgent.instances)
+        # print(len(cells.ManufacturingAgent.instances))
+        time.sleep(15)
         env.run(until=config["SIMULATION_RANGE"])
 
         print('\nSimulation %d finished in %d seconds!' % (sim_count + 1, time.time() - start_time))
-
         print("Time Tracker:\nTime for state calculations: %d seconds \nTime for destination calculations: %d seconds" % (time_tracker.time_state_calc, time_tracker.time_destination_calc))
         print("State Calculations:\nTime for occupancy: %d seconds \nTime for order attributes: %d seconds" % (time_tracker.time_occupancy_calc, time_tracker.time_order_attr_calc))
         print("Time for action finding: Normal actions %d seconds, Smart actions: %d seconds" % (time_tracker.time_action_calc, time_tracker.time_smart_action_calc))
@@ -176,7 +178,6 @@ def sim_run_evaluation(sim_env, eval_measures):
                     "cell": cells.Cell.instances,
                     "order": Order.instances
                     }
-
     for focus in eval_measures.keys():
         measures = [key for key, value in eval_measures[focus].items() if value == True]
         if focus == "simulation":

@@ -117,50 +117,23 @@ def reward_action(old_state, new_state, order, action):
     
     return reward
 
-def reward_action_1(old_state, new_state, order, action):
+def reward_smart_dispatch(old_state, new_state, order, action):
     """Calculate the reward for an agent for the last action he performed
     :return The reward amount"""
-    reward = 0
-    reward_due_to = 0
-    
-    new_cell_state_due_to = new_state.loc[:, "due_to"]
-    old_cell_state_due_to = old_state.loc[:, "due_to"]
+    reward_due_to, reward_basic = 0, 0
+    reward_due_to = calc_reward_due_to(old_state, action)
+    # reward_basic = calc_reward_basic(old_state, new_state, order)
+    return reward_due_to + reward_basic
 
-    #get due_to values for all orders that have a destination
-    destination = old_state.loc[:, "_destination"]
-    available_destinations = []
-    for i in range(len(destination)): #(2) look for orders on valid places, if not valid; nan
-        if destination[i] == -1:
-            available_destinations.append(np.nan)
-        else:
-            available_destinations.append(1)
-    due_to_values = np.multiply(old_cell_state_due_to, available_destinations)
+def reward_heuristic(old_state, new_state, order, action):
+    reward_due_to, reward_basic = 0, 0
+    reward_due_to = calc_reward_due_to(old_state, action)
+    # reward_basic = calc_reward_basic(old_state, new_state, order)
+    return reward_due_to + reward_basic
 
-    try:
-        due_to = old_state.loc[action, "due_to"].values[0]
-    except AttributeError:
-        due_to = old_state.loc[action, "due_to"]
-    
-    relevant_due_tos = [x for x in due_to_values if np.isnan(x) == False]
 
-    try:        
-        if len(relevant_due_tos)>1:
-            if due_to <= np.mean(relevant_due_tos):
-                reward_due_to = 400
-            else:
-                reward_due_to = -300
-        else: 
-            reward_due_to = 100
-    except:
-        reward_due_to = 0
 
-    
-
-    
-    print("reward_due_to: ", reward_due_to)
-
-    a = old_state.loc[action, "_destination"]
-
+def calc_reward_basic(old_state, new_state, order):
     old_pos_type = old_state[old_state["order"] == order]["pos_type"].iloc[0]
 
     # Penalty for blocked Input
@@ -244,7 +217,37 @@ def reward_action_1(old_state, new_state, order, action):
                        (next_task_in_cell, -50),
                        (order_completed, 50)]
 
-    reward_basic = sum([value for condition, value in reward_settings if condition]) + reward_due_to    
-    print("reward: ", sum([value for condition, value in reward_settings if condition])) 
-    reward += reward_due_to + reward_basic
-    return reward
+    return sum([value for condition, value in reward_settings if condition])    
+
+def calc_reward_due_to(old_state, action):
+    old_cell_state_due_to = old_state.loc[:, "due_to"]
+
+    #get due_to values for all orders that have a destination
+    destination = old_state.loc[:, "_destination"]
+    available_destinations = []
+    for i in range(len(destination)): #(2) look for orders on valid places, if not valid; nan
+        if destination[i] == -1:
+            available_destinations.append(np.nan)
+        else:
+            available_destinations.append(1)
+    due_to_values = np.multiply(old_cell_state_due_to, available_destinations)
+
+    try:
+        due_to = old_state.loc[action, "due_to"].values[0]
+    except AttributeError:
+        due_to = old_state.loc[action, "due_to"]
+    
+    relevant_due_tos = [x for x in due_to_values if np.isnan(x) == False]
+    
+    try:        
+        if len(relevant_due_tos)>1:
+            if due_to <= np.mean(relevant_due_tos):
+                reward_due_to = 400
+            else:
+                reward_due_to = -300
+        else: 
+            reward_due_to = 0
+    except:
+        reward_due_to = 0
+
+    return reward_due_to

@@ -106,6 +106,7 @@ class ReinforceAgent():
             return q_value, Smart_action
     
     def get_dispatch_rule(self, state):
+        self.episode_step = self.episode_step + 1 
         self.global_step = self.global_step + 1
         if self.epsilon > self.epsilon_min:
             self.epsilon = self.epsilon * self.epsilon_decay
