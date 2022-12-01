@@ -18,6 +18,7 @@ configuration = {
     "ORDER_MINIMAL_LENGTH": 0,
     "ORDER_MAXIMAL_LENGTH": 100,
     "SPREAD_ORDER_COMPLEXITY": 0.1,
+    # "SPREAD_ORDER_Priority": 1,
 
     "AGENT_SPEED": 3,
     "TIME_FOR_ITEM_PICK_UP": 0.1,

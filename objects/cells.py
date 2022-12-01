@@ -135,10 +135,13 @@ class Cell:
         if requester.ruleset.dynamic:
             criteria = state_attributes.smart_state
             ranking_criteria = []
+        elif requester.ruleset.dynamic_dispatch:
+            criteria = state_attributes.smart_state
+            ranking_criteria = []
         else:
             criteria = state_attributes.normal_state
             ranking_criteria = requester.ranking_criteria
-
+        
         # Get occupancy of all available slots within this cell
         now = time.time()
         occupancy_states = pd.DataFrame(self.occupancy(requester, criteria))

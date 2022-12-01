@@ -1,6 +1,8 @@
+from cmath import exp
 from pickletools import read_int4
 import pandas as pd
 import numpy as np
+import math
 
 def evaluate_choice(choice):
     """Take an chosen action and check if this action is valid or should not be performed to save the system stability.
@@ -122,15 +124,17 @@ def reward_smart_dispatch(old_state, new_state, order, action):
     :return The reward amount"""
     reward_due_to, reward_basic = 0, 0
     reward_due_to = calc_reward_due_to(old_state, action)
+    reward_priority = calc_reward_priority(old_state, action) # 0 or 1; 1 if order has high priority
     # reward_basic = calc_reward_basic(old_state, new_state, order)
-    return reward_due_to + reward_basic
+    return reward_due_to * math.exp(reward_priority/5) + reward_basic
 
 def reward_heuristic(old_state, new_state, order, action):
     reward_due_to, reward_basic = 0, 0
-    reward_due_to = calc_reward_due_to(old_state, action)
+    reward_due_to = calc_reward_due_to(old_state, action) # -300 or 400; if order had lower due_to in average
+    reward_priority = calc_reward_priority(old_state, action) # 0 or 1; 1 if order has high priority
     # reward_basic = calc_reward_basic(old_state, new_state, order)
-    return reward_due_to + reward_basic
-
+    print("reward_smart:_2", reward_due_to)
+    return reward_due_to * math.exp(reward_priority/5) + reward_basic
 
 
 def calc_reward_basic(old_state, new_state, order):
@@ -221,7 +225,7 @@ def calc_reward_basic(old_state, new_state, order):
 
 def calc_reward_due_to(old_state, action):
     old_cell_state_due_to = old_state.loc[:, "due_to"]
-
+    print(old_cell_state_due_to)
     #get due_to values for all orders that have a destination
     destination = old_state.loc[:, "_destination"]
     available_destinations = []
@@ -236,9 +240,9 @@ def calc_reward_due_to(old_state, action):
         due_to = old_state.loc[action, "due_to"].values[0]
     except AttributeError:
         due_to = old_state.loc[action, "due_to"]
-    
+
     relevant_due_tos = [x for x in due_to_values if np.isnan(x) == False]
-    
+
     try:        
         if len(relevant_due_tos)>1:
             if due_to <= np.mean(relevant_due_tos):
@@ -251,3 +255,11 @@ def calc_reward_due_to(old_state, action):
         reward_due_to = 0
 
     return reward_due_to
+
+def calc_reward_priority(old_state, action): #get priority indicators for all orders that have a destination; 0 = normal priority; 1 = high priority
+    old_cell_priorities = old_state.loc[:, "priority"]
+    reward_priority = 0
+    if old_cell_priorities[action].values[0] == 1:
+        reward_priority = 1
+
+    return reward_priority

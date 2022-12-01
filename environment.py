@@ -46,7 +46,6 @@ def set_up_sim_env(config: dict, env: simpy.Environment, setup, train):
     :param env: (simpy environment) An simpy environment
     :param setup: (Pandas dataframe) The cell setup. Either created by setup process or loaded from file
     :param train: (boolean) Determines if the simulation is used to train an reinforcement learning algorithm
-
     :return sim_env: A new created simulation environment object"""
 
     # Generate objects from setup
@@ -120,9 +119,7 @@ def simulation(runs=1, show_progress=False, save_log=True,
 
         if show_progress:
             env.process(show_progress_func(env, simulation_environment))
-        # print("cells.ManufacturingAgent.instances: ", cells.ManufacturingAgent.instances)
-        # print(len(cells.ManufacturingAgent.instances))
-        time.sleep(15)
+
         env.run(until=config["SIMULATION_RANGE"])
 
         print('\nSimulation %d finished in %d seconds!' % (sim_count + 1, time.time() - start_time))
@@ -178,6 +175,7 @@ def sim_run_evaluation(sim_env, eval_measures):
                     "cell": cells.Cell.instances,
                     "order": Order.instances
                     }
+
     for focus in eval_measures.keys():
         measures = [key for key, value in eval_measures[focus].items() if value == True]
         if focus == "simulation":

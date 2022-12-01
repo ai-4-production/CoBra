@@ -3,6 +3,7 @@ import json
 from objects.processing_steps import load_processing_steps, ProcessingStep
 import simpy
 import time
+import random
 from copy import copy
 import numpy as np
 from objects.machines import Machine
@@ -13,7 +14,7 @@ class Order:
     finished_instances = []
 
     def __init__(self, env: simpy.Environment, sim_env, start, due_to,
-                 type, complexity=1):
+                 type, complexity=1, priority=1):
         self.env = env
         self.simulation_environment = sim_env
 
@@ -25,7 +26,7 @@ class Order:
         self.starting_position = sim_env.main_cell.input_buffer  # The position where the item will spawn once it started
         self.due_to = due_to  # Due to date of the order
         self.complexity = complexity  # Numerical value, modifier for processing time within machines
-
+        self.priority = priority # Numerical value, modifier for priority of orders
         # State
         self.started = False  # Order has arrived
         self.overdue = False  # Order is overdue
@@ -229,8 +230,7 @@ def order_arrivals(env: simpy.Environment, sim_env, config: dict):
 
     for order in sorted_list:
         yield env.timeout(order['start'] - last_arrival)
-        new_order = Order(env, sim_env, env.now, order['due_to'],
-                          order['type'], complexity=order['complexity'])
+        new_order = Order(env, sim_env, env.now, order['due_to'], order['type'], complexity=order['complexity'], priority=order['priority'])
         new_order.order_arrival()
         last_arrival = env.now
         orders_created += 1
@@ -264,7 +264,6 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     i = 0
     base_lengths = []
     while i < amount:
-        print(i)
         if i % 2 == 0: base_lengths.append(0)
         elif i % 3 == 0: base_lengths.append(40)
         else: base_lengths.append(70)
@@ -278,12 +277,21 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
         while comp_value <= 0:
             comp_value = np.random.normal(loc=1, scale=config['SPREAD_ORDER_COMPLEXITY'], size=1)
         complexities[complexities == complexity] = comp_value
-
+    
+    # Calculate order prioritities
+    priorities = np.full(amount, 1)
+    
+    for priority in range(len(priorities)):
+        prio = random.randint(1,10)
+        if prio < 4:
+            priorities[priority] = 1
+        elif prio >= 3:
+            priorities[priority] = 0
+    
     # Calculate order due_tue dates
     due_tues = start_times + base_lengths * duration_factors
 
-    order_records = np.rec.fromarrays((start_times, due_tues, complexities, types),
-                                        names=('start', 'due_to', 'complexity', 'type'))
+    order_records = np.rec.fromarrays((start_times, due_tues, complexities, priorities, types), names=('start', 'due_to', 'complexity','priority', 'type'))
 
     return order_records
 
@@ -304,6 +312,9 @@ def get_order_attributes(order, requester, attributes: list, now):
 
     def complexity():
         return order.complexity
+
+    def priority():
+        return order.priority
 
     def type():
         return order.type.type_id

@@ -208,6 +208,27 @@
                 "dynamic_dispatch": true,
                 "reinforcement_agent": "rein_agent_dispatch"
               }
+            },
+            {
+              "id": 13,
+              "name": "Reinforcement Agent (distributor, 1 child,  dispatch rules as actions)",
+              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
+              "rules":
+              {
+                "dynamic_dispatch": true,
+                "reinforcement_agent": "rein_agent_dispatch_distribute"
+              }
+            },
+            {
+              "id": 14,
+              "name": "Reinforcement Agent (general)",
+              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
+              "rules":
+              {
+                "dynamic_dispatch": true,
+                "dynamic_layout": true,
+                "reinforcement_agent": "rein_agent_dispatch_dynamic"
+              }
             }
           ]
 

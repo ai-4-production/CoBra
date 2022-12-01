@@ -12,8 +12,6 @@ from keras.layers import Dense, Dropout, Activation
 
 # Add reinforcement models
 
-
-# Dummy class
 class ReinforceAgent():
     def __init__(self, state_size, action_size):
         self.load_model = False
@@ -48,7 +46,7 @@ class ReinforceAgent():
     def buildModel(self):
         model = Sequential()
         dropout = 0.1
-        model.add(Dense(32, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
+        model.add(Dense(64, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dense(32, activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dropout(dropout))
         model.add(Dense(self.action_size, kernel_initializer='lecun_uniform'))
@@ -88,7 +86,6 @@ class ReinforceAgent():
         return reward + self.discount_factor * np.amax(next_target)
 
     def get_action(self, state):
-        self.global_step = self.global_step + 1
         if self.epsilon > self.epsilon_min:
             self.epsilon = self.epsilon * self.epsilon_decay
         epsilon_random = np.random.rand()
@@ -106,7 +103,6 @@ class ReinforceAgent():
             return q_value, Smart_action
     
     def get_dispatch_rule(self, state):
-        self.episode_step = self.episode_step + 1 
         self.global_step = self.global_step + 1
         if self.epsilon > self.epsilon_min:
             self.epsilon = self.epsilon * self.epsilon_decay
@@ -120,7 +116,7 @@ class ReinforceAgent():
             state = np.array(state)
             q_value = self.model.predict(state.reshape(1, len(state)))
             self.q_value = q_value
-            action = np.argmax(self.q_value[0])       
+            action = np.argmax(self.q_value[0])
             return action
 
     def appendMemory(self, smart_agent, former_state, new_state, action, reward, time_passed):
@@ -139,6 +135,7 @@ class ReinforceAgent():
 
 
 rein_agent_1 = ReinforceAgent(70, 11)
-rein_agent_1_1 = ReinforceAgent(11, 7) #current one 
+rein_agent_1_1 = ReinforceAgent(11, 7)
 rein_agent_1_2 = ReinforceAgent(11, 11)
-rein_agent_dispatch = ReinforceAgent(11, 3) 
+rein_agent_dispatch = ReinforceAgent(11, 3) #current one 
+rein_agent_dispatch_distribute = ReinforceAgent(12, 3) #current one 

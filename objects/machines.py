@@ -326,8 +326,7 @@ class Machine:
             material_attributes.append((item.composition[composition_element], material_complexity, material_hardness))
 
         manufacturing_time = (task.base_duration * item.complexity * sum([amount*(complexity+(hardness/2)) for amount, complexity, hardness in material_attributes]))/10
-        print("manufacturing_time: ", manufacturing_time)
-
+        
         return manufacturing_time
 
     def failure_event(self):
