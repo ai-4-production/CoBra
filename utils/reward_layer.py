@@ -126,16 +126,18 @@ def reward_smart_dispatch(old_state, new_state, order, action):
     reward_due_to = calc_reward_due_to(old_state, action)
     reward_priority = calc_reward_priority(old_state, action) # 0 or 1; 1 if order has high priority
     # reward_basic = calc_reward_basic(old_state, new_state, order)
-    return reward_due_to * math.exp(reward_priority/5) + reward_basic
+    return reward_due_to * math.exp(reward_priority/3) + reward_basic
 
 def reward_heuristic(old_state, new_state, order, action):
     reward_due_to, reward_basic = 0, 0
     reward_due_to = calc_reward_due_to(old_state, action) # -300 or 400; if order had lower due_to in average
     reward_priority = calc_reward_priority(old_state, action) # 0 or 1; 1 if order has high priority
     # reward_basic = calc_reward_basic(old_state, new_state, order)
-    print("reward_smart:_2", reward_due_to)
-    return reward_due_to * math.exp(reward_priority/5) + reward_basic
-
+    print("reward_heuristic:", reward_due_to)
+    if reward_due_to > 0:
+        return reward_due_to * math.exp(reward_priority/3) + reward_basic
+    else:  
+        return reward_due_to * math.exp(-reward_priority/3) + reward_basic
 
 def calc_reward_basic(old_state, new_state, order):
     old_pos_type = old_state[old_state["order"] == order]["pos_type"].iloc[0]
@@ -225,7 +227,6 @@ def calc_reward_basic(old_state, new_state, order):
 
 def calc_reward_due_to(old_state, action):
     old_cell_state_due_to = old_state.loc[:, "due_to"]
-    print(old_cell_state_due_to)
     #get due_to values for all orders that have a destination
     destination = old_state.loc[:, "_destination"]
     available_destinations = []

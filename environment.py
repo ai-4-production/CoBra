@@ -38,6 +38,8 @@ class SimulationEnvironment:
         self.db_con, self.db_cu = database.set_up_db(self)
         self.__class__.instances.append(self)
 
+        t = time.localtime()
+        self.timestamp = time.strftime('_%m-%d-%Y_%H-%M', t)
 
 def set_up_sim_env(config: dict, env: simpy.Environment, setup, train):
     """Setting up an new simulation environment
@@ -149,7 +151,7 @@ def simulation(runs=1, show_progress=False, save_log=True,
             schema["simulation_runs"].append(run.results)
             schema["orders"].append(run.order_results)
 
-        with open('../result/last_runs.json', 'w') as f:
+        with open('../result/last_runs' + self.timestamp + '.json', 'w') as f:
             json.dump(schema, f, indent=4, ensure_ascii=False)
 
 

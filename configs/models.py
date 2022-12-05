@@ -20,10 +20,10 @@ class ReinforceAgent():
         self.action_size = action_size
         self.episode_step = 6000
         self.target_update = 40
-        self.discount_factor = 0.99
-        self.learning_rate = 0.01
+        self.discount_factor = 0.99 #previous: 0.999
+        self.learning_rate = 0.005 #previous: 0.01
         self.epsilon = 1.0
-        self.epsilon_decay = 0.999
+        self.epsilon_decay = 0.997 #previous: 0.999
         self.epsilon_min = 0.1
         self.batch_size = 8
         self.train_start = 8        
@@ -47,6 +47,7 @@ class ReinforceAgent():
         model = Sequential()
         dropout = 0.1
         model.add(Dense(64, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
+        model.add(Dense(64, activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dense(32, activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dropout(dropout))
         model.add(Dense(self.action_size, kernel_initializer='lecun_uniform'))
@@ -137,5 +138,5 @@ class ReinforceAgent():
 rein_agent_1 = ReinforceAgent(70, 11)
 rein_agent_1_1 = ReinforceAgent(11, 7)
 rein_agent_1_2 = ReinforceAgent(11, 11)
-rein_agent_dispatch = ReinforceAgent(11, 3) #current one 
-rein_agent_dispatch_distribute = ReinforceAgent(12, 3) #current one 
+rein_agent_dispatch = ReinforceAgent(22, 3) #current one 
+rein_agent_dispatch_distribute = ReinforceAgent(24, 3) #current one 

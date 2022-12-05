@@ -245,15 +245,15 @@ class ManufacturingAgent:
         # total_state = state_due_to + state_...
         # return total_state
         state_due_to = order_state.loc[:, "due_to"] #state size = 11 
+        state_priority = order_state.loc[:, "priority"] #state size = 11; order priority
         state_due_to_available = np.multiply(state_due_to, available_destinations) #only consider orders with destination
-        # state_complexity
-        max_due_to = max(state_due_to_available) #for normalizing the vector
         try:
             state_due_to_normalized = [x / max(abs(i) for i in state_due_to_available) for x in state_due_to_available]
-            state_due_to_available = np.multiply(available_destinations, state_due_to_normalized)
-            return state_due_to_available
+            state_due_to_available = np.multiply(available_destinations, state_due_to_normalized) # only due_to values for orders with destination -> nothing in machine etc.
+            state_priority = np.multiply(available_destinations, state_priority)
+            return np.append(state_due_to_available, state_priority)
         except:
-            return state_due_to_available
+            return np.append(state_due_to_available, state_priority)
 
     def get_RL_state_distribution(self, order_state, available_destinations):
 
@@ -567,11 +567,12 @@ class ManufacturingAgent:
         processable_orders = self.get_processable_orders(old_state)
         if processable_orders  > 1: #if more than one order was apparent. 0,1: no AI necessary
             if not self.cell.machines:
-                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action)
                 print("Distribution cell")
+
+                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action)                                
             else:
-                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action)
                 print("Machine cell")
+                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action)            
             
             with open('../result/rewards' + self.timestamp + '.json', 'a+', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
