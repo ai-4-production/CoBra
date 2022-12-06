@@ -98,6 +98,7 @@ class ReinforceAgent():
             # return random.randrange(self.action_size)
         else:
             Smart_action = True
+            print(Smart_action)
             state = np.array(state)
             q_value = self.model.predict(state.reshape(1, len(state)))
             self.q_value = q_value
@@ -115,6 +116,7 @@ class ReinforceAgent():
             # return random.randrange(self.action_size)
         else:
             state = np.array(state)
+            print("Smart_action")
             q_value = self.model.predict(state.reshape(1, len(state)))
             self.q_value = q_value
             action = np.argmax(self.q_value[0])

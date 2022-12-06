@@ -126,7 +126,11 @@ def reward_smart_dispatch(old_state, new_state, order, action):
     reward_due_to = calc_reward_due_to(old_state, action)
     reward_priority = calc_reward_priority(old_state, action) # 0 or 1; 1 if order has high priority
     # reward_basic = calc_reward_basic(old_state, new_state, order)
-    return reward_due_to * math.exp(reward_priority/3) + reward_basic
+    if reward_due_to > 0:
+        return reward_due_to * math.exp(reward_priority/3) + reward_basic
+    else:  
+        return reward_due_to * math.exp(-reward_priority/3) + reward_basic
+
 
 def reward_heuristic(old_state, new_state, order, action):
     reward_due_to, reward_basic = 0, 0
