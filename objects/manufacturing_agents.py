@@ -543,8 +543,8 @@ class ManufacturingAgent:
         # new_state_flat = list(self.state_to_numeric(copy(new_state)).to_numpy().flatten())
         self.count = self.count + 1
         processable_orders = self.get_processable_orders(old_state)
-        reward = reward_layer.reward_heuristic(old_state, new_state, order, action)
         if self.get_processable_orders(old_state) > 1:
+            reward = reward_layer.reward_heuristic(old_state, new_state, order, action)
             with open('../result/reward_heuristic'  + self.timestamp + '.json', 'a+', newline='', encoding='utf-8') as file:
                 agent_name = str(self)
                 agent_name = agent_name[-14:-1]
