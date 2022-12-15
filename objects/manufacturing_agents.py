@@ -110,26 +110,23 @@ class ManufacturingAgent:
 
         # Get state of cell and orders inside this cell
         state_calc_start = time.time()
-        cell_state = self.cell.get_cell_state(requester=self)
+        cell_state = self.cell.get_cell_state(requester=self)  
         time_tracker.time_state_calc += time.time() - state_calc_start
-        
+
         # For each order in state add the destination if this order would be chosen
         dest_calc_start = time.time()
         cell_state["_destination"] = cell_state.apply(self.add_destinations, axis=1)
-        time_tracker.time_destination_calc += time.time() - dest_calc_start    
+        time_tracker.time_destination_calc += time.time() - dest_calc_start   
         self.ranking_criteria = [criteria["measure"] for criteria in self.ruleset.numerical_criteria]
-        now = time.time()
-        # Get action depending on agent ruleset
 
+        # Get action depending on agent ruleset
         if self.ruleset.dynamic:
             next_task, next_order, destination, base_state, state_RL, action, action_RL = self.get_smart_action(cell_state)
-            time_tracker.time_smart_action_calc += time.time() - now
-        elif self.ruleset.dynamic_dispatch: 
+        elif self.ruleset.dynamic_dispatch:
             next_task, next_order, destination, base_state, state_RL, action, action_RL = self.get_smart_dispatch_rule(cell_state)
-            time_tracker.time_action_calc += time.time() - now
         else:
             next_task, next_order, destination, base_state = self.get_action(cell_state)
-            time_tracker.time_action_calc += time.time() - now
+            
 
         # Perform next task if there is one
         if next_task:
@@ -163,14 +160,14 @@ class ManufacturingAgent:
             new_cell_state["_destination"] = new_cell_state.apply(self.add_destinations, axis=1)
             time_tracker.time_destination_calc += time.time() - dest_calc_start
             new_cell_state = self.state_to_numeric(copy(new_cell_state))
+            if self.get_processable_orders(cell_state) > 1:
+                if not self.ruleset.dynamic and not self.ruleset.dynamic_dispatch:
+                    action = self.get_heuristics_action_index(cell_state, next_order)
+                    self.finished_heuristic_action(cell_state, new_cell_state, base_state, next_order, self.env.now - task_started_at, action)
 
-            if not self.ruleset.dynamic and not self.ruleset.dynamic_dispatch:
-                action = self.get_heuristics_action_index(cell_state, next_order)
-                self.finished_heuristic_action(cell_state, new_cell_state, base_state, next_order, self.env.now - task_started_at, action)
-
-            if self.ruleset.dynamic or self.ruleset.dynamic_dispatch:  # Check rewards            
-                #reward function tbd
-                self.finished_smart_action(cell_state, new_cell_state, base_state, state_RL, next_order, self.env.now - task_started_at, action, action_RL)
+                if self.ruleset.dynamic or self.ruleset.dynamic_dispatch:  # Check rewards            
+                    #reward function tbd
+                    self.finished_smart_action(cell_state, new_cell_state, base_state, state_RL, next_order, action, action_RL)
                 
             # Start new main process
             self.main_proc = self.env.process(self.main_process())
@@ -239,25 +236,22 @@ class ManufacturingAgent:
         else:
             return None, None, None, None
 
-    def get_RL_state(self, order_state, available_destinations): # get flatted state vector with desired 
-        # Flatten state
-        # Order_state = numeric state
-        # total_state = state_due_to + state_...
-        # return total_state
-        state_due_to = order_state.loc[:, "due_to"] #state size = 11 
-        state_priority = order_state.loc[:, "priority"] #state size = 11; order priority
-        state_due_to_available = np.multiply(state_due_to, available_destinations) #only consider orders with destination
+    def get_RL_state(self, order_state, available_destinations): # get flatted state vector with chosen information
+        state_due_to = order_state.loc[:, "due_to"] 
+        state_priority = order_state.loc[:, "priority"] 
+        state_priority = np.multiply(available_destinations, state_priority)
+        state_state_priority = state_priority / 2
+        state_due_to_available = np.multiply(available_destinations, state_due_to) # only due_to values for orders with destination -> nothing in machine etc.
+        max_due_to = max(abs(i) for i in state_due_to_available)
         try:
-            state_due_to_normalized = [x / max(abs(i) for i in state_due_to_available) for x in state_due_to_available]
-            state_due_to_available = np.multiply(available_destinations, state_due_to_normalized) # only due_to values for orders with destination -> nothing in machine etc.
-            state_priority = np.multiply(available_destinations, state_priority)
-            return np.append(state_due_to_available, state_priority)
+            state_due_to_normalized = [x / max_due_to for x in state_due_to_available] # only due_to values for orders with destination -> nothing in machine etc.
+            state_RL = []
+            for i in range(len(state_due_to_available)): #(2) look for orders on valid places
+                state_RL.append(state_due_to_normalized[i])
+                state_RL.append(state_state_priority[i])    
+            return state_RL
         except:
-            return np.append(state_due_to_available, state_priority)
-
-    def get_RL_state_distribution(self, order_state, available_destinations):
-
-        return None
+            return np.append(state_due_to_available, state_state_priority)
 
     def get_available_destinations(self, order_state): #get numerized _destination space
         destination = order_state.loc[:, "_destination"]
@@ -274,36 +268,34 @@ class ManufacturingAgent:
         :param order_state: Pandas Dataframe, categorical state of the cell
         :return task: simpy process to be performed next
         :return next_order: order to be moved
-        :return destination: destination where the order will be brought to"""
-
+        :return destination: d estination where the order will be brought to"""
         smart_agent = self.ruleset.reinforce_agent
         #smart_agent = configs.models.ReinforceAgent(11, 3)
-
         #get state with orders on the various slots
         state_numeric = self.state_to_numeric(copy(order_state))
         available_destinations = self.get_available_destinations(state_numeric)
-        state_RL = self.get_RL_state(state_numeric, available_destinations) #smart agent thinking...
-        action_RL = smart_agent.get_dispatch_rule(state_RL)
-        
-        possible_dispatch_rules = [2,3,4]
-        for ruleset in RuleSet.instances:
-            if ruleset.id == possible_dispatch_rules[action_RL]:
-                self.ruleset_temp = ruleset # Reference to the choosen ruleset of the smart agent
-                break
-        self.ranking_criteria_assist = [criteria["measure"] for criteria in self.ruleset_temp.numerical_criteria]
 
         order = order_state[(order_state["order"].notnull())]
         useable_orders = order[(order["locked"] == 0) & (order["in_m_input"] == 0) & (order["in_m"] == 0) & (order["in_same_cell"] == 1)]
-
+        
         if useable_orders.empty:
             return None, None, None, None, None, None, None
         useable_with_free_destination = useable_orders[useable_orders["_destination"] != -1]
-
+        
         if useable_with_free_destination.empty:
             return None, None, None, None, None, None, None
         elif len(useable_with_free_destination) == 1:
             next_order = useable_with_free_destination["order"].iat[0]
+            state_RL, action_RL = None, None
         else:
+            state_RL = self.get_RL_state(state_numeric, available_destinations) 
+            action_RL = smart_agent.get_dispatch_rule(state_RL) #smart agent thinking...
+            possible_dispatch_rules = [4,9]
+            for ruleset in RuleSet.instances:
+                if ruleset.id == possible_dispatch_rules[action_RL]:
+                    self.ruleset_temp = ruleset # Reference to the choosen ruleset of the smart agent
+                    break
+            self.ranking_criteria_assist = [criteria["measure"] for criteria in self.ruleset_temp.numerical_criteria]
             criteria = [criteria["measure"] for criteria in self.ruleset_temp.numerical_criteria]            
             #ranking = useable_with_free_destination.loc[:, ["order"] + criteria]
             ranking = useable_with_free_destination.reindex(columns = (["order"] + criteria))
@@ -326,82 +318,7 @@ class ManufacturingAgent:
             ranking.loc[:, "Score"] = order_scores.sum(axis=1)
             ranking.sort_values(by=["Score"], inplace=True)
             next_order = ranking["order"].iat[0]
-
-        action = self.get_heuristics_action_index(order_state, next_order)
-        # action_next_order = order_state[order_state["order"]==next_order].index.values
-        # action = action_next_order
-        destination = useable_with_free_destination[useable_with_free_destination["order"] == next_order].reset_index(drop=True).loc[0, "_destination"]
-        # next_task, next_order, destination, base_state_flat, action, dynamic_temp
-        if destination:
-            return self.env.process(self.item_from_to(next_order, next_order.position, destination)), next_order, destination, state_numeric, state_RL, action, action_RL
-        else:
-            return None, None, None, None, None, None, None
-    
-    def get_smart_dispatch_rule_dynamic(self, order_state):
-        """Gets an action by using an dynamic reinforcement learning model defined in agents ruleset
-        :param order_state: Pandas Dataframe, categorical state of the cell
-        :return task: simpy process to be performed next
-        :return next_order: order to be moved
-        :return destination: destination where the order will be brought to"""
-
-        try:
-            self.dynamic = False 
-        except:
-            self.dynamic = True
-
-
-        smart_agent = self.ruleset.reinforce_agent
         
-        #get state with orders on the various slots
-        state_numeric = self.state_to_numeric(copy(order_state))
-        available_destinations = self.get_available_destinations(state_numeric)
-        state_RL = self.get_RL_state(state_numeric, available_destinations)
-        
-        #smart agent thinking...
-        action_RL = smart_agent.get_dispatch_rule(state_RL)
-        
-        possible_dispatch_rules = [2,3,4]
-        for ruleset in RuleSet.instances:
-            if ruleset.id == possible_dispatch_rules[action_RL]:
-                self.ruleset_temp = ruleset # Reference to the choosen ruleset of the smart agent
-                break
-        self.ranking_criteria_assist = [criteria["measure"] for criteria in self.ruleset_temp.numerical_criteria]
-
-        order = order_state[(order_state["order"].notnull())]
-        useable_orders = order[(order["locked"] == 0) & (order["in_m_input"] == 0) & (order["in_m"] == 0) & (order["in_same_cell"] == 1)]
-
-        if useable_orders.empty:
-            return None, None, None, None, None, None, None
-        useable_with_free_destination = useable_orders[useable_orders["_destination"] != -1]
-
-        if useable_with_free_destination.empty:
-            return None, None, None, None, None, None, None
-        elif len(useable_with_free_destination) == 1:
-            next_order = useable_with_free_destination["order"].iat[0]
-        else:
-            criteria = [criteria["measure"] for criteria in self.ruleset_temp.numerical_criteria]            
-            #ranking = useable_with_free_destination.loc[:, ["order"] + criteria]
-            ranking = useable_with_free_destination.reindex(columns = (["order"] + criteria))
-
-            for criterion in self.ruleset_temp.numerical_criteria:
-                weight = criterion["weight"]
-                measure = criterion["measure"]
-                order = criterion["ranking_order"]
-
-                max_v = ranking[measure].max()
-                min_v = ranking[measure].min()
-
-                # Min Max Normalisation
-                if order == "ASC":
-                    ranking["WS-" + measure] = weight * div_possible_zero((ranking[measure] - min_v), (max_v - min_v))
-                else:
-                    ranking["WS-" + measure] = weight * (1 - div_possible_zero((ranking[measure] - min_v), (max_v - min_v)))
-
-            order_scores = ranking.filter(regex="WS-")
-            ranking.loc[:, "Score"] = order_scores.sum(axis=1)
-            ranking.sort_values(by=["Score"], inplace=True)
-            next_order = ranking["order"].iat[0]
-
         action = self.get_heuristics_action_index(order_state, next_order)
         # action_next_order = order_state[order_state["order"]==next_order].index.values
         # action = action_next_order
@@ -414,8 +331,7 @@ class ManufacturingAgent:
 
     def get_heuristics_action_index(self, order_state, next_order):
         action_next_order = order_state[order_state["order"]==next_order].index.values
-        action = action_next_order
-        return action
+        return action_next_order
 
     def get_smart_action(self, order_state):
         """Gets an action by using an dynamic reinforcement learning model defined in agents ruleset
@@ -424,8 +340,7 @@ class ManufacturingAgent:
         :return task: simpy process to be performed next
         :return next_order: order to be moved
         :return destination: destination where the order will be brought to"""
-        smart_agent = self.ruleset.reinforce_agent
-        
+        smart_agent = self.ruleset.reinforce_agent  
         state_numeric = self.state_to_numeric(copy(order_state))
         available_destinations = self.get_available_destinations(state_numeric)
         # Get action space
@@ -442,14 +357,13 @@ class ManufacturingAgent:
                 destination = order_state.at[action, "_destination"] 
             else: 
                 # Take no action - idle mode
-                smart_agent.appendMemory(smart_agent, former_state=state_RL, new_state=state_RL, action = action_RL, reward=0,
-                                        time_passed=0)
+                smart_agent.appendMemory(smart_agent, former_state=state_RL, new_state=state_RL, action = action_RL, reward=0)
                 return None, None, None, None, None, None, None # next_task, next_order, destination, base_state_flat, action
         
             penalty = reward_layer.evaluate_choice(state_numeric.loc[action])
             if penalty < 0:
                 #action = self.get_RL_action_index(action)
-                smart_agent.appendMemory(smart_agent, former_state=state_RL, new_state=state_RL, action= action_RL, reward=penalty, time_passed=0)
+                smart_agent.appendMemory(smart_agent, former_state=state_RL, new_state=state_RL, action= action_RL, reward=penalty)
                 return None, None, None, None, None, None, None # next_task, next_order, destination, base_state_flat, action, dynamic_temp
             else:
                 return self.env.process(self.item_from_to(next_order, next_order.position, destination)), next_order, destination, state_numeric, state_RL, action, action_RL
@@ -553,7 +467,7 @@ class ManufacturingAgent:
         
         
 
-    def finished_smart_action(self, old_state, new_state, old_state_flat, state_RL, order, time_passed, action, action_RL): # calc reward and append memory
+    def finished_smart_action(self, old_state, new_state, old_state_flat, state_RL, order, action, action_RL): # calc reward and append memory
         """Calculate reward for smart action and inform reinforcement agent about the state changes
         :param old_state: The state at action decision (categorical)
         :param new_state: Current state after finished task (categorical)
@@ -562,24 +476,23 @@ class ManufacturingAgent:
         :param time_passed: (float) Time passed between action decision and finished task
         :param action: (int) The chosen action""" 
         smart_agent = self.ruleset.reinforce_agent
+        available_destinations = self.get_available_destinations(new_state)
+        new_state_RL = self.get_RL_state(new_state, available_destinations)
         # new_state_flat = list(self.state_to_numeric(copy(new_state)).to_numpy().flatten())        
         self.count_smart = self.count_smart + 1
         processable_orders = self.get_processable_orders(old_state)
+        priority = old_state.loc[action, "priority"].values[0]
         if processable_orders  > 1: #if more than one order was apparent. 0,1: no AI necessary
             if not self.cell.machines:
-                print("Distribution cell")
-
                 reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action)                                
             else:
-                print("Machine cell")
-                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action)            
-            
-            with open('../result/rewards' + self.timestamp + '.json', 'a+', newline='', encoding='utf-8') as file:
+                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action)           
+            with open('../result/rewards' + self.timestamp + '.csv', 'a+', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 agent_name = str(self)
                 agent_name = agent_name[-14:-1]
-                writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, reward, processable_orders]))
-            smart_agent.appendMemory(smart_agent, former_state=state_RL, new_state=state_RL, action = action_RL, reward=reward, time_passed=time_passed)
+                writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, reward, priority, processable_orders, action, action_RL]))
+            smart_agent.appendMemory(smart_agent, state_RL, new_state_RL, action_RL, reward)
 
     def get_processable_orders(self, old_state):
             # print("orders: ", len(old_state["order"]) - sum(x is not None for x in old_state["order"]), "; ", reward)
@@ -1111,16 +1024,14 @@ class ManufacturingAgent:
         """Util: Converts an categorical state into an numerical state. Fill all Nan values.
         :param order_state: Pandas Dataframe containing the categorical state
         :return numerical_order_state: Converted State"""
-
+        
         # Add index column
         order_state.loc[:, "slot_id"] = order_state.index
         slot_ids = order_state.pop("slot_id")
         order_state.insert(0, "slot_id", slot_ids)
-
         
         a = order_state.loc[:, "pos_type"]
         
-
         # Get ids for all positions within the cell
         pos_in_cell = order_state["pos"].unique()
         pos_ids = np.arange(1, len(pos_in_cell) + 1)
@@ -1137,16 +1048,17 @@ class ManufacturingAgent:
         cols = ["pos", "agent_position", "next_position", "_destination"]
         cols = [column for column in cols if column in order_state.columns.values.tolist()]
         order_state[cols] = order_state[cols].replace(pos_ids)
-
+        
         cols = ["pos_type"]
         order_state[cols] = order_state[cols].replace(pos_type_ids)
-
+        
         if "locked_item" in order_state.columns.values.tolist():
             order_state["locked_item"].fillna(-2)
             cols = ["locked_item"]
             order_state[cols] = order_state[cols].replace(orders_in_cell)
-
+        
         order_state = order_state.fillna(0)
+        now = time.time()
         order_state.loc[order_state["order"] != 0, "order"] = 1
-
+        time_tracker.time_prob_2 += time.time() - now
         return order_state

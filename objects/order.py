@@ -60,7 +60,7 @@ class Order:
             self.completed = True
             self.completed_at = self.env.now
             self.__class__.finished_instances.append(self)
-            print("Order finished! Nr ", len(self.__class__.finished_instances))
+            # print("Order finished! Nr ", len(self.__class__.finished_instances))
 
     def processing_step_finished(self):
         """Event: One processing step of the order was finished. Get next and check if order tasks are completed."""
@@ -87,7 +87,7 @@ class Order:
             if len(self.position.items_in_storage) == self.position.storage_capacity:
                 self.position.full = True
 
-            print(round(self.env.now, 2), "Arrival of new item")
+            # print(round(self.env.now, 2), "Arrival of new item")
 
             self.simulation_environment.main_cell.new_order_in_cell(self)
             self.simulation_environment.main_cell.inform_agents()
@@ -226,7 +226,8 @@ def order_arrivals(env: simpy.Environment, sim_env, config: dict):
     seed = config["SEED_INCOMING_ORDERS"]
 
     list_of_orders = get_orders_from_seed(max_orders, seed, config)
-    sorted_list = list_of_orders[np.argsort(list_of_orders[:], order=["start", "due_to"])]
+    sorted_list = list_of_orders[np.argsort(list_of_orders[:], order=["start"])]
+    #sorted_list = list_of_orders[np.argsort(list_of_orders[:], order=["start", "due_to"])]
 
     for order in sorted_list:
         yield env.timeout(order['start'] - last_arrival)
@@ -282,12 +283,14 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     priorities = np.full(amount, 1)
     
     for priority in range(len(priorities)):
-        prio = random.randint(1,10)
-        if prio < 4:
+        prio = random.randint(0,99)
+        if prio < 10:
+            priorities[priority] = 2
+        elif prio >= 10 and prio < 30:
             priorities[priority] = 1
-        elif prio >= 3:
+        else:
             priorities[priority] = 0
-    
+
     # Calculate order due_tue dates
     due_tues = start_times + base_lengths * duration_factors
 

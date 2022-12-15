@@ -3,6 +3,7 @@ import json
 import numpy as np
 import random
 import time
+from utils import time_tracker
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from collections import deque
@@ -11,6 +12,7 @@ from keras.optimizers import RMSprop
 from keras.layers import Dense, Dropout, Activation
 
 # Add reinforcement models
+#save model option
 
 class ReinforceAgent():
     def __init__(self, state_size, action_size):
@@ -19,14 +21,14 @@ class ReinforceAgent():
         self.state_size = state_size
         self.action_size = action_size
         self.episode_step = 6000
-        self.target_update = 40
+        self.target_update = 15
         self.discount_factor = 0.99 #previous: 0.999
-        self.learning_rate = 0.005 #previous: 0.01
+        self.learning_rate = 0.005 #previous: 0.005
         self.epsilon = 1.0
         self.epsilon_decay = 0.997 #previous: 0.999
-        self.epsilon_min = 0.1
-        self.batch_size = 8
-        self.train_start = 8        
+        self.epsilon_min = 0.01 #previous: 0.1
+        self.batch_size = 32
+        self.train_start = 6        
         self.memory = deque(maxlen=1000000)
         self.global_step = 0
 
@@ -46,9 +48,9 @@ class ReinforceAgent():
     def buildModel(self):
         model = Sequential()
         dropout = 0.1
-        model.add(Dense(64, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
+        model.add(Dense(128, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
+        # model.add(Dense(128), activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dense(64, activation='relu', kernel_initializer='lecun_uniform'))
-        model.add(Dense(32, activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dropout(dropout))
         model.add(Dense(self.action_size, kernel_initializer='lecun_uniform'))
         model.add(Activation('linear'))
@@ -57,6 +59,7 @@ class ReinforceAgent():
         return model
 
     def trainModel(self, target):
+        now_0 = time.time()
         mini_batch = random.sample(self.memory, self.batch_size)
         X_batch = np.empty((0, self.state_size), dtype=np.int)
         Y_batch = np.empty((0, self.action_size), dtype=np.int)
@@ -68,20 +71,16 @@ class ReinforceAgent():
             q_value = self.model.predict(states.reshape(1, len(states)))
             self.q_value = q_value
             next_target = self.model.predict(next_states.reshape(1, len(next_states)))
-
             if target:
                 next_target = self.target_model.predict(next_states.reshape(1, len(next_states)))
-                self.updateTargetModel()
-
-            #missing update target model
-            #save model option
-
+                #self.updateTargetModel()
             next_q_value = self.getQvalue(rewards, next_target)
 
             X_batch = np.append(X_batch, np.array([states.copy()]), axis=0)
             Y_sample = q_value.copy()
             Y_sample[0][actions] = next_q_value
             Y_batch = np.append(Y_batch, np.array([Y_sample[0]]), axis=0)
+        time_tracker.time_train_calc += time.time() - now_0   
 
     def getQvalue(self, reward, next_target):
         return reward + self.discount_factor * np.amax(next_target)
@@ -98,7 +97,6 @@ class ReinforceAgent():
             # return random.randrange(self.action_size)
         else:
             Smart_action = True
-            print(Smart_action)
             state = np.array(state)
             q_value = self.model.predict(state.reshape(1, len(state)))
             self.q_value = q_value
@@ -121,7 +119,7 @@ class ReinforceAgent():
             action = np.argmax(self.q_value[0])
             return action
 
-    def appendMemory(self, smart_agent, former_state, new_state, action, reward, time_passed):
+    def appendMemory(self, smart_agent, former_state, new_state, action, reward):
         #smart_agent, former_state=old_state_flat, new_state=new_state_flat, action=action, reward=reward, time_passed=time_passed
         self.memory.append((former_state, action, reward, new_state))
         #if len(smart_agent.memory) >= smart_agent.train_start:
@@ -139,5 +137,5 @@ class ReinforceAgent():
 rein_agent_1 = ReinforceAgent(70, 11)
 rein_agent_1_1 = ReinforceAgent(11, 7)
 rein_agent_1_2 = ReinforceAgent(11, 11)
-rein_agent_dispatch = ReinforceAgent(22, 3) #current one 
-rein_agent_dispatch_distribute = ReinforceAgent(24, 3) #current one 
+rein_agent_dispatch = ReinforceAgent(22, 2) #current one 
+rein_agent_dispatch_distribute = ReinforceAgent(24, 2) #current one 

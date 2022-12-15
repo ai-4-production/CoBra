@@ -42,7 +42,7 @@ class Buffer:
         if self.items_waiting:
             self.items_waiting = sorted(self.items_waiting, key=lambda tup: tup[1])
             self.items_waiting[0][0].order_arrival()
-            print("len(self.items_waiting): ", len(self.items_waiting))
+            # print("len(self.items_waiting): ", len(self.items_waiting))
             del self.items_waiting[0]
         else:
             self.full = False

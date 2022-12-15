@@ -46,7 +46,6 @@ class RuleSet:
         try:
             self.dynamic_dispatch = rules['rules']['dynamic_dispatch']
             self.reinforce_agent = eval("configs.models." + rules['rules']['reinforcement_agent'])
-
             #if train_model:
             #    self.reinforce_agent.trainModel()
         except:

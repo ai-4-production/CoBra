@@ -10,6 +10,7 @@ import configs.config as configuration_file
 from objects.materials import load_materials
 import numpy as np
 import json
+import csv
 
 
 class SimulationEnvironment:
@@ -38,9 +39,6 @@ class SimulationEnvironment:
         self.db_con, self.db_cu = database.set_up_db(self)
         self.__class__.instances.append(self)
 
-        t = time.localtime()
-        self.timestamp = time.strftime('_%m-%d-%Y_%H-%M', t)
-
 def set_up_sim_env(config: dict, env: simpy.Environment, setup, train):
     """Setting up an new simulation environment
 
@@ -66,7 +64,6 @@ def set_up_sim_env(config: dict, env: simpy.Environment, setup, train):
 def simulation(runs=1, show_progress=False, save_log=True,
                change_interruptions=True, change_incoming_orders=True, train=False):
     """Main function of the simulation: Create project setup and run simulation on it"""
-
     config = configuration_file.configuration
     eval_measures = configuration_file.evaluation_measures
 
@@ -106,6 +103,8 @@ def simulation(runs=1, show_progress=False, save_log=True,
 
     # Run the set amount of simulations
     for sim_count in range(runs):
+        t = time.localtime()
+        timestamp = time.strftime('_%m-%d-%Y_%H-%M', t)
         config["SEED_MACHINE_INTERUPTIONS"] = interruption_seeds[sim_count].item()
         config["SEED_INCOMING_ORDERS"] = order_seeds[sim_count].item()
         env = simpy.Environment()
@@ -128,6 +127,8 @@ def simulation(runs=1, show_progress=False, save_log=True,
         print("Time Tracker:\nTime for state calculations: %d seconds \nTime for destination calculations: %d seconds" % (time_tracker.time_state_calc, time_tracker.time_destination_calc))
         print("State Calculations:\nTime for occupancy: %d seconds \nTime for order attributes: %d seconds" % (time_tracker.time_occupancy_calc, time_tracker.time_order_attr_calc))
         print("Time for action finding: Normal actions %d seconds, Smart actions: %d seconds" % (time_tracker.time_action_calc, time_tracker.time_smart_action_calc))
+        print("Time for neural network batch training: %d seconds" % (time_tracker.time_train_calc))
+
 
         if not simulation_environment.train_model:
             database.add_final_events()
@@ -151,7 +152,7 @@ def simulation(runs=1, show_progress=False, save_log=True,
             schema["simulation_runs"].append(run.results)
             schema["orders"].append(run.order_results)
 
-        with open('../result/last_runs' + self.timestamp + '.json', 'w') as f:
+        with open('../result/last_runs' + timestamp + '.json', 'w') as f:
             json.dump(schema, f, indent=4, ensure_ascii=False)
 
 

@@ -9,6 +9,12 @@ time_pos_attr_calc = 0
 
 time_action_calc = 0
 time_smart_action_calc = 0
+time_train_calc = 0
+
+time_prob_1 = 0
+time_prob_2 = 0
+time_prob_3 = 0
+time_prob_4 = 0
 
 
 def reset_timer():
@@ -22,6 +28,12 @@ def reset_timer():
 
     global time_action_calc
     global time_smart_action_calc
+    global time_train_calc
+
+    global time_prob_2
+    global time_prob_2
+    global time_prob_3
+    global time_prob_4
 
     time_state_calc = 0
     time_destination_calc = 0
@@ -32,3 +44,9 @@ def reset_timer():
 
     time_action_calc = 0
     time_smart_action_calc = 0
+    time_train_calc = 0
+
+    time_prob_1 = 0
+    time_prob_2 = 0
+    time_prob_3 = 0
+    time_prob_4 = 0

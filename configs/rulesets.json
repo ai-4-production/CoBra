@@ -171,33 +171,23 @@
             },
             {
               "id": 9,
-              "name": "Reinforcement (70, 11)",
-              "description": "Kalkuliere Action mittels eines Reinforcement Agenten",
+              "name": "High priority",
+              "description": "Bevorzuge die Aufträge die die höchste Prirität haben",
               "rules":
               {
-                "dynamic": true,
-                "reinforcement_agent": "rein_agent_1"
+                "criteria": {
+                  "numerical": [
+                    {
+                      "measure": "priority",
+                      "ranking_order": "DESC",
+                      "weight": 1
+                    }
+                  ]
+
+                }
+
               }
-            },
-            {
-              "id": 10,
-              "name": "Reinforcement Agent (1 Machine, 1 Agent)",
-              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
-              "rules":
-              {
-                "dynamic": true,
-                "reinforcement_agent": "rein_agent_1_1"
-              }
-            },
-            {
-              "id": 11,
-              "name": "Reinforcement Agent (2 Machine,  Agent)",
-              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
-              "rules":
-              {
-                "dynamic": true,
-                "reinforcement_agent": "rein_agent_1_2"
-              }
+
             },
             {
               "id": 12,
