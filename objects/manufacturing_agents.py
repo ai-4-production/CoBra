@@ -457,13 +457,14 @@ class ManufacturingAgent:
         # new_state_flat = list(self.state_to_numeric(copy(new_state)).to_numpy().flatten())
         self.count = self.count + 1
         processable_orders = self.get_processable_orders(old_state)
+        priority = old_state.loc[action, "priority"].values[0]
         if self.get_processable_orders(old_state) > 1:
             reward = reward_layer.reward_heuristic(old_state, new_state, order, action)
-            with open('../result/reward_heuristic'  + self.timestamp + '.json', 'a+', newline='', encoding='utf-8') as file:
+            with open('../result/reward_heuristic' + self.timestamp + '_' + agent_name + '.csv', 'a+', newline='', encoding='utf-8') as file:
                 agent_name = str(self)
                 agent_name = agent_name[-14:-1]
                 writer = csv.writer(file)
-                writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count, reward, processable_orders]))
+                writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count, reward, priority, processable_orders, action]))
         
         
 
@@ -487,7 +488,7 @@ class ManufacturingAgent:
                 reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action)                                
             else:
                 reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action)           
-            with open('../result/rewards' + self.timestamp + '.csv', 'a+', newline='', encoding='utf-8') as file:
+            with open('../result/rewards' + self.timestamp + '_' + agent_name +  '.csv', 'a+', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 agent_name = str(self)
                 agent_name = agent_name[-14:-1]
