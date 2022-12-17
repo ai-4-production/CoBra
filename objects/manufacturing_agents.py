@@ -289,7 +289,7 @@ class ManufacturingAgent:
         else:
             state_RL = self.get_RL_state(state_numeric, available_destinations) 
             action_RL = smart_agent.get_dispatch_rule(state_RL) #smart agent thinking...
-            possible_dispatch_rules = [4,9]
+            possible_dispatch_rules = [3,4,9]
             for ruleset in RuleSet.instances:
                 if ruleset.id == possible_dispatch_rules[action_RL]:
                     self.ruleset_temp = ruleset # Reference to the choosen ruleset of the smart agent
@@ -459,9 +459,14 @@ class ManufacturingAgent:
         priority = old_state.loc[action, "priority"].values[0]
         if self.get_processable_orders(old_state) > 1:
             reward = reward_layer.reward_heuristic(old_state, new_state, order, action)
-            with open('../result/rewards' + self.timestamp + '_' + agent_name + '_level-' + self.cell.level + '_parent-' + self.cell.parent + '_rule-' + self.ruleset.id +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-                agent_name = str(self)
-                agent_name = agent_name[-14:-1]
+            agent_name = str(self)
+            agent_name = agent_name[-14:-1]
+            parent = str(self.cell.parent)
+            try:
+                parent = parent[-14:-1]
+            except:
+                parent = None
+            with open('../result/rewards' + self.timestamp + '_' + agent_name + '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count, reward, priority, processable_orders, action]))
         
@@ -483,14 +488,19 @@ class ManufacturingAgent:
         processable_orders = self.get_processable_orders(old_state)
         priority = old_state.loc[action, "priority"].values[0]
         if processable_orders  > 1: #if more than one order was apparent. 0,1: no AI necessary
+            agent_name = str(self)
+            agent_name = agent_name[-14:-1]
+            parent = str(self.cell.parent)
+            try:
+                parent = parent[-14:-1]
+            except:
+                parent = None
             if not self.cell.machines:
                 reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action)                                
             else:
                 reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action)           
-            with open('../result/rewards' + self.timestamp + '_' + agent_name + '_level-' + self.cell.level + '_parent-' + self.cell.parent + '_rule-' + self.ruleset.id +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+            with open('../result/rewards' + self.timestamp + '_' + agent_name + '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
-                agent_name = str(self)
-                agent_name = agent_name[-14:-1]
                 writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, reward, priority, processable_orders, action, action_RL]))
             smart_agent.appendMemory(smart_agent, state_RL, new_state_RL, action_RL, reward)
 

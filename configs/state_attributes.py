@@ -1,7 +1,7 @@
 """This file defines what attributes should be included in the state for either normal or smart agents.
 A list of useable values is including within the documentation. There are certain attributes that have to be included."""
 
-normal_state = {"order": ["type", "tasks_finished", "next_task", "locked", "picked_up", "in_same_cell", "in_m_input", "in_m", "processing", "due_to","remaining_tasks", "priority"],
+normal_state = {"order": ["type", "tasks_finished", "next_task", "locked", "picked_up", "in_same_cell", "in_m_input", "in_m", "processing", "due_to","remaining_tasks", "priority", "time_in_cell"],
                 "buffer": ["free_slots"],
                 "machine": ["failure"],
                 "agent": []}

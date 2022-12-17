@@ -123,10 +123,11 @@ def reward_action(old_state, new_state, order, action):
 def reward_smart_dispatch(old_state, new_state, order, action):
     """Calculate the reward for an agent for the last action he performed
     :return The reward amount"""
-    reward_due_to, reward_basic = 0, 0
+    reward_due_to, reward_basic, reward_throughput_time_local = 0, 0, 0
     reward_due_to = calc_reward_due_to(old_state, action)
     reward_priority = calc_reward_priority(old_state, action) # 0 or 1; 1 if order has high priority
-    return reward_due_to + reward_priority
+    reward_throughput_time_local = calc_reward_throughput_time_local(old_state, action)
+    return reward_due_to + reward_priority + reward_throughput_time_local
     # if reward_due_to > 0:
     #     return reward_due_to * math.exp(reward_priority/3) + reward_basic
     # else:  
@@ -137,12 +138,98 @@ def reward_heuristic(old_state, new_state, order, action):
     reward_due_to, reward_basic = 0, 0
     reward_due_to = calc_reward_due_to(old_state, action) # -300 or 400; if order had lower due_to in average
     reward_priority = calc_reward_priority(old_state, action) # 0 or 1; 1 if order has high priority
+    reward_throughput_time_local = calc_reward_throughput_time_local(old_state, action)
     # reward_basic = calc_reward_basic(old_state, new_state, order)
-    return reward_due_to + reward_priority
+    return reward_due_to + reward_priority + reward_throughput_time_local
     # if reward_due_to > 0:
     #     return reward_due_to * math.exp(reward_priority/2) + reward_basic
     # else:  
     #     return reward_due_to * math.exp(-reward_priority/2) + reward_basic
+
+
+def calc_reward_due_to(old_state, action):
+    old_cell_state_due_to = old_state.loc[:, "due_to"]
+    #get due_to values for all orders that have a destination
+    destination = old_state.loc[:, "_destination"]
+    available_destinations = []
+    for i in range(len(destination)): #(2) look for orders on valid places, if not valid; nan
+        if destination[i] == -1:
+            available_destinations.append(np.nan)
+        else:
+            available_destinations.append(1)
+    due_to_values = np.multiply(old_cell_state_due_to, available_destinations)
+    min_due_to, max_due_to = np.min(due_to_values), np.max(due_to_values)
+    try:
+        due_to = old_state.loc[action, "due_to"].values[0]
+    except AttributeError:
+        due_to = old_state.loc[action, "due_to"]
+    reward_due_to = (2*(max_due_to-due_to)/(max_due_to-min_due_to) - 1)**5 * 200
+    return reward_due_to
+
+def calc_reward_due_to_old(old_state, action):
+    old_cell_state_due_to = old_state.loc[:, "due_to"]
+    #get due_to values for all orders that have a destination
+    destination = old_state.loc[:, "_destination"]
+    available_destinations = []
+    for i in range(len(destination)): #(2) look for orders on valid places, if not valid; nan
+        if destination[i] == -1:
+            available_destinations.append(np.nan)
+        else:
+            available_destinations.append(1)
+    due_to_values = np.multiply(old_cell_state_due_to, available_destinations)
+
+    try:
+        due_to = old_state.loc[action, "due_to"].values[0]
+    except AttributeError:
+        due_to = old_state.loc[action, "due_to"]
+
+    relevant_due_tos = [x for x in due_to_values if np.isnan(x) == False]
+
+    try:
+        if len(relevant_due_tos)>1:
+            if due_to <= np.mean(relevant_due_tos):
+                reward_due_to = 400
+            else:
+                reward_due_to = -400
+        else: 
+            reward_due_to = 0
+    except:
+        reward_due_to = 0
+    return reward_due_to
+
+def calc_reward_priority(old_state, action): #get priority indicators for all orders that have a destination; 0 = normal priority; 1 = high priority
+    old_cell_priorities = old_state.loc[:, "priority"]
+    reward_priority = 0
+    if old_cell_priorities[action].values[0] == 0:
+        reward_priority = 0
+    elif old_cell_priorities[action].values[0] == 1:
+        reward_priority = 400
+    elif old_cell_priorities[action].values[0] == 2:
+        reward_priority = 800
+    return reward_priority
+
+def calc_reward_throughput_time_local(old_state, action):
+    time_in_cell = old_state.loc[:, "time_in_cell"]
+    #get due_to values for all orders that have a destination
+    destination = old_state.loc[:, "_destination"]
+    available_destinations = []
+    for i in range(len(destination)): #(2) look for orders on valid places, if not valid; nan
+        if destination[i] == -1:
+            available_destinations.append(np.nan)
+        else:
+            available_destinations.append(1)
+    time_in_cell_available = np.multiply(time_in_cell, available_destinations) #Time in cell of orders that can be processed by an agent
+
+    time_in_cell_min, time_in_cell_max = np.min(time_in_cell_available), np.max(time_in_cell_available)
+    try:
+        time_in_cell_order = old_state.loc[action, "time_in_cell"].values[0]
+    except AttributeError:
+        time_in_cell_order = old_state.loc[action, "time_in_cell"]
+
+    reward_throughput_time = (1 - 2*(time_in_cell_max-time_in_cell_order)/(time_in_cell_max-time_in_cell_min))**5 * 200
+    return reward_throughput_time
+
+
 
 def calc_reward_basic(old_state, new_state, order):
     old_pos_type = old_state[old_state["order"] == order]["pos_type"].iloc[0]
@@ -229,64 +316,3 @@ def calc_reward_basic(old_state, new_state, order):
                        (order_completed, 50)]
 
     return sum([value for condition, value in reward_settings if condition])    
-
-def calc_reward_due_to(old_state, action):
-    old_cell_state_due_to = old_state.loc[:, "due_to"]
-    #get due_to values for all orders that have a destination
-    destination = old_state.loc[:, "_destination"]
-    available_destinations = []
-    for i in range(len(destination)): #(2) look for orders on valid places, if not valid; nan
-        if destination[i] == -1:
-            available_destinations.append(np.nan)
-        else:
-            available_destinations.append(1)
-    due_to_values = np.multiply(old_cell_state_due_to, available_destinations)
-    min_due_to, max_due_to = np.min(due_to_values), np.max(due_to_values)
-    try:
-        due_to = old_state.loc[action, "due_to"].values[0]
-    except AttributeError:
-        due_to = old_state.loc[action, "due_to"]
-    reward_due_to = (2*(max_due_to-due_to)/(max_due_to-min_due_to) - 1)**5 * 200
-    return reward_due_to
-
-def calc_reward_due_to_old(old_state, action):
-    old_cell_state_due_to = old_state.loc[:, "due_to"]
-    #get due_to values for all orders that have a destination
-    destination = old_state.loc[:, "_destination"]
-    available_destinations = []
-    for i in range(len(destination)): #(2) look for orders on valid places, if not valid; nan
-        if destination[i] == -1:
-            available_destinations.append(np.nan)
-        else:
-            available_destinations.append(1)
-    due_to_values = np.multiply(old_cell_state_due_to, available_destinations)
-
-    try:
-        due_to = old_state.loc[action, "due_to"].values[0]
-    except AttributeError:
-        due_to = old_state.loc[action, "due_to"]
-
-    relevant_due_tos = [x for x in due_to_values if np.isnan(x) == False]
-
-    try:
-        if len(relevant_due_tos)>1:
-            if due_to <= np.mean(relevant_due_tos):
-                reward_due_to = 400
-            else:
-                reward_due_to = -400
-        else: 
-            reward_due_to = 0
-    except:
-        reward_due_to = 0
-    return reward_due_to
-
-def calc_reward_priority(old_state, action): #get priority indicators for all orders that have a destination; 0 = normal priority; 1 = high priority
-    old_cell_priorities = old_state.loc[:, "priority"]
-    reward_priority = 0
-    if old_cell_priorities[action].values[0] == 0:
-        reward_priority = 0
-    elif old_cell_priorities[action].values[0] == 1:
-        reward_priority = 400
-    elif old_cell_priorities[action].values[0] == 2:
-        reward_priority = 800
-    return reward_priority

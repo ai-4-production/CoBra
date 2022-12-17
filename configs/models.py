@@ -137,5 +137,5 @@ class ReinforceAgent():
 rein_agent_1 = ReinforceAgent(70, 11)
 rein_agent_1_1 = ReinforceAgent(11, 7)
 rein_agent_1_2 = ReinforceAgent(11, 11)
-rein_agent_dispatch = ReinforceAgent(22, 2) #current one 
-rein_agent_dispatch_distribute = ReinforceAgent(24, 2) #current one 
+rein_agent_dispatch = ReinforceAgent(22, 3) #current one 
+rein_agent_dispatch_distribute = ReinforceAgent(24, 3) #current one 
