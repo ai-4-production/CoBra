@@ -238,19 +238,31 @@ class ManufacturingAgent:
     def get_RL_state(self, order_state, available_destinations): # get flatted state vector with chosen information
         state_due_to = order_state.loc[:, "due_to"] 
         state_priority = order_state.loc[:, "priority"] 
+        time_in_cell = order_state.loc[:, "time_in_cell"] 
         state_priority = np.multiply(available_destinations, state_priority)
         state_state_priority = state_priority / 2
         state_due_to_available = np.multiply(available_destinations, state_due_to) # only due_to values for orders with destination -> nothing in machine etc.
+        time_in_cell_available = np.multiply(available_destinations, time_in_cell)
+        max_time_in_cell = max(abs(i) for i in time_in_cell_available)
         max_due_to = max(abs(i) for i in state_due_to_available)
-        try:
+        
+        if max_due_to != 0:
             state_due_to_normalized = [x / max_due_to for x in state_due_to_available] # only due_to values for orders with destination -> nothing in machine etc.
-            state_RL = []
-            for i in range(len(state_due_to_available)): #(2) look for orders on valid places
-                state_RL.append(state_due_to_normalized[i])
-                state_RL.append(state_state_priority[i])    
-            return state_RL
-        except:
-            return np.append(state_due_to_available, state_state_priority)
+        else:
+            state_due_to_normalized = np.zeros(len(state_due_to_available))
+
+        if max_time_in_cell != 0:
+            state_time_in_cell_normalized = [x / max_time_in_cell for x in time_in_cell_available]
+        else:
+            state_time_in_cell_normalized = np.zeros(len(time_in_cell_available))
+        
+        state_RL = []
+        for i in range(len(state_due_to_available)): #(2) look for orders on valid places
+            state_RL.append(state_due_to_normalized[i])
+            state_RL.append(state_time_in_cell_normalized[i])
+            state_RL.append(state_state_priority[i])    
+
+        return state_RL
 
     def get_available_destinations(self, order_state): #get numerized _destination space
         destination = order_state.loc[:, "_destination"]
