@@ -126,8 +126,7 @@ class ManufacturingAgent:
             next_task, next_order, destination, base_state, state_RL, action, action_RL = self.get_smart_dispatch_rule(cell_state)
         else:
             next_task, next_order, destination, base_state = self.get_action(cell_state)
-            
-
+        
         # Perform next task if there is one
         if next_task:
             self.current_task = next_task
@@ -460,7 +459,7 @@ class ManufacturingAgent:
         priority = old_state.loc[action, "priority"].values[0]
         if self.get_processable_orders(old_state) > 1:
             reward = reward_layer.reward_heuristic(old_state, new_state, order, action)
-            with open('../result/reward_heuristic' + self.timestamp + '_' + agent_name + '.csv', 'a+', newline='', encoding='utf-8') as file:
+            with open('../result/rewards' + self.timestamp + '_' + agent_name + '_level-' + self.cell.level + '_parent-' + self.cell.parent + '_rule-' + self.ruleset.id +  '.csv', 'a+', newline='', encoding='utf-8') as file:
                 agent_name = str(self)
                 agent_name = agent_name[-14:-1]
                 writer = csv.writer(file)
@@ -488,7 +487,7 @@ class ManufacturingAgent:
                 reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action)                                
             else:
                 reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action)           
-            with open('../result/rewards' + self.timestamp + '_' + agent_name +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+            with open('../result/rewards' + self.timestamp + '_' + agent_name + '_level-' + self.cell.level + '_parent-' + self.cell.parent + '_rule-' + self.ruleset.id +  '.csv', 'a+', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 agent_name = str(self)
                 agent_name = agent_name[-14:-1]

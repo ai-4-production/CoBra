@@ -246,7 +246,7 @@ def calc_reward_due_to(old_state, action):
         due_to = old_state.loc[action, "due_to"].values[0]
     except AttributeError:
         due_to = old_state.loc[action, "due_to"]
-    reward_due_to = (2*(max_due_to-due_to)/(max_due_to-min_due_to) - 1)**3 * 200
+    reward_due_to = (2*(max_due_to-due_to)/(max_due_to-min_due_to) - 1)**5 * 200
     return reward_due_to
 
 def calc_reward_due_to_old(old_state, action):

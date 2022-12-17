@@ -68,11 +68,11 @@ class ReinforceAgent():
             next_states = np.asarray(mini_batch[i][3])
             actions = np.asarray(mini_batch[i][1])
             rewards = np.asarray(mini_batch[i][2])
-            q_value = self.model.predict(states.reshape(1, len(states)))
+            q_value = self.model.predict(states.reshape(1, len(states)), verbose = 0)
             self.q_value = q_value
-            next_target = self.model.predict(next_states.reshape(1, len(next_states)))
+            next_target = self.model.predict(next_states.reshape(1, len(next_states)), verbose = 0)
             if target:
-                next_target = self.target_model.predict(next_states.reshape(1, len(next_states)))
+                next_target = self.target_model.predict(next_states.reshape(1, len(next_states)), verbose = 0)
                 #self.updateTargetModel()
             next_q_value = self.getQvalue(rewards, next_target)
 
@@ -98,7 +98,7 @@ class ReinforceAgent():
         else:
             Smart_action = True
             state = np.array(state)
-            q_value = self.model.predict(state.reshape(1, len(state)))
+            q_value = self.model.predict(state.reshape(1, len(state)), verbose = 0)
             self.q_value = q_value
             return q_value, Smart_action
     
@@ -114,7 +114,7 @@ class ReinforceAgent():
             # return random.randrange(self.action_size)
         else:
             state = np.array(state)
-            q_value = self.model.predict(state.reshape(1, len(state)))
+            q_value = self.model.predict(state.reshape(1, len(state)), verbose = 0)
             self.q_value = q_value
             action = np.argmax(self.q_value[0])
             return action
