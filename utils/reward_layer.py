@@ -226,7 +226,7 @@ def calc_reward_throughput_time_local(old_state, action):
     except AttributeError:
         time_in_cell_order = old_state.loc[action, "time_in_cell"]
 
-    reward_throughput_time = (1 - 2*(time_in_cell_max-time_in_cell_order)/(time_in_cell_max-time_in_cell_min))**5 * 200
+    reward_throughput_time = (1 - 2*(time_in_cell_max-time_in_cell_order)/(time_in_cell_max-time_in_cell_min))**5 * 200 #Highest time in cell to awarded, lowest to be punished
     return reward_throughput_time
 
 
