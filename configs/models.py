@@ -1,4 +1,5 @@
 import os
+import gc
 import json
 import numpy as np
 import random
@@ -10,6 +11,7 @@ from collections import deque
 from keras.models import Sequential, load_model
 from keras.optimizers import RMSprop
 from keras.layers import Dense, Dropout, Activation
+from keras.backend import backend as K
 
 # Add reinforcement models
 #save model option
@@ -27,7 +29,7 @@ class ReinforceAgent():
         self.epsilon = 1.0
         self.epsilon_decay = 0.997 #previous: 0.999
         self.epsilon_min = 0.01 #previous: 0.1
-        self.batch_size = 32
+        self.batch_size = 16
         self.train_start = 6        
         self.memory = deque(maxlen=1000000)
         self.global_step = 0
@@ -48,7 +50,7 @@ class ReinforceAgent():
     def buildModel(self):
         model = Sequential()
         dropout = 0.1
-        model.add(Dense(128, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
+        model.add(Dense(64, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
         # model.add(Dense(128), activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dense(64, activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dropout(dropout))
@@ -80,7 +82,10 @@ class ReinforceAgent():
             Y_sample = q_value.copy()
             Y_sample[0][actions] = next_q_value
             Y_batch = np.append(Y_batch, np.array([Y_sample[0]]), axis=0)
-        time_tracker.time_train_calc += time.time() - now_0   
+        self.model.fit(X_batch, Y_batch, batch_size=self.batch_size, epochs=1, verbose=0)
+        gc.collect()
+        K.clear_session()
+
 
     def getQvalue(self, reward, next_target):
         return reward + self.discount_factor * np.amax(next_target)
