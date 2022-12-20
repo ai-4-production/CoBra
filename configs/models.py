@@ -84,7 +84,7 @@ class ReinforceAgent():
             Y_batch = np.append(Y_batch, np.array([Y_sample[0]]), axis=0)
         self.model.fit(X_batch, Y_batch, batch_size=self.batch_size, epochs=1, verbose=0)
         gc.collect()
-        K.clear_session()
+        # K.clear_session()
 
 
     def getQvalue(self, reward, next_target):
