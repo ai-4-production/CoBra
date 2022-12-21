@@ -11,6 +11,7 @@ from collections import deque
 from keras.models import Sequential, load_model
 from keras.optimizers import RMSprop
 from keras.layers import Dense, Dropout, Activation
+os.environ['keras_backend'] = 'tensorflow' 
 from keras.backend import backend as K
 
 # Add reinforcement models
@@ -29,7 +30,7 @@ class ReinforceAgent():
         self.epsilon = 1.0
         self.epsilon_decay = 0.997 #previous: 0.999
         self.epsilon_min = 0.01 #previous: 0.1
-        self.batch_size = 16
+        self.batch_size = 8
         self.train_start = 6        
         self.memory = deque(maxlen=1000000)
         self.global_step = 0
@@ -83,8 +84,9 @@ class ReinforceAgent():
             Y_sample[0][actions] = next_q_value
             Y_batch = np.append(Y_batch, np.array([Y_sample[0]]), axis=0)
         self.model.fit(X_batch, Y_batch, batch_size=self.batch_size, epochs=1, verbose=0)
+        time_tracker.time_train_calc = time.time() - now_0
         gc.collect()
-        # K.clear_session()
+        K.clear_session()
 
 
     def getQvalue(self, reward, next_target):
