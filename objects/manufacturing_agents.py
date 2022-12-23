@@ -167,7 +167,8 @@ class ManufacturingAgent:
                 if self.ruleset.dynamic or self.ruleset.dynamic_dispatch:  # Check rewards            
                     #reward function tbd
                     self.finished_smart_action(cell_state, new_cell_state, base_state, state_RL, next_order, action, action_RL)
-                
+ 
+
             # Start new main process
             self.main_proc = self.env.process(self.main_process())
 
@@ -471,7 +472,7 @@ class ManufacturingAgent:
         self.count = self.count + 1
         processable_orders = self.get_processable_orders(old_state)
         priority = old_state.loc[action, "priority"].values[0]
-        if self.get_processable_orders(old_state) > 1:
+        if processable_orders > 1:
             reward = reward_layer.reward_heuristic(old_state, new_state, order, action)
             agent_name = str(self)
             agent_name = agent_name[-14:-1]

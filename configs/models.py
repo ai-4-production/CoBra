@@ -4,6 +4,7 @@ import json
 import numpy as np
 import random
 import time
+import pathlib
 from utils import time_tracker
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -18,8 +19,8 @@ from keras.backend import backend as K
 #save model option
 
 class ReinforceAgent():
-    def __init__(self, state_size, action_size):
-        self.load_model = False
+    def __init__(self, state_size, action_size, load_model, global_step = 0):
+        self.load_model = load_model
         self.load_episode = 0
         self.state_size = state_size
         self.action_size = action_size
@@ -33,20 +34,24 @@ class ReinforceAgent():
         self.batch_size = 8
         self.train_start = 6        
         self.memory = deque(maxlen=1000000)
-        self.global_step = 0
+        self.global_step = global_step
 
         self.model = self.buildModel()
         self.target_model = self.buildModel()
+        self.path = pathlib.Path(__file__).parent.resolve()
 
-        self.updateTargetModel()
-
-        if self.load_model:
-            self.model.set_weights(load_model(self.dirPath+str(self.load_episode)+".h5").get_weights())
-
-            with open(self.dirPath+str(self.load_episode)+'.json') as outfile:
-                param = json.load(outfile)
-                self.epsilon = param.get('epsilon')
-
+        try:
+            if self.load_model:
+                self.model = load_model('../models_saved/' + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
+                self.target_model = self.model
+                # with open(self.dirPath+str(self.load_episode)+'.json') as outfile:
+                #     param = json.load(outfile)
+                #     self.epsilon = param.get('epsilon')
+            else: 
+                self.model = self.buildModel()
+                self.target_model = self.buildModel()
+        except:
+            pass
     
     def buildModel(self):
         model = Sequential()
@@ -85,6 +90,9 @@ class ReinforceAgent():
             Y_batch = np.append(Y_batch, np.array([Y_sample[0]]), axis=0)
         self.model.fit(X_batch, Y_batch, batch_size=self.batch_size, epochs=1, verbose=0)
         time_tracker.time_train_calc = time.time() - now_0
+        # if self.global_step % 10 == 0:
+        #     self.model.save('/models_saved/' + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
+
         gc.collect()
         # K.clear_session()
 
@@ -92,34 +100,45 @@ class ReinforceAgent():
     def getQvalue(self, reward, next_target):
         return reward + self.discount_factor * np.amax(next_target)
 
-    def get_action(self, state):
-        if self.epsilon > self.epsilon_min:
-            self.epsilon = self.epsilon * self.epsilon_decay
-        epsilon_random = np.random.rand()
-        
-        if epsilon_random <= self.epsilon:
-            Smart_action = False
-            action = random.randint(0, self.action_size)
-            return action, Smart_action
-            # return random.randrange(self.action_size)
-        else:
-            Smart_action = True
-            state = np.array(state)
-            q_value = self.model.predict(state.reshape(1, len(state)), verbose = 0)
-            self.q_value = q_value
-            return q_value, Smart_action
+    # def get_action(self, state):
+    #     if self.load_model = False:
+    #         if self.epsilon > self.epsilon_min:
+    #             self.epsilon = self.epsilon * self.epsilon_decay
+    #         epsilon_random = np.random.rand()
+    #         if epsilon_random <= self.epsilon:
+    #             Smart_action = False
+    #             action = random.randint(0, self.action_size)
+    #             return action, Smart_action
+    #             # return random.randrange(self.action_size)
+    #         else:
+    #             Smart_action = True
+    #             state = np.array(state)
+    #             q_value = self.model.predict(state.reshape(1, len(state)), verbose = 0)
+    #             self.q_value = q_value
+    #             return q_value, Smart_action
+
+    #     elif self.load_model = True: 
     
     def get_dispatch_rule(self, state):
-        self.global_step = self.global_step + 1
-        if self.epsilon > self.epsilon_min:
-            self.epsilon = self.epsilon * self.epsilon_decay
-        epsilon_random = np.random.rand()
-        
-        if epsilon_random <= self.epsilon:
-            action = random.randint(0, self.action_size - 1)
-            return action
-            # return random.randrange(self.action_size)
-        else:
+        if not self.load_model:
+            self.global_step = self.global_step + 1
+            if self.epsilon > self.epsilon_min:
+                self.epsilon = self.epsilon * self.epsilon_decay
+
+            epsilon_random = np.random.rand()
+
+            if epsilon_random <= self.epsilon:
+                action = random.randint(0, self.action_size - 1)
+                return action
+                # return random.randrange(self.action_size)
+            else:
+                state = np.array(state)
+                q_value = self.model.predict(state.reshape(1, len(state)), verbose = 0)
+                self.q_value = q_value
+                action = np.argmax(self.q_value[0])
+                return action
+
+        elif self.load_model: 
             state = np.array(state)
             q_value = self.model.predict(state.reshape(1, len(state)), verbose = 0)
             self.q_value = q_value
@@ -130,19 +149,16 @@ class ReinforceAgent():
         #smart_agent, former_state=old_state_flat, new_state=new_state_flat, action=action, reward=reward, time_passed=time_passed
         self.memory.append((former_state, action, reward, new_state))
         #if len(smart_agent.memory) >= smart_agent.train_start:
-        if (smart_agent.global_step % smart_agent.target_update) == 0:
-            smart_agent.updateTargetModel()
-        if len(smart_agent.memory) >= smart_agent.batch_size:
-            smart_agent.trainModel(True)
-
-
+        if not self.load_model:
+            if (smart_agent.global_step % smart_agent.target_update) == 0:
+                smart_agent.updateTargetModel()
+            if len(smart_agent.memory) >= smart_agent.batch_size:
+                smart_agent.trainModel(True)
 
     def updateTargetModel(self):
         self.target_model.set_weights(self.model.get_weights())
 
-
-rein_agent_1 = ReinforceAgent(70, 11)
-rein_agent_1_1 = ReinforceAgent(11, 7)
-rein_agent_1_2 = ReinforceAgent(11, 11)
-rein_agent_dispatch = ReinforceAgent(33, 3) #current one 
-rein_agent_dispatch_distribute = ReinforceAgent(36, 3) #current one 
+rein_agent_dispatch = ReinforceAgent(33, 3, False) #current one 
+rein_agent_dispatch_distribute = ReinforceAgent(36, 3, False) #current one 
+rein_agent_dispatch_operate = ReinforceAgent(33, 3, True) #current one 
+rein_agent_dispatch_distribute_operate = ReinforceAgent(36, 3, True) #current one 
