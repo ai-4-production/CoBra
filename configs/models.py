@@ -64,8 +64,8 @@ class ReinforceAgent():
     def trainModel(self, target):
         now_0 = time.time()
         mini_batch = random.sample(self.memory, self.batch_size)
-        X_batch = np.empty((0, self.state_size), dtype=np.int)
-        Y_batch = np.empty((0, self.action_size), dtype=np.int)
+        X_batch = np.empty((0, self.state_size), dtype=int)
+        Y_batch = np.empty((0, self.action_size), dtype=int)
         for i in range(self.batch_size):
             states = np.asarray(mini_batch[i][0])
             next_states = np.asarray(mini_batch[i][3])
@@ -86,7 +86,7 @@ class ReinforceAgent():
         self.model.fit(X_batch, Y_batch, batch_size=self.batch_size, epochs=1, verbose=0)
         time_tracker.time_train_calc = time.time() - now_0
         gc.collect()
-        K.clear_session()
+        # K.clear_session()
 
 
     def getQvalue(self, reward, next_target):
