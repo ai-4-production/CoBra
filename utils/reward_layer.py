@@ -199,17 +199,26 @@ def calc_reward_due_to_old(old_state, action):
 
 def calc_reward_priority(old_state, action): #get priority indicators for all orders that have a destination; 0 = normal priority; 1 = high priority
     old_cell_priorities = old_state.loc[:, "priority"]
-    reward_priority = 0
+    reward_priority, reward_priority_2 = 0, 0
     if old_cell_priorities[action].values[0] == 0:
         reward_priority = 0
     elif old_cell_priorities[action].values[0] == 1:
-        reward_priority = 300
+        reward_priority = 200
     elif old_cell_priorities[action].values[0] == 2:
         reward_priority = 700
 
-    # insert priority here
+    count_prio_2 = 0
+    for i in range(len(old_cell_priorities)):
+        try:
+            if old_cell_priorities[i].values[0] == 2:
+                count_prio_2 += 1    
+        except AttributeError:
+            pass
+        
+    if count_prio_2 >= 1 and old_cell_priorities[action].values[0] != 2:
+        reward_priority_2 = -400
 
-    return reward_priority
+    return reward_priority + reward_priority_2
 
 def calc_reward_throughput_time_local(old_state, action):
     time_in_cell = old_state.loc[:, "time_in_cell"]
