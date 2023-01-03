@@ -7,7 +7,7 @@ import time
 import pathlib
 from utils import time_tracker
 import sys
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+# sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from collections import deque
 from keras.models import Sequential, load_model
 from keras.optimizers import RMSprop
@@ -25,16 +25,17 @@ class ReinforceAgent():
         self.state_size = state_size
         self.action_size = action_size
         self.episode_step = 6000
-        self.target_update = 15
+        self.target_update = 10
         self.discount_factor = 0.99 #previous: 0.999
         self.learning_rate = 0.005 #previous: 0.005
         self.epsilon = 1.0
         self.epsilon_decay = 0.997 #previous: 0.999
         self.epsilon_min = 0.01 #previous: 0.1
-        self.batch_size = 8
-        self.train_start = 6        
+        self.batch_size = 32  
         self.memory = deque(maxlen=1000000)
         self.global_step = global_step
+        self.global_step_1 = 0
+        self.train_step = 0
 
         self.model = self.buildModel()
         self.target_model = self.buildModel()
@@ -56,7 +57,7 @@ class ReinforceAgent():
     def buildModel(self):
         model = Sequential()
         dropout = 0.1
-        model.add(Dense(64, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
+        model.add(Dense(128, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
         # model.add(Dense(128), activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dense(64, activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dropout(dropout))
@@ -82,6 +83,7 @@ class ReinforceAgent():
             if target:
                 next_target = self.target_model.predict(next_states.reshape(1, len(next_states)), verbose = 0)
                 #self.updateTargetModel()
+            K.clear_session()
             next_q_value = self.getQvalue(rewards, next_target)
 
             X_batch = np.append(X_batch, np.array([states.copy()]), axis=0)
@@ -92,9 +94,11 @@ class ReinforceAgent():
         time_tracker.time_train_calc = time.time() - now_0
         # if self.global_step % 10 == 0:
         #     self.model.save('/models_saved/' + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
+        # print("Prev.: ", self.global_step_1, ", Act.: ", self.global_step)
+        # self.global_step_1 = self.global_step
 
         gc.collect()
-        # K.clear_session()
+    
 
 
     def getQvalue(self, reward, next_target):
@@ -120,8 +124,8 @@ class ReinforceAgent():
     #     elif self.load_model = True: 
     
     def get_dispatch_rule(self, state):
+        self.global_step = self.global_step + 1
         if not self.load_model:
-            self.global_step = self.global_step + 1
             if self.epsilon > self.epsilon_min:
                 self.epsilon = self.epsilon * self.epsilon_decay
 
@@ -148,12 +152,18 @@ class ReinforceAgent():
     def appendMemory(self, smart_agent, former_state, new_state, action, reward):
         #smart_agent, former_state=old_state_flat, new_state=new_state_flat, action=action, reward=reward, time_passed=time_passed
         self.memory.append((former_state, action, reward, new_state))
-        #if len(smart_agent.memory) >= smart_agent.train_start:
         if not self.load_model:
             if (smart_agent.global_step % smart_agent.target_update) == 0:
                 smart_agent.updateTargetModel()
             if len(smart_agent.memory) >= smart_agent.batch_size:
                 smart_agent.trainModel(True)
+                self.train_step += 1
+                print("self.train_step: ", self.train_step, "self.global_step: ", self.global_step)
+                if self.train_step % 50 == 0:
+                    # self.model.save('/models_saved/' + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
+                    self.model.save("../models_saved/" + str(self.action_size) + "_" + str(self.state_size) + "_" +str(self.train_step))
+                    print("model_saved")
+                    
 
     def updateTargetModel(self):
         self.target_model.set_weights(self.model.get_weights())

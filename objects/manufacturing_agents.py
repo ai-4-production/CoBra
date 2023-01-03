@@ -301,9 +301,9 @@ class ManufacturingAgent:
             state_RL, action_RL = None, None
         else:
             state_RL = self.get_RL_state(state_numeric, available_destinations) 
-            now_0 = time.time()
+            now = time.time()
             action_RL = smart_agent.get_dispatch_rule(state_RL) #smart agent thinking...
-            time_tracker.time_smart_action_calc = time.time() - now_0
+            time_tracker.time_smart_action_calc += time.time() - now 
             possible_dispatch_rules = [3,4,9]
             for ruleset in RuleSet.instances:
                 if ruleset.id == possible_dispatch_rules[action_RL]:

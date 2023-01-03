@@ -261,7 +261,6 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     types = np.full(amount, possible_types[0])
     duration_factors = np.asarray([order_type.duration_factor for order_type in types])
     base_lengths_1 = np.random.randint(low=config['ORDER_MINIMAL_LENGTH'], high=config['ORDER_MAXIMAL_LENGTH'], size=amount)
-    base_lengths_2 = np.full(amount, 20)
     i = 0
     base_lengths = []
     while i < amount:
@@ -286,14 +285,14 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
         prio = random.randint(0,99)
         if prio < 10:
             priorities[priority] = 2
-        elif prio >= 10 and prio < 30:
+        elif prio >= 10 and prio < 20:
             priorities[priority] = 1
         else:
             priorities[priority] = 0
 
     # Calculate order due_tue dates
     due_tues = start_times + base_lengths * duration_factors
-
+    
     order_records = np.rec.fromarrays((start_times, due_tues, complexities, priorities, types), names=('start', 'due_to', 'complexity','priority', 'type'))
 
     return order_records

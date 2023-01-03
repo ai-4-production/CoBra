@@ -163,7 +163,7 @@ def calc_reward_due_to(old_state, action):
         due_to = old_state.loc[action, "due_to"].values[0]
     except AttributeError:
         due_to = old_state.loc[action, "due_to"]
-    reward_due_to = (2*(max_due_to-due_to)/(max_due_to-min_due_to) - 1)**5 * 200
+    reward_due_to = (2*(max_due_to-due_to)/(max_due_to-min_due_to) - 1)**5 * 150
     return reward_due_to
 
 def calc_reward_due_to_old(old_state, action):
@@ -203,9 +203,9 @@ def calc_reward_priority(old_state, action): #get priority indicators for all or
     if old_cell_priorities[action].values[0] == 0:
         reward_priority = 0
     elif old_cell_priorities[action].values[0] == 1:
-        reward_priority = 400
+        reward_priority = 300
     elif old_cell_priorities[action].values[0] == 2:
-        reward_priority = 800
+        reward_priority = 700
     return reward_priority
 
 def calc_reward_throughput_time_local(old_state, action):
@@ -226,7 +226,7 @@ def calc_reward_throughput_time_local(old_state, action):
     except AttributeError:
         time_in_cell_order = old_state.loc[action, "time_in_cell"]
 
-    reward_throughput_time = (1 - 2*(time_in_cell_max-time_in_cell_order)/(time_in_cell_max-time_in_cell_min))**5 * 200 #Highest time in cell to awarded, lowest to be punished
+    reward_throughput_time = (1 - 2*(time_in_cell_max-time_in_cell_order)/(time_in_cell_max-time_in_cell_min))**5 * 100 #Highest time in cell to awarded, lowest to be punished
     return reward_throughput_time
 
 
