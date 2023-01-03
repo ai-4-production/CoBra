@@ -97,7 +97,7 @@ class ReinforceAgent():
             if target:
                 next_target = self.target_model.predict(next_states.reshape(1, len(next_states)), verbose = 0)
                 #self.updateTargetModel()
-            K.clear_session()
+            # K.clear_session()
             next_q_value = self.getQvalue(rewards, next_target)
 
             X_batch = np.append(X_batch, np.array([states.copy()]), axis=0)
@@ -112,7 +112,7 @@ class ReinforceAgent():
         # self.global_step_1 = self.global_step
 
         gc.collect() 
-        K.clear_session()
+        # K.clear_session()
 
     def getQvalue(self, reward, next_target):
         return reward + self.discount_factor * np.amax(next_target)
@@ -161,8 +161,8 @@ class ReinforceAgent():
     def updateTargetModel(self):
         self.target_model.set_weights(self.model.get_weights())
 
-# rein_agent_dispatch = ReinforceAgent(33, 3, False) #current one 
-# rein_agent_dispatch_distribute = ReinforceAgent(36, 3, False) #current one 
+rein_agent_dispatch = ReinforceAgent(33, 3, False) #current one 
+rein_agent_dispatch_distribute = ReinforceAgent(36, 3, False) #current one 
 
-rein_agent_dispatch = ReinforceAgent(33, 3, True, 2250) #current one 
-rein_agent_dispatch_distribute = ReinforceAgent(36, 3, True, 1450) #current one 
+rein_agent_dispatch1 = ReinforceAgent(33, 3, True, 2250) #current one 
+rein_agent_dispatch_distribute1 = ReinforceAgent(36, 3, True, 1450) #current one 
