@@ -214,13 +214,10 @@ def load_order_types():
 def order_arrivals(env: simpy.Environment, sim_env, config: dict):
     """
     Create incoming order events for the simulation environment
-
     :param env: SimPy environment
     :param sim_env: Object of class simulation environment
     :param config: Configuration with Parameter like number of orders, order length
     """
-
-    orders_created = 0
     last_arrival = 0
     max_orders = config['NUMBER_OF_ORDERS']
     seed = config["SEED_INCOMING_ORDERS"]
@@ -234,8 +231,6 @@ def order_arrivals(env: simpy.Environment, sim_env, config: dict):
         new_order = Order(env, sim_env, env.now, order['due_to'], order['type'], complexity=order['complexity'], priority=order['priority'])
         new_order.order_arrival()
         last_arrival = env.now
-        orders_created += 1
-
 
 def get_orders_from_seed(amount: int, seed: int, config: dict):
     """Create a list of random order attributes from seed

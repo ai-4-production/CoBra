@@ -206,6 +206,9 @@ def calc_reward_priority(old_state, action): #get priority indicators for all or
         reward_priority = 300
     elif old_cell_priorities[action].values[0] == 2:
         reward_priority = 700
+
+    # insert priority here
+
     return reward_priority
 
 def calc_reward_throughput_time_local(old_state, action):
