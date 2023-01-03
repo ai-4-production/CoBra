@@ -162,7 +162,7 @@ class ReinforceAgent():
         self.target_model.set_weights(self.model.get_weights())
 
 rein_agent_dispatch = ReinforceAgent(39, 3, False) #current one 
-rein_agent_dispatch_distribute = ReinforceAgent(39, 3, False) #current one 
+rein_agent_dispatch_distribute = ReinforceAgent(42, 3, False) #current one 
 
 # rein_agent_dispatch1 = ReinforceAgent(33, 3, True, 2250) #current one 
 # rein_agent_dispatch_distribute1 = ReinforceAgent(36, 3, True, 1450) #current one 

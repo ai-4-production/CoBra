@@ -203,20 +203,34 @@ def calc_reward_priority(old_state, action): #get priority indicators for all or
     if old_cell_priorities[action].values[0] == 0:
         reward_priority = 0
     elif old_cell_priorities[action].values[0] == 1:
-        reward_priority = 200
+        reward_priority = 300
     elif old_cell_priorities[action].values[0] == 2:
-        reward_priority = 700
+        reward_priority = 600
 
-    count_prio_2 = 0
-    for i in range(len(old_cell_priorities)):
-        try:
-            if old_cell_priorities[i].values[0] == 2:
-                count_prio_2 += 1    
-        except AttributeError:
-            pass
-        
+    count_prio_1, count_prio_2 = 0, 0
+    
+    destination = old_state.loc[:, "_destination"]
+    available_destinations = []
+    for i in range(len(destination)): #(2) look for orders on valid places, if not valid; nan
+        if destination[i] == -1:
+            available_destinations.append(np.nan)
+        else:
+            available_destinations.append(1)
+    priorities = np.multiply(old_cell_priorities, available_destinations)
+
+    for i in range(len(priorities)):
+        if priorities[i] == 2:
+            count_prio_2 += 1    
+        elif priorities[i] == 1: 
+            count_prio_1 += 1
+    
+    print("count_prio_2: ", count_prio_2)
     if count_prio_2 >= 1 and old_cell_priorities[action].values[0] != 2:
         reward_priority_2 = -400
+
+    if count_prio_2 == 0:
+        if count_prio_1 >= 1 and old_cell_priorities[action].values[0] != 1:
+            reward_priority_2 = -100
 
     return reward_priority + reward_priority_2
 
