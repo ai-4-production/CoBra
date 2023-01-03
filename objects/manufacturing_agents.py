@@ -29,7 +29,7 @@ class ManufacturingAgent:
         self.simulation_environment = None
 
         t = time.localtime()
-        self.timestamp = time.strftime('_%m-%d-%Y_%H-%M', t)
+        self.timestamp = time.strftime('_%Y-%m-%d_%H-%M', t)
 
         self.lock = None
         self.count = 0

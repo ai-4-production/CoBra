@@ -194,9 +194,9 @@ def sim_run_evaluation(sim_env, eval_measures):
 
     print("\nCalculation finished in %d seconds!" % (time.time() - start_time))
     print(time_tracker.time_action_calc, time_tracker.time_smart_action_calc, time_tracker.time_train_calc, time_tracker.time_destination_calc, time_tracker.time_occupancy_calc, time_tracker.time_state_calc)
-    with open('/result/times' + '.csv', 'a+', newline='', encoding='utf-8') as file:
-        writer = csv.writer(file)
-        writer.writerow(list([time_tracker.time_action_calc, time_tracker.time_smart_action_calc, time_tracker.time_train_calc, time_tracker.time_destination_calc, time_tracker.time_occupancy_calc, time_tracker.time_state_calc]))
+    # with open('/times' + '.csv', 'a+', newline='', encoding='utf-8') as file:
+    #     writer = csv.writer(file)
+    #     writer.writerow(list([time_tracker.time_action_calc, time_tracker.time_smart_action_calc, time_tracker.time_train_calc, time_tracker.time_destination_calc, time_tracker.time_occupancy_calc, time_tracker.time_state_calc]))
 
 def release_objects():
     """Release all created objects"""

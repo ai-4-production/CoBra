@@ -19,8 +19,8 @@ from keras.backend import backend as K
 #save model option
 
 class ReinforceAgent():
-    def __init__(self, state_size, action_size, load_model, global_step = 0):
-        self.load_model = load_model
+    def __init__(self, state_size, action_size, trained_model, global_step = 0):
+        self.trained_model = trained_model
         self.load_episode = 0
         self.state_size = state_size
         self.action_size = action_size
@@ -41,18 +41,32 @@ class ReinforceAgent():
         self.target_model = self.buildModel()
         self.path = pathlib.Path(__file__).parent.resolve()
 
-        try:
-            if self.load_model:
-                self.model = load_model('../models_saved/' + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
-                self.target_model = self.model
-                # with open(self.dirPath+str(self.load_episode)+'.json') as outfile:
-                #     param = json.load(outfile)
-                #     self.epsilon = param.get('epsilon')
-            else: 
-                self.model = self.buildModel()
-                self.target_model = self.buildModel()
-        except:
-            pass
+        if self.trained_model:
+            print("../models_saved/" + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
+            self.model = load_model("models_saved/" + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
+            self.target_model = self.model
+            # with open(self.dirPath+str(self.load_episode)+'.json') as outfile:
+            #     param = json.load(outfile)
+            #     self.epsilon = param.get('epsilon')
+        else: 
+            self.model = self.buildModel()
+            self.target_model = self.buildModel()
+
+        # try:
+        #     if self.trained_model:
+        #         print("../models_saved/" + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
+        #         self.model = load_model("../models_saved/" + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
+        #         self.target_model = self.model
+        #         # with open(self.dirPath+str(self.load_episode)+'.json') as outfile:
+        #         #     param = json.load(outfile)
+        #         #     self.epsilon = param.get('epsilon')
+        #     else: 
+        #         self.model = self.buildModel()
+        #         self.target_model = self.buildModel()
+        # except:
+        #     print("except")
+        #     time.sleep(10)
+        #     pass
     
     def buildModel(self):
         model = Sequential()
@@ -97,35 +111,15 @@ class ReinforceAgent():
         # print("Prev.: ", self.global_step_1, ", Act.: ", self.global_step)
         # self.global_step_1 = self.global_step
 
-        gc.collect()
-    
-
+        gc.collect() 
+        K.clear_session()
 
     def getQvalue(self, reward, next_target):
         return reward + self.discount_factor * np.amax(next_target)
-
-    # def get_action(self, state):
-    #     if self.load_model = False:
-    #         if self.epsilon > self.epsilon_min:
-    #             self.epsilon = self.epsilon * self.epsilon_decay
-    #         epsilon_random = np.random.rand()
-    #         if epsilon_random <= self.epsilon:
-    #             Smart_action = False
-    #             action = random.randint(0, self.action_size)
-    #             return action, Smart_action
-    #             # return random.randrange(self.action_size)
-    #         else:
-    #             Smart_action = True
-    #             state = np.array(state)
-    #             q_value = self.model.predict(state.reshape(1, len(state)), verbose = 0)
-    #             self.q_value = q_value
-    #             return q_value, Smart_action
-
-    #     elif self.load_model = True: 
     
     def get_dispatch_rule(self, state):
         self.global_step = self.global_step + 1
-        if not self.load_model:
+        if not self.trained_model:
             if self.epsilon > self.epsilon_min:
                 self.epsilon = self.epsilon * self.epsilon_decay
 
@@ -142,7 +136,7 @@ class ReinforceAgent():
                 action = np.argmax(self.q_value[0])
                 return action
 
-        elif self.load_model: 
+        elif self.trained_model: 
             state = np.array(state)
             q_value = self.model.predict(state.reshape(1, len(state)), verbose = 0)
             self.q_value = q_value
@@ -152,13 +146,12 @@ class ReinforceAgent():
     def appendMemory(self, smart_agent, former_state, new_state, action, reward):
         #smart_agent, former_state=old_state_flat, new_state=new_state_flat, action=action, reward=reward, time_passed=time_passed
         self.memory.append((former_state, action, reward, new_state))
-        if not self.load_model:
+        if not self.trained_model:
             if (smart_agent.global_step % smart_agent.target_update) == 0:
                 smart_agent.updateTargetModel()
             if len(smart_agent.memory) >= smart_agent.batch_size:
                 smart_agent.trainModel(True)
                 self.train_step += 1
-                print("self.train_step: ", self.train_step, "self.global_step: ", self.global_step)
                 if self.train_step % 50 == 0:
                     # self.model.save('/models_saved/' + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
                     self.model.save("../models_saved/" + str(self.action_size) + "_" + str(self.state_size) + "_" +str(self.train_step))
@@ -168,7 +161,8 @@ class ReinforceAgent():
     def updateTargetModel(self):
         self.target_model.set_weights(self.model.get_weights())
 
-rein_agent_dispatch = ReinforceAgent(33, 3, False) #current one 
-rein_agent_dispatch_distribute = ReinforceAgent(36, 3, False) #current one 
-rein_agent_dispatch_operate = ReinforceAgent(33, 3, True) #current one 
-rein_agent_dispatch_distribute_operate = ReinforceAgent(36, 3, True) #current one 
+# rein_agent_dispatch = ReinforceAgent(33, 3, False) #current one 
+# rein_agent_dispatch_distribute = ReinforceAgent(36, 3, False) #current one 
+
+rein_agent_dispatch = ReinforceAgent(33, 3, True, 2250) #current one 
+rein_agent_dispatch_distribute = ReinforceAgent(36, 3, True, 1450) #current one 
