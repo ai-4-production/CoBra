@@ -125,7 +125,7 @@ class ManufacturingAgent:
         elif self.ruleset.dynamic_dispatch:
             next_task, next_order, destination, base_state, state_RL, action, action_RL = self.get_smart_dispatch_rule(cell_state)
         else:
-            now = time.time
+            now = time.time()
             next_task, next_order, destination, base_state = self.get_action(cell_state)
             time_tracker.time_action_calc += time.time() - now
         # Perform next task if there is one

@@ -127,13 +127,14 @@ def reward_smart_dispatch(old_state, new_state, order, action):
     reward_due_to = calc_reward_due_to(old_state, action)
     reward_priority = calc_reward_priority(old_state, action) # 0 or 1; 1 if order has high priority
     reward_throughput_time_local = calc_reward_throughput_time_local(old_state, action)
+    # if reward_priority == 300 or reward_priority == 600:
+    #     print("reward_due_to:", reward_due_to)
+    #     print("reward_priority", reward_priority)
+    #     print("reward_throughput_time_local:", reward_throughput_time_local)
+    #     print(reward_due_to + reward_priority + reward_throughput_time_local)
+    #     print("_______________________________________________")
     return reward_due_to + reward_priority + reward_throughput_time_local
-    # if reward_due_to > 0:
-    #     return reward_due_to * math.exp(reward_priority/3) + reward_basic
-    # else:  
-    #     return reward_due_to * math.exp(-reward_priority/3) + reward_basic
-    
-
+   
 def reward_heuristic(old_state, new_state, order, action):
     reward_due_to, reward_basic = 0, 0
     reward_due_to = calc_reward_due_to(old_state, action) # -300 or 400; if order had lower due_to in average
@@ -141,10 +142,7 @@ def reward_heuristic(old_state, new_state, order, action):
     reward_throughput_time_local = calc_reward_throughput_time_local(old_state, action)
     # reward_basic = calc_reward_basic(old_state, new_state, order)
     return reward_due_to + reward_priority + reward_throughput_time_local
-    # if reward_due_to > 0:
-    #     return reward_due_to * math.exp(reward_priority/2) + reward_basic
-    # else:  
-    #     return reward_due_to * math.exp(-reward_priority/2) + reward_basic
+
 
 
 def calc_reward_due_to(old_state, action):
@@ -224,7 +222,6 @@ def calc_reward_priority(old_state, action): #get priority indicators for all or
         elif priorities[i] == 1: 
             count_prio_1 += 1
     
-    print("count_prio_2: ", count_prio_2)
     if count_prio_2 >= 1 and old_cell_priorities[action].values[0] != 2:
         reward_priority_2 = -400
 

@@ -9,6 +9,7 @@ from utils import time_tracker
 import sys
 # sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from collections import deque
+import tensorflow as tf
 from keras.models import Sequential, load_model
 from keras.optimizers import RMSprop
 from keras.layers import Dense, Dropout, Activation
@@ -25,6 +26,7 @@ class ReinforceAgent():
         self.state_size = state_size
         self.action_size = action_size
         self.episode_step = 6000
+        self.hidden_layer_size_1 = 128
         self.target_update = 10
         self.discount_factor = 0.99 #previous: 0.999
         self.learning_rate = 0.005 #previous: 0.005
@@ -42,8 +44,8 @@ class ReinforceAgent():
         self.path = pathlib.Path(__file__).parent.resolve()
 
         if self.trained_model:
-            print("../models_saved/" + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
-            self.model = load_model("models_saved/" + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
+            print("../models_saved/" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size) + '_' + str(self.global_step))
+            self.model = load_model("models_saved/"  + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size)  + '_' + str(self.global_step))
             self.target_model = self.model
             # with open(self.dirPath+str(self.load_episode)+'.json') as outfile:
             #     param = json.load(outfile)
@@ -71,8 +73,7 @@ class ReinforceAgent():
     def buildModel(self):
         model = Sequential()
         dropout = 0.1
-        model.add(Dense(128, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
-        # model.add(Dense(128), activation='relu', kernel_initializer='lecun_uniform'))
+        model.add(Dense(self.hidden_layer_size_1, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dense(64, activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dropout(dropout))
         model.add(Dense(self.action_size, kernel_initializer='lecun_uniform'))
@@ -104,6 +105,7 @@ class ReinforceAgent():
             Y_sample = q_value.copy()
             Y_sample[0][actions] = next_q_value
             Y_batch = np.append(Y_batch, np.array([Y_sample[0]]), axis=0)
+            tf.keras.backend.clear_session()
         self.model.fit(X_batch, Y_batch, batch_size=self.batch_size, epochs=1, verbose=0)
         time_tracker.time_train_calc = time.time() - now_0
         # if self.global_step % 10 == 0:
@@ -152,17 +154,17 @@ class ReinforceAgent():
             if len(smart_agent.memory) >= smart_agent.batch_size:
                 smart_agent.trainModel(True)
                 self.train_step += 1
-                if self.train_step % 50 == 0:
+                if self.train_step % 200 == 0:
                     # self.model.save('/models_saved/' + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
-                    self.model.save("../models_saved/" + str(self.action_size) + "_" + str(self.state_size) + "_" +str(self.train_step))
+                    self.model.save("../models_saved/" + str(self.action_size) + "_" + str(self.state_size) + "_" + str(self.hidden_layer_size_1) + "_" + str(self.batch_size) + "_" + str(self.train_step))
                     print("model_saved")
                     
 
     def updateTargetModel(self):
         self.target_model.set_weights(self.model.get_weights())
 
+rein_agent_dispatch1 = ReinforceAgent(39, 3, True, 2800) #current one 
+rein_agent_dispatch_distribute1 = ReinforceAgent(42, 3, True, 2400) #current one 
+
 rein_agent_dispatch = ReinforceAgent(39, 3, False) #current one 
 rein_agent_dispatch_distribute = ReinforceAgent(42, 3, False) #current one 
-
-# rein_agent_dispatch1 = ReinforceAgent(33, 3, True, 2250) #current one 
-# rein_agent_dispatch_distribute1 = ReinforceAgent(36, 3, True, 1450) #current one 
