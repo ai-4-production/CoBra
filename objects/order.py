@@ -280,7 +280,7 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
         prio = random.randint(0,99)
         if prio < 10:
             priorities[priority] = 2
-        elif prio >= 10 and prio < 20:
+        elif prio >= 10 and prio < 25:
             priorities[priority] = 1
         else:
             priorities[priority] = 0

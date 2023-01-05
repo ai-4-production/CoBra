@@ -52,7 +52,25 @@
 
             },
             {
-              "id": 222,
+              "id": 3,
+              "name": "FiFo Local",
+              "description": "Bevorzuge die Aufträge, die als erstes in der Zelle eingetroffen sind.",
+              "rules":
+              {
+                "criteria": {
+                  "numerical": [
+                    {
+                      "measure": "time_in_cell",
+                      "ranking_order": "DESC",
+                      "weight": 1
+                    }
+                  ]
+                }
+
+              }
+            },
+            {
+              "id": 333,
               "name": "LiFo Local",
               "description": "Bevorzuge die Aufträge, welche am ältesten sind.",
               "rules":
@@ -70,24 +88,6 @@
 
               }
 
-            },
-            {
-              "id": 3,
-              "name": "FiFo Local",
-              "description": "Bevorzuge die Aufträge, die als erstes in der Zelle eingetroffen sind.",
-              "rules":
-              {
-                "criteria": {
-                  "numerical": [
-                    {
-                      "measure": "time_in_cell",
-                      "ranking_order": "DESC",
-                      "weight": 1
-                    }
-                  ]
-                }
-
-              }
             },
             {
               "id": 4,
