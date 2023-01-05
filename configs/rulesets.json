@@ -52,6 +52,26 @@
 
             },
             {
+              "id": 222,
+              "name": "LiFo Local",
+              "description": "Bevorzuge die Aufträge, welche am ältesten sind.",
+              "rules":
+              {
+                "criteria": {
+                  "numerical": [
+                    {
+                      "measure": "time_in_cell",
+                      "ranking_order": "ASC",
+                      "weight": 1
+                    }
+                  ]
+
+                }
+
+              }
+
+            },
+            {
               "id": 3,
               "name": "FiFo Local",
               "description": "Bevorzuge die Aufträge, die als erstes in der Zelle eingetroffen sind.",

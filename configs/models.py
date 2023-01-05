@@ -32,12 +32,14 @@ class ReinforceAgent():
         self.learning_rate = 0.005 #previous: 0.005
         self.epsilon = 1.0
         self.epsilon_decay = 0.997 #previous: 0.999
-        self.epsilon_min = 0.01 #previous: 0.1
+        self.epsilon_min = 0.001 #previous: 0.1
         self.batch_size = 32  
         self.memory = deque(maxlen=1000000)
         self.global_step = global_step
         self.global_step_1 = 0
         self.train_step = 0
+        t = time.localtime()
+        self.timestamp = time.strftime('%Y-%m-%d_%H-%M', t)
 
         self.model = self.buildModel()
         self.target_model = self.buildModel()
@@ -54,28 +56,12 @@ class ReinforceAgent():
             self.model = self.buildModel()
             self.target_model = self.buildModel()
 
-        # try:
-        #     if self.trained_model:
-        #         print("../models_saved/" + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
-        #         self.model = load_model("../models_saved/" + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
-        #         self.target_model = self.model
-        #         # with open(self.dirPath+str(self.load_episode)+'.json') as outfile:
-        #         #     param = json.load(outfile)
-        #         #     self.epsilon = param.get('epsilon')
-        #     else: 
-        #         self.model = self.buildModel()
-        #         self.target_model = self.buildModel()
-        # except:
-        #     print("except")
-        #     time.sleep(10)
-        #     pass
-    
     def buildModel(self):
         model = Sequential()
         dropout = 0.1
         model.add(Dense(self.hidden_layer_size_1, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dense(64, activation='relu', kernel_initializer='lecun_uniform'))
-        model.add(Dropout(dropout))
+        # model.add(Dropout(dropout))
         model.add(Dense(self.action_size, kernel_initializer='lecun_uniform'))
         model.add(Activation('linear'))
         model.compile(loss='mse', optimizer=RMSprop(learning_rate=self.learning_rate, rho=0.9, epsilon=1e-06))
@@ -154,9 +140,9 @@ class ReinforceAgent():
             if len(smart_agent.memory) >= smart_agent.batch_size:
                 smart_agent.trainModel(True)
                 self.train_step += 1
-                if self.train_step % 200 == 0:
+                if self.train_step % 100 == 0:
                     # self.model.save('/models_saved/' + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
-                    self.model.save("../models_saved/" + str(self.action_size) + "_" + str(self.state_size) + "_" + str(self.hidden_layer_size_1) + "_" + str(self.batch_size) + "_" + str(self.train_step))
+                    self.model.save("../models_saved/" + self.timestamp + str(self.action_size) + "_" + str(self.state_size) + "_" + str(self.hidden_layer_size_1) + "_" + str(self.batch_size) + "_" + str(self.train_step))
                     print("model_saved")
                     
 
