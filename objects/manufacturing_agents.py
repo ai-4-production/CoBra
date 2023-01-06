@@ -316,36 +316,36 @@ class ManufacturingAgent:
             self.ranking_criteria_assist = [criteria["measure"] for criteria in self.ruleset_temp.numerical_criteria]
             criteria = [criteria["measure"] for criteria in self.ruleset_temp.numerical_criteria]
 
-            # if self.ruleset_temp.id != 4: #pre-sorting for due_to rule
-            #     for ruleset in RuleSet.instances:
-            #         if ruleset.id == 4:
-            #             ruleset_due_to = ruleset # Reference to the choosen ruleset of the smart agent
-            #             break
-            #     self.ranking_criteria_assist = [criteria["measure"] for criteria in ruleset_due_to.numerical_criteria]
-            #     criteria_temp = [criteria["measure"] for criteria in ruleset_due_to.numerical_criteria]
-            #     ranking = useable_with_free_destination.reindex(columns = (["order"] + criteria_temp + criteria))
-            #     print("ranking 1: ", ranking)
-            #     for criterion in ruleset_due_to.numerical_criteria:
-            #         weight = criterion["weight"]
-            #         measure = criterion["measure"]
-            #         order = criterion["ranking_order"]
+            if self.ruleset_temp.id == 9: #pre-sorting for due_to rule
+                for ruleset in RuleSet.instances:
+                    if ruleset.id == 4:
+                        ruleset_due_to = ruleset # Reference to the choosen ruleset of the smart agent
+                        break
+                self.ranking_criteria_assist = [criteria["measure"] for criteria in ruleset_due_to.numerical_criteria]
+                criteria_temp = [criteria["measure"] for criteria in ruleset_due_to.numerical_criteria]
+                ranking = useable_with_free_destination.reindex(columns = (["order"] + criteria_temp + criteria))
+                print("ranking 1: ", ranking)
+                for criterion in ruleset_due_to.numerical_criteria:
+                    weight = criterion["weight"]
+                    measure = criterion["measure"]
+                    order = criterion["ranking_order"]
 
-            #         max_v = ranking[measure].max()
-            #         min_v = ranking[measure].min()
+                    max_v = ranking[measure].max()
+                    min_v = ranking[measure].min()
 
-            #         # Min Max Normalisation
-            #         if order == "ASC":
-            #             ranking["WS-" + measure] = weight * div_possible_zero((ranking[measure] - min_v), (max_v - min_v))
-            #         else:
-            #             ranking["WS-" + measure] = weight * (1 - div_possible_zero((ranking[measure] - min_v), (max_v - min_v)))
-            #     order_scores = ranking.filter(regex="WS-")
-            #     ranking.loc[:, "Score"] = order_scores.sum(axis=1)
-            #     ranking.sort_values(by=["Score"], inplace=True)
-            #     ranking.drop(columns=["Score"])
-            #     print("ranking 2: ", ranking)
+                    # Min Max Normalisation
+                    if order == "ASC":
+                        ranking["WS-" + measure] = weight * div_possible_zero((ranking[measure] - min_v), (max_v - min_v))
+                    else:
+                        ranking["WS-" + measure] = weight * (1 - div_possible_zero((ranking[measure] - min_v), (max_v - min_v)))
+                order_scores = ranking.filter(regex="WS-")
+                ranking.loc[:, "Score"] = order_scores.sum(axis=1)
+                ranking.sort_values(by=["Score"], inplace=True)
+                ranking.drop(columns=["Score"])
+                print("ranking 2: ", ranking)
            
-            # if self.ruleset_temp.id == 4:
-            ranking = useable_with_free_destination.reindex(columns = (["order"] + criteria))
+            if self.ruleset_temp.id != 9:
+                ranking = useable_with_free_destination.reindex(columns = (["order"] + criteria))
         
             for criterion in self.ruleset_temp.numerical_criteria:
                 weight = criterion["weight"]
@@ -364,6 +364,7 @@ class ManufacturingAgent:
             order_scores = ranking.filter(regex="WS-")
             ranking.loc[:, "Score"] = order_scores.sum(axis=1)
             ranking.sort_values(by=["Score"], inplace=True)
+            print("ranking 3: ", ranking)
             next_order = ranking["order"].iat[0]
         
         action = self.get_heuristics_action_index(order_state, next_order)

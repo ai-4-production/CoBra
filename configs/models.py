@@ -27,12 +27,12 @@ class ReinforceAgent():
         self.action_size = action_size
         self.episode_step = 6000
         self.hidden_layer_size_1 = 128
-        self.target_update = 10
+        self.target_update = 5
         self.discount_factor = 0.99 #previous: 0.999
         self.learning_rate = 0.005 #previous: 0.005
         self.epsilon = 1.0
         self.epsilon_decay = 0.997 #previous: 0.999
-        self.epsilon_min = 0.001 #previous: 0.1
+        self.epsilon_min = 0.001
         self.batch_size = 32  
         self.memory = deque(maxlen=1000000)
         self.global_step = global_step
@@ -58,10 +58,10 @@ class ReinforceAgent():
 
     def buildModel(self):
         model = Sequential()
-        dropout = 0.1
+        dropout = 0.03
         model.add(Dense(self.hidden_layer_size_1, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dense(64, activation='relu', kernel_initializer='lecun_uniform'))
-        # model.add(Dropout(dropout))
+        model.add(Dropout(dropout))
         model.add(Dense(self.action_size, kernel_initializer='lecun_uniform'))
         model.add(Activation('linear'))
         model.compile(loss='mse', optimizer=RMSprop(learning_rate=self.learning_rate, rho=0.9, epsilon=1e-06))
@@ -140,17 +140,16 @@ class ReinforceAgent():
             if len(smart_agent.memory) >= smart_agent.batch_size:
                 smart_agent.trainModel(True)
                 self.train_step += 1
-                if self.train_step % 100 == 0:
+                if self.train_step % 200 == 0:
                     # self.model.save('/models_saved/' + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
                     self.model.save("../models_saved/" + self.timestamp + str(self.action_size) + "_" + str(self.state_size) + "_" + str(self.hidden_layer_size_1) + "_" + str(self.batch_size) + "_" + str(self.train_step))
                     print("model_saved")
                     
-
     def updateTargetModel(self):
         self.target_model.set_weights(self.model.get_weights())
 
-rein_agent_dispatch = ReinforceAgent(39, 3, True, 2800) #current one 
-rein_agent_dispatch_distribute = ReinforceAgent(42, 3, True, 2400) #current one 
+#ZZZZrein_agent_dispatch1 = ReinforceAgent(39, 3, True, 2800) #current one 
+#rein_agent_dispatch_distribute1 = ReinforceAgent(42, 3, True, 2400) #current one 
 
-rein_agent_dispatch1 = ReinforceAgent(39, 3, False) #current one 
-rein_agent_dispatch_distribute1 = ReinforceAgent(42, 3, False) #current one 
+rein_agent_dispatch = ReinforceAgent(39, 3, False) #current one 
+rein_agent_dispatch_distribute = ReinforceAgent(42, 3, False) #current one 
