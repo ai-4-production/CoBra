@@ -11,7 +11,7 @@ from objects.materials import load_materials
 import numpy as np
 import json
 import csv
-
+import simpy.rt
 
 class SimulationEnvironment:
     instances = []
@@ -108,6 +108,7 @@ def simulation(runs=1, show_progress=False, save_log=True,
         config["SEED_MACHINE_INTERUPTIONS"] = interruption_seeds[sim_count].item()
         config["SEED_INCOMING_ORDERS"] = order_seeds[sim_count].item()
         env = simpy.Environment()
+        #env = simpy.rt.RealtimeEnvironment(factor = 0.1)
 
         simulation_environment = set_up_sim_env(config, env, configuration, train)
 

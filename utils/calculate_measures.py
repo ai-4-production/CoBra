@@ -295,7 +295,6 @@ def cell_measures(sim_env, obj, measures=[]):
         for order_id in orders:
             df = time_by_dimension("item", order_id, "cell", db_con, object_as_id=True)
             results.append(df[df["cell"] == id(obj)]["length"].iloc[0])
-
         if len(results) == 0:
             return 0
 
@@ -476,6 +475,7 @@ def remove_events_without_changes(df: pd.DataFrame, column: str):
     df["to_drop"] = df[column].shift(periods=1, axis=0) == df[column]
     df = df.drop(df[df["to_drop"]].index)
     del df["to_drop"]
-    df = df.append(last_row)
+    # df = df.append(last_row)
+    pd.concat([df, last_row])
 
     return df
