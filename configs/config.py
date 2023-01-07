@@ -1,8 +1,8 @@
 """Configuration file for SimPy Simulation, environment and performance measures"""
 
 configuration = {
-    "SETUP_FILE": "minimal setup.txt",
-    "SIMULATION_RANGE": 100000,
+    "SETUP_FILE": "Layout_1.txt",
+    "SIMULATION_RANGE": 10000,
 
     "SEED_MACHINE_INTERRUPTIONS": 29378374,
     "MACHINE_FAILURE_RATE": 20,
@@ -14,7 +14,7 @@ configuration = {
     "MACHINE_TIME_RELEASE_ITEM": 0.1,
 
     "SEED_INCOMING_ORDERS": 10278347,
-    "NUMBER_OF_ORDERS": 9000,
+    "NUMBER_OF_ORDERS": 1500,
     "ORDER_MINIMAL_LENGTH": 0,
     "ORDER_MAXIMAL_LENGTH": 100,
     "SPREAD_ORDER_COMPLEXITY": 0.1,

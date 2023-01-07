@@ -151,5 +151,10 @@ class ReinforceAgent():
 #ZZZZrein_agent_dispatch1 = ReinforceAgent(39, 3, True, 2800) #current one 
 #rein_agent_dispatch_distribute1 = ReinforceAgent(42, 3, True, 2400) #current one 
 
-rein_agent_dispatch = ReinforceAgent(39, 3, False) #current one 
+rein_agent_dispatch_0 = ReinforceAgent(42, 3, False) #current one 
+rein_agent_dispatch_1 = ReinforceAgent(42, 3, False) #current one 
+rein_agent_dispatch_2 = ReinforceAgent(24, 3, False) #current one 
+rein_agent_dispatch_3 = ReinforceAgent(24, 3, False) #current one 
+rein_agent_dispatch_4 = ReinforceAgent(69, 3, False) #current one 
+
 rein_agent_dispatch_distribute = ReinforceAgent(42, 3, False) #current one 

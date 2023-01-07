@@ -252,8 +252,8 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     # Create attributes
     start_times_1 = np.random.uniform(low=0, high=config['SIMULATION_RANGE'], size=amount)
     start_times = np.arange(0, config['SIMULATION_RANGE'], config['SIMULATION_RANGE']/config['NUMBER_OF_ORDERS'])
-    types_1 = np.random.choice(possible_types, amount, p=frequency_factors,  replace=True)
-    types = np.full(amount, possible_types[0])
+    types = np.random.choice(possible_types, amount, p=frequency_factors,  replace=True)
+    types_1 = np.full(amount, possible_types[0])
     duration_factors = np.asarray([order_type.duration_factor for order_type in types])
     base_lengths_1 = np.random.randint(low=config['ORDER_MINIMAL_LENGTH'], high=config['ORDER_MAXIMAL_LENGTH'], size=amount)
     i = 0
