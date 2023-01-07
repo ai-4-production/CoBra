@@ -258,11 +258,23 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     base_lengths_1 = np.random.randint(low=config['ORDER_MINIMAL_LENGTH'], high=config['ORDER_MAXIMAL_LENGTH'], size=amount)
     i = 0
     base_lengths = []
-    while i < amount:
-        if i % 2 == 0: base_lengths.append(0)
-        elif i % 3 == 0: base_lengths.append(40)
-        else: base_lengths.append(70)
-        i += 1
+    # while i < amount:
+    #     if i % 2 == 0: base_lengths.append(0)
+    #     elif i % 3 == 0: base_lengths.append(40)
+    #     else: base_lengths.append(70)
+    #     i += 1
+    # Calculate order prioritities
+    base_lengths = np.full(amount, 1)
+    for base_length in range(len(base_lengths)):
+        lenght = random.randint(0,99)
+        if lenght < 20:
+            base_lengths[base_length] = 0
+        elif lenght >= 20 and lenght < 50:
+            base_lengths[base_length] = 40
+        else:
+            base_lengths[base_length] = 70
+
+
     complexities_1 = np.random.normal(loc=1, scale=config['SPREAD_ORDER_COMPLEXITY'], size=amount)
     complexities = np.full(amount, 1)
 

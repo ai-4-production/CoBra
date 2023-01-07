@@ -317,7 +317,7 @@ class ManufacturingAgent:
             criteria = [criteria["measure"] for criteria in self.ruleset_temp.numerical_criteria]
 
             if self.ruleset_temp.id == 9 and (len(useable_orders[useable_orders["priority"] == 2]) > 1 or len(useable_orders[useable_orders["priority"] == 1]) > 1) : #pre-sorting for due_to rule
-                for ruleset in RuleSet.instances:
+                for ruleset in RuleSet.instances:           
                     if ruleset.id == 4:
                         ruleset_due_to = ruleset # Reference to the choosen ruleset of the smart agent
                         break
