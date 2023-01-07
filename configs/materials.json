@@ -1,15 +1,15 @@
 {
   "materials": [
     {"title": "copper",
-    "hardness": 4,
+    "hardness": 2,
     "complexity": 2.5},
 
-    {"title": "wood",
-    "hardness": 1,
+    {"title": "steel",
+    "hardness": 3,
     "complexity": 1.8},
 
     {"title": "plastic",
-    "hardness": 2,
+    "hardness": 1,
     "complexity": 1}
   ]
 }
