@@ -227,7 +227,7 @@ def calc_reward_priority(old_state, action): #get priority indicators for all or
 
     if count_prio_2 == 0:
         if count_prio_1 >= 1 and old_cell_priorities[action].values[0] != 1:
-            reward_priority_2 = -150
+            reward_priority_2 = -151
 
     return reward_priority + reward_priority_2
 
