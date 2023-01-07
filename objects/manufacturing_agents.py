@@ -263,7 +263,6 @@ class ManufacturingAgent:
             state_RL.append(state_due_to_normalized[i])
             state_RL.append(state_time_in_cell_normalized[i])
             state_RL.append(state_state_priority[i])    
-        print(state_RL)
         return state_RL
 
     def get_available_destinations(self, order_state): #get numerized _destination space
