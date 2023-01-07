@@ -328,7 +328,6 @@ class ManufacturingAgent:
                     weight = criterion["weight"]
                     measure = criterion["measure"]
                     order = criterion["ranking_order"]
-                    print("Hiq")
                     max_v = ranking[measure].max()
                     min_v = ranking[measure].min()
 
