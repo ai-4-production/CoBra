@@ -3,6 +3,7 @@ import json
 from objects.processing_steps import load_processing_steps, ProcessingStep
 import simpy
 import time
+import math
 import random
 from copy import copy
 import numpy as np
@@ -60,7 +61,8 @@ class Order:
             self.completed = True
             self.completed_at = self.env.now
             self.__class__.finished_instances.append(self)
-            # print("Order finished! Nr ", len(self.__class__.finished_instances))
+            if (len(self.__class__.finished_instances) % 10) == 0:
+                print("Order finished! Nr ", len(self.__class__.finished_instances))
 
     def processing_step_finished(self):
         """Event: One processing step of the order was finished. Get next and check if order tasks are completed."""
@@ -234,7 +236,7 @@ def order_arrivals(env: simpy.Environment, sim_env, config: dict):
 
 def get_orders_from_seed(amount: int, seed: int, config: dict):
     """Create a list of random order attributes from seed
-
+a
     :param amount: (int) The amount of orders to generate
     :param seed: (int) Seed for order arrivals and random attributes
     :param config: (dict) Main configuration dictionary to get setting for generation of orders
@@ -243,26 +245,42 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     np.random.seed(seed)
 
     possible_types = OrderType.instances
-
-
     frequency_factors = [order_type.frequency_factor for order_type in possible_types]
     factors_sum = sum(frequency_factors)
     frequency_factors = [factor/factors_sum for factor in frequency_factors]
-
     # Create attributes
     start_times_1 = np.random.uniform(low=0, high=config['SIMULATION_RANGE'], size=amount)
     start_times = np.arange(0, config['SIMULATION_RANGE'], config['SIMULATION_RANGE']/config['NUMBER_OF_ORDERS'])
+
     types = np.random.choice(possible_types, amount, p=frequency_factors,  replace=True)
-    types_1 = np.full(amount, possible_types[0])
+   
+    types_test_base = [possible_types[0], possible_types[1], possible_types[2], possible_types[0], possible_types[1],  possible_types[3]]
+    types_test = []
+    i = 0
+    while i < (math.floor(amount/len(types_test_base))):
+        types_test = types_test + types_test_base
+        i += 1
+    m = len(types_test)
+    while m < amount:
+        add_order = [possible_types[random.randint(0, len(possible_types)-1)]]
+        types_test = types_test + add_order
+        m += 1
+    types = types_test
+
+    # maximum = count = 0
+    # current = ''
+    # for c in types:
+    #     if c == current:
+    #         count += 1
+    #     else:
+    #         count = 1
+    #         current = c
+    #     maximum = max(count,maximum)
+    # print("maximum: ", maximum)
+
     duration_factors = np.asarray([order_type.duration_factor for order_type in types])
     base_lengths_1 = np.random.randint(low=config['ORDER_MINIMAL_LENGTH'], high=config['ORDER_MAXIMAL_LENGTH'], size=amount)
-    i = 0
-    base_lengths = []
-    # while i < amount:
-    #     if i % 2 == 0: base_lengths.append(0)
-    #     elif i % 3 == 0: base_lengths.append(40)
-    #     else: base_lengths.append(70)
-    #     i += 1
+
     # Calculate order prioritities
     base_lengths = np.full(amount, 1)
     for base_length in range(len(base_lengths)):
@@ -273,7 +291,6 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
             base_lengths[base_length] = 40
         else:
             base_lengths[base_length] = 70
-
 
     complexities_1 = np.random.normal(loc=1, scale=config['SPREAD_ORDER_COMPLEXITY'], size=amount)
     complexities = np.full(amount, 1)

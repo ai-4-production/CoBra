@@ -20,7 +20,7 @@ from keras.backend import backend as K
 #save model option
 
 class ReinforceAgent():
-    def __init__(self, state_size, action_size, trained_model, global_step = 0):
+    def __init__(self, state_size, action_size, trained_model = False, global_step = 0):
         self.trained_model = trained_model
         self.load_episode = 0
         self.state_size = state_size
@@ -32,8 +32,8 @@ class ReinforceAgent():
         self.learning_rate = 0.005 #previous: 0.005
         self.epsilon = 1.0
         self.epsilon_decay = 0.997 #previous: 0.999
-        self.epsilon_min = 0.001
-        self.batch_size = 32  
+        self.epsilon_min = 0.01
+        self.batch_size = 32
         self.memory = deque(maxlen=1000000)
         self.global_step = global_step
         self.global_step_1 = 0
@@ -58,7 +58,7 @@ class ReinforceAgent():
 
     def buildModel(self):
         model = Sequential()
-        dropout = 0.03
+        dropout = 0.01
         model.add(Dense(self.hidden_layer_size_1, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dense(64, activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dropout(dropout))
@@ -131,7 +131,7 @@ class ReinforceAgent():
             action = np.argmax(self.q_value[0])
             return action
 
-    def appendMemory(self, smart_agent, former_state, new_state, action, reward):
+    def appendMemory(self, smart_agent, cell_id, former_state, new_state, action, reward):
         #smart_agent, former_state=old_state_flat, new_state=new_state_flat, action=action, reward=reward, time_passed=time_passed
         self.memory.append((former_state, action, reward, new_state))
         if not self.trained_model:
@@ -142,7 +142,7 @@ class ReinforceAgent():
                 self.train_step += 1
                 if self.train_step % 200 == 0:
                     # self.model.save('/models_saved/' + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
-                    self.model.save("../models_saved/" + self.timestamp + str(self.action_size) + "_" + str(self.state_size) + "_" + str(self.hidden_layer_size_1) + "_" + str(self.batch_size) + "_" + str(self.train_step))
+                    self.model.save("../models_saved/" + self.timestamp + "_" + 'cell.id-' + str(cell_id) +  '_' + str(self) + "_" + str(self.action_size) + "_" + str(self.state_size) + "_" + str(self.hidden_layer_size_1) + "_" + str(self.batch_size) + "_" + str(self.train_step))
                     print("model_saved")
                     
     def updateTargetModel(self):
@@ -151,10 +151,10 @@ class ReinforceAgent():
 #ZZZZrein_agent_dispatch1 = ReinforceAgent(39, 3, True, 2800) #current one 
 #rein_agent_dispatch_distribute1 = ReinforceAgent(42, 3, True, 2400) #current one 
 
-rein_agent_dispatch_0 = ReinforceAgent(42, 3, False) #current one 
-rein_agent_dispatch_1 = ReinforceAgent(42, 3, False) #current one 
-rein_agent_dispatch_2 = ReinforceAgent(24, 3, False) #current one 
-rein_agent_dispatch_3 = ReinforceAgent(24, 3, False) #current one 
-rein_agent_dispatch_4 = ReinforceAgent(69, 3, False) #current one 
+# rein_agent_dispatch_0 = ReinforceAgent(57, 3) #current one 
+# rein_agent_dispatch_1 = ReinforceAgent(48, 3) #current one 
+# rein_agent_dispatch_2 = ReinforceAgent(27, 3) #current one 
+# rein_agent_dispatch_3 = ReinforceAgent(27, 3) #current one 
+# rein_agent_dispatch_4 = ReinforceAgent(81, 3) #current one
+rein_agent_dispatch_4 = ReinforceAgent(81, 3, True, 6400) #current one 
 
-rein_agent_dispatch_distribute = ReinforceAgent(42, 3, False) #current one 

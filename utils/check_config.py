@@ -40,7 +40,7 @@ def check_configuration_file(config: dict):
         "NUMBER_OF_ORDERS": {
             "data_type": int,
             "minimum": 1,
-            "maximum": 10000
+            "maximum": 200001
         },
         "ORDER_MINIMAL_LENGTH": {
             "data_type": float,

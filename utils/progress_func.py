@@ -24,7 +24,7 @@ def show_progress_func(env, sim_env):
 
     while counter <= periods:
         yield env.timeout(period_length)
-        print("Finished", (100/periods)*counter, "% of the simulation!")
+        print("Finished", round((100/periods)*counter,2), "% of the simulation!")
         show_occupancy()
         counter += 1
 
