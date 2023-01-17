@@ -1,7 +1,7 @@
 """Configuration file for SimPy Simulation, environment and performance measures"""
 
 configuration = {
-    "SETUP_FILE": "Layout_1.txt",
+    "SETUP_FILE": "Layout_FAZI.txt",
     "SIMULATION_RANGE": 10000,
     "SEED_MACHINE_INTERRUPTIONS": 29378374,
     "MACHINE_FAILURE_RATE": 4,

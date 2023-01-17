@@ -8,7 +8,7 @@
             },
             {
               "id": 2,
-              "title": "Grinding",
+              "title": "Polishing",
               "base_duration": 7
             },
             {
@@ -18,18 +18,23 @@
             },
             {
               "id": 4,
-              "title": "Grinding_2",
+              "title": "Polishing_2",
               "base_duration": 6
             },
             {
               "id": 5,
-              "title": "Coating",
-              "base_duration": 12
+              "title": "Hardening",
+              "base_duration": 3
             },
             {
               "id": 6,
               "title": "Labelling",
-              "base_duration": 12
+              "base_duration": 2
+            },
+            {
+              "id": 7,
+              "title": "Quality check",
+              "base_duration": 1
             }
           ]
 }

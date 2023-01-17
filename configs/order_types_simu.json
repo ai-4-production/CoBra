@@ -1,0 +1,17 @@
+{
+  "order_types":
+          [
+            {
+              "title": "Produkt A",
+              "id": 1,
+              "frequency_factor": 2,
+              "duration_factor": 1,
+              "composition": {
+                "copper": 1.0,
+                "steel": 1.0,
+                "plastic": 1.0
+              },
+              "work_schedule": [1,2,6]
+            }      
+          ]
+}

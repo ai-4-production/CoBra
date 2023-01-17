@@ -122,13 +122,12 @@ class ManufacturingAgent:
         cell_state["_destination"] = cell_state.apply(self.add_destinations, axis=1)
         time_tracker.time_destination_calc += time.time() - dest_calc_start   
         self.ranking_criteria = [criteria["measure"] for criteria in self.ruleset.numerical_criteria]
-        # if (self.count_smart % 1) == 0 and self.cell.id == 4:
-        #     print("self.cell.id: ", self.cell.id)
-        #     print(cell_state.loc[:,["pos_type", "order", "tasks_finished", "next_task", "due_to", "_destination"]])
-        
-        # if (self.count % 1) == 0 and self.cell.id == 1:
-        #     print("self.cell.id: ", self.cell.id)
-        #     print(cell_state.loc[:,["pos_type", "order", "tasks_finished", "next_task", "due_to", "_destination"]])
+
+        # if self.cell.id == 0 or self.cell.id == 2 or self.cell.id == 5:
+        #     print(self.cell.id)
+        #     # print(dir(cell_state))
+        #     print(cell_state.loc[:,["pos_type","order", "pos","_destination", "next_task"]])
+        #     print("________________________________________-")
 
         # Get action depending on agent ruleset and cell_state
         if self.ruleset.dynamic:
@@ -141,7 +140,7 @@ class ManufacturingAgent:
             time_tracker.time_action_calc += time.time() - now
 
 
-        # Perform next task if there is one
+        # Perform next task if there is one~
         if next_task:
             self.current_task = next_task
             self.has_task = True
@@ -254,7 +253,7 @@ class ManufacturingAgent:
         try:
             state_due_to = order_state.loc[:, "due_to"]
             state_priority = order_state.loc[:, "priority"] 
-            time_in_cell = order_state.loc[:, "time_in_cell"]         
+            time_in_cell = order_state.loc[:, "time_in_cell"]    
         except:
             print("State error")
             print(self.cell.id)
@@ -496,9 +495,8 @@ class ManufacturingAgent:
         :param data: (pd.Series) Column of state
         :return destination: Calculated destination or -1 if no useable order or no available destination for that order"""
 
-        useable_order = (pd.notnull(data["order"])) and (data["locked"] == 0) and (data["in_m_input"] == 0) and (
-                data["in_m"] == 0)
-
+        useable_order = (pd.notnull(data["order"])) and (data["locked"] == 0) and (data["in_m_input"] == 0) and (data["in_m"] == 0)
+        
         if useable_order:
             destination = self.calculate_destination(data["order"])
 
@@ -516,8 +514,8 @@ class ManufacturingAgent:
 
         destination = None
 
-        if order.current_cell is not self.cell:
-            return destination
+        # if order.current_cell is not self.cell:
+        #     return destination
 
         next_processing_step = order.next_task
         next_steps = order.remaining_tasks
@@ -754,6 +752,13 @@ class ManufacturingAgent:
 
         # Inform other agents within this cell
         self.cell.inform_agents()
+
+        try:
+            for child in self.cell.childs:
+                child.inform_agents()
+        except:
+            pass
+
         self.current_subtask = None
 
     def store_item(self):

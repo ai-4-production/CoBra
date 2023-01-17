@@ -162,7 +162,6 @@ class Cell:
         :return merged_state: Dataframe"""
 
         current_time = self.env.now
-
         occupancy["attributes"] = occupancy["order"].apply(get_order_attributes, args=(requester, attributes, current_time))
         occupancy = occupancy.join(pd.DataFrame(occupancy.pop("attributes").values.tolist()))
         return occupancy
