@@ -12,3 +12,5 @@ In such a system, deep reinforcement learning (RL) has several advantages when a
 2. Adaptability: RL algorithms can adapt to changing conditions in the production environment, such as variations in raw materials or equipment failures.
 3. Autonomy: RL-controlled production systems can operate autonomously, reducing the need for human intervention and improving overall efficiency.
 4. Scalability: RL algorithms can be scaled to control large and complex production systems.
+
+![CoBra](https://user-images.githubusercontent.com/79931115/213127583-ee8c44f1-6bc7-4416-b38a-3244fbe33844.jpg)
