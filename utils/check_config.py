@@ -70,7 +70,7 @@ def check_configuration_file(config: dict):
         },
         "MACHINE_SETUP_TIME": {
             "data_type": float,
-            "minimum": 1,
+            "minimum": 0,
             "lower_than": "SIMULATION_RANGE"
         },
         "MACHINE_TIME_LOAD_ITEM": {

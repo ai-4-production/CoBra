@@ -253,32 +253,6 @@ a
     start_times = np.arange(0, config['SIMULATION_RANGE'], config['SIMULATION_RANGE']/config['NUMBER_OF_ORDERS'])
 
     types = np.random.choice(possible_types, amount, p=frequency_factors,  replace=True)
-   
-    # types_test_base = [possible_types[0], possible_types[1], possible_types[2], possible_types[0], possible_types[1],  possible_types[3]]
-    # types_test_base = [possible_types[0], possible_types[0], possible_types[0], possible_types[0], possible_types[0],  possible_types[0]]
-
-    # types_test = []
-    # i = 0
-    # while i < (math.floor(amount/len(types_test_base))):
-    #     types_test = types_test + types_test_base
-    #     i += 1
-    # m = len(types_test)
-    # while m < amount:
-    #     add_order = [possible_types[random.randint(0, len(possible_types)-1)]]
-    #     types_test = types_test + add_order
-    #     m += 1
-    # types = types_test
-
-    # maximum = count = 0
-    # current = ''
-    # for c in types:
-    #     if c == current:
-    #         count += 1
-    #     else:
-    #         count = 1
-    #         current = c
-    #     maximum = max(count,maximum)
-    # print("maximum: ", maximum)
 
     duration_factors = np.asarray([order_type.duration_factor for order_type in types])
     base_lengths_1 = np.random.randint(low=config['ORDER_MINIMAL_LENGTH'], high=config['ORDER_MAXIMAL_LENGTH'], size=amount)
@@ -309,9 +283,9 @@ a
     
     for priority in range(len(priorities)):
         prio = random.randint(0,99)
-        if prio < 10:
+        if prio < 5:
             priorities[priority] = 2
-        elif prio >= 10 and prio < 25:
+        elif prio >= 5 and prio < 20:
             priorities[priority] = 1
         else:
             priorities[priority] = 0
