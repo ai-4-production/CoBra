@@ -1,25 +1,27 @@
 """Configuration file for SimPy Simulation, environment and performance measures"""
 
 configuration = {
-    "SETUP_FILE": "Layout_FAZI.txt",
-    "SIMULATION_RANGE": 30000,
+    # "SETUP_FILE": "Layout_FAZI.txt",
+    # "SETUP_FILE": "Layout_Scenario_Paper_AI.txt",
+    "SETUP_FILE": "Layout_Scenario_Paper_EDD.txt",
+    "SIMULATION_RANGE": 6000,
     "SEED_MACHINE_INTERRUPTIONS": 29378374,
     "MACHINE_FAILURE_RATE": 4,
     "FAILURE_MINIMAL_LENGTH": 10,
     "FAILURE_MAXIMAL_LENGTH": 20,
 
     "MACHINE_SETUP_TIME": 1,
-    "MACHINE_TIME_LOAD_ITEM": 0.1,
-    "MACHINE_TIME_RELEASE_ITEM": 0.1,
+    "MACHINE_TIME_LOAD_ITEM": 1,
+    "MACHINE_TIME_RELEASE_ITEM": 1,
 
     "SEED_INCOMING_ORDERS": 10278347,
-    "NUMBER_OF_ORDERS": 3900,
+    "NUMBER_OF_ORDERS": 1500,
     "ORDER_MINIMAL_LENGTH": 0,
     "ORDER_MAXIMAL_LENGTH": 100,
     "SPREAD_ORDER_COMPLEXITY": 0.1,
     # "SPREAD_ORDER_Priority": 1,
 
-    "AGENT_SPEED": 0.5,
+    "AGENT_SPEED": 10,
     "TIME_FOR_ITEM_PICK_UP": 0.1,
     "TIME_FOR_ITEM_STORE": 0.1,
 

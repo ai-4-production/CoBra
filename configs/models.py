@@ -33,7 +33,7 @@ class ReinforceAgent():
         self.epsilon = 1.0
         self.epsilon_decay = 0.997 #previous: 0.999
         self.epsilon_min = 0.01
-        self.batch_size = 32
+        self.batch_size = 64
         self.memory = deque(maxlen=1000000)
         self.global_step = global_step
         self.global_step_1 = 0
@@ -46,8 +46,8 @@ class ReinforceAgent():
         self.path = pathlib.Path(__file__).parent.resolve()
 
         if self.trained_model:
-            print("../models_saved/" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size) + '_' + str(self.global_step))
-            self.model = load_model("models_saved/"  + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size)  + '_' + str(self.global_step))
+            print("../models_saved/2023-01-18_09-07_cell.id-5_<configs.models.ReinforceAgent object at 0x7fc0547f9b80>_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size) + '_' + str(self.global_step))
+            self.model = load_model("models_saved/2023-01-18_09-07_cell.id-5_<configs.models.ReinforceAgent object at 0x7fc0547f9b80>_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size)  + '_' + str(self.global_step))
             self.target_model = self.model
             # with open(self.dirPath+str(self.load_episode)+'.json') as outfile:
             #     param = json.load(outfile)
@@ -137,7 +137,7 @@ class ReinforceAgent():
         if not self.trained_model:
             if (smart_agent.global_step % smart_agent.target_update) == 0:
                 smart_agent.updateTargetModel()
-            if len(smart_agent.memory) >= smart_agent.batch_size:
+            if len(smart_agent.memory) >= self.batch_size:
                 smart_agent.trainModel(True)
                 self.train_step += 1
                 if self.train_step % 200 == 0:
@@ -148,13 +148,16 @@ class ReinforceAgent():
     def updateTargetModel(self):
         self.target_model.set_weights(self.model.get_weights())
 
-#ZZZZrein_agent_dispatch1 = ReinforceAgent(39, 3, True, 2800) #current one 
-#rein_agent_dispatch_distribute1 = ReinforceAgent(42, 3, True, 2400) #current one 
-
 rein_agent_dispatch_0 = ReinforceAgent(57, 3) #current one 
-rein_agent_dispatch_1 = ReinforceAgent(48, 3) #current one 
-# rein_agent_dispatch_2 = ReinforceAgent(27, 3) #current one 
-# rein_agent_dispatch_3 = ReinforceAgent(27, 3) #current one 
-rein_agent_dispatch_4 = ReinforceAgent(96, 3) #current one
+rein_agent_dispatch_1 = ReinforceAgent(48, 3) #current one
+
+# scenario within paper
+rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, False)
+rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(52, 5, False)
+rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(80, 5, False)
+rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(76, 5, False)
+rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(56, 5, False)
+
+rein_agent_dispatch_4 = ReinforceAgent(128, 5, False) #current one
 # rein_agent_dispatch_4 = ReinforceAgent(81, 3, True, 6400) #current one 
 

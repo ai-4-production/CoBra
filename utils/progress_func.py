@@ -6,7 +6,7 @@ def show_progress_func(env, sim_env):
     :param env: (simpy environment) The simpy environment of the run
     :param sim_env: (simulation environment object) The simulation environment of the run"""
 
-    periods = 20
+    periods = 100
     period_length = sim_env.simulation_time_range/periods
     counter = 1
 
