@@ -210,46 +210,6 @@
 
             },
             {
-              "id": 12,
-              "name": "Reinforcement Agent 0",
-              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
-              "rules":
-              {
-                "dynamic_dispatch": true,
-                "reinforcement_agent": "rein_agent_dispatch_0"
-              }
-            },
-            {
-              "id": 13,
-              "name": "Reinforcement Agent 1",
-              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
-              "rules":
-              {
-                "dynamic_dispatch": true,
-                "reinforcement_agent": "rein_agent_dispatch_1"
-              }
-            },
-            {
-              "id": 14,
-              "name": "Reinforcement Agent 2",
-              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
-              "rules":
-              {
-                "dynamic_dispatch": true,
-                "reinforcement_agent": "rein_agent_dispatch_2"
-              }
-            },
-            {
-              "id": 15,
-              "name": "Reinforcement Agent 3",
-              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
-              "rules":
-              {
-                "dynamic_dispatch": true,
-                "reinforcement_agent": "rein_agent_dispatch_3"
-              }
-            },
-            {
               "id": 16,
               "name": "Reinforcement Agent 4",
               "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
@@ -259,6 +219,59 @@
                 "reinforcement_agent": "rein_agent_dispatch_4"
               }
             },
+            {
+              "id": 30,
+              "name": "Reinforcement Agent 4",
+              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
+              "rules":
+              {
+                "dynamic_dispatch": true,
+                "reinforcement_agent": "rein_agent_dispatch_scenario_paper_d_1"
+              }
+            },
+            {
+              "id": 31,
+              "name": "Reinforcement Agent 4",
+              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
+              "rules":
+              {
+                "dynamic_dispatch": true,
+                "reinforcement_agent": "rein_agent_dispatch_scenario_paper_d_1_1"
+              }
+            },
+            {
+              "id": 32,
+              "name": "Reinforcement Agent 4",
+              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
+              "rules":
+              {
+                "dynamic_dispatch": true,
+                "reinforcement_agent": "rein_agent_dispatch_scenario_paper_d_1_2"
+              }
+            },
+            {
+              "id": 33,
+              "name": "Reinforcement Agent 4",
+              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
+              "rules":
+              {
+                "dynamic_dispatch": true,
+                "reinforcement_agent": "rein_agent_dispatch_scenario_paper_m_1_1_1"
+              }
+            },
+            {
+              "id": 34,
+              "name": "Reinforcement Agent 4",
+              "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
+              "rules":
+              {
+                "dynamic_dispatch": true,
+                "reinforcement_agent": "rein_agent_dispatch_scenario_paper_m_1_1_2"
+              }
+            },
+
+
+
             {
               "id": 17,
               "name": "Reinforcement Agent (general)",

@@ -4,26 +4,26 @@
             {
               "title": "Produkt A",
               "id": 1,
-              "frequency_factor": 2,
+              "frequency_factor": 1.5,
               "duration_factor": 1,
               "composition": {
                 "copper": 1.0,
                 "steel": 1.0,
                 "plastic": 1.0
               },
-              "work_schedule": [1,2,5,7]
+              "work_schedule": [1,2,6]
             },
             {
               "title": "Produkt B",
               "id": 2,
-              "frequency_factor": 1,
+              "frequency_factor": 1.5,
               "duration_factor": 1,
               "composition": {
                 "copper": 1.0,
                 "steel": 1.0,
                 "plastic": 1.0
               },
-              "work_schedule": [3,4,6,7]
+              "work_schedule": [3,4,5]
             },
             {
               "title": "Produkt C",
@@ -35,22 +35,10 @@
                 "steel": 1.0,
                 "plastic": 1.0
               },
-              "work_schedule": [3,4,7]
-            },
-            {
-              "title": "Produkt D",
-              "id": 4,
-              "frequency_factor": 1,
-              "duration_factor": 1,
-              "composition": {
-                "copper": 1.0,
-                "steel": 1.0,
-                "plastic": 1.0
-              },
               "work_schedule": [3,4]
             },
             {
-              "title": "Produkt E",
+              "title": "Produkt D",
               "id": 5,
               "frequency_factor": 1,
               "duration_factor": 1,
@@ -59,7 +47,7 @@
                 "steel": 1.0,
                 "plastic": 1.0
               },
-              "work_schedule": [1,2,5,7]
+              "work_schedule": [1,2]
             }
             
           ]
