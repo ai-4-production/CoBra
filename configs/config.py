@@ -2,9 +2,9 @@
 
 configuration = {
     # "SETUP_FILE": "Layout_FAZI.txt",
-    # "SETUP_FILE": "Layout_Scenario_Paper_AI.txt",
-    "SETUP_FILE": "Layout_Scenario_Paper_EDD.txt",
-    "SIMULATION_RANGE": 6000,
+    "SETUP_FILE": "Layout_Scenario_Paper_AI.txt",
+    # "SETUP_FILE": "Layout_Scenario_Paper_EDD.txt",
+    "SIMULATION_RANGE": 36000,
     "SEED_MACHINE_INTERRUPTIONS": 29378374,
     "MACHINE_FAILURE_RATE": 4,
     "FAILURE_MINIMAL_LENGTH": 10,
@@ -15,13 +15,13 @@ configuration = {
     "MACHINE_TIME_RELEASE_ITEM": 1,
 
     "SEED_INCOMING_ORDERS": 10278347,
-    "NUMBER_OF_ORDERS": 1500,
+    "NUMBER_OF_ORDERS": 9000,
     "ORDER_MINIMAL_LENGTH": 0,
     "ORDER_MAXIMAL_LENGTH": 100,
     "SPREAD_ORDER_COMPLEXITY": 0.1,
     # "SPREAD_ORDER_Priority": 1,
 
-    "AGENT_SPEED": 10,
+    "AGENT_SPEED": 2,
     "TIME_FOR_ITEM_PICK_UP": 0.1,
     "TIME_FOR_ITEM_STORE": 0.1,
 
