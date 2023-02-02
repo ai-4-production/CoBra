@@ -92,6 +92,7 @@ def simulation(runs=1, show_progress=False, save_log=True,
     if change_incoming_orders:
         np.random.seed(config["SEED_GENERATOR"]["SEED_GEN_INC_ORDERS"])
         order_seeds = np.random.randint(99999999, size=runs)
+        print(order_seeds)
     else:
         order_seeds = np.full([runs, ], config["SEED_INCOMING_ORDERS"])
 
@@ -104,7 +105,7 @@ def simulation(runs=1, show_progress=False, save_log=True,
     # Run the set amount of simulations
     for sim_count in range(runs):
         t = time.localtime()
-        timestamp = time.strftime('_%m-%d-%Y_%H-%M', t)
+        timestamp = time.strftime('_%m-%d-%Y_%H-%M-%S', t)
         config["SEED_MACHINE_INTERUPTIONS"] = interruption_seeds[sim_count].item()
         config["SEED_INCOMING_ORDERS"] = order_seeds[sim_count].item()
         env = simpy.Environment()

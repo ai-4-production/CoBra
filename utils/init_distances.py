@@ -1,4 +1,5 @@
 from configs.config import configuration
+import time 
 
 
 def init_cell_dimensions(cells):
@@ -80,5 +81,6 @@ def init_cell_dimensions(cells):
 
         start = cell.possible_positions
         end = cell.possible_positions
-
+    
         cell.distances = [(start_pos, end_pos, distance(start_pos, end_pos, cell, best_path)) for start_pos in start for end_pos in end]
+        

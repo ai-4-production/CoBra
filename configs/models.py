@@ -13,7 +13,7 @@ import tensorflow as tf
 from keras.models import Sequential, load_model
 from keras.optimizers import RMSprop
 from keras.layers import Dense, Dropout, Activation
-os.environ['keras_backend'] = 'tensorflow' 
+os.environ['keras_backend'] = 'tensorflow'
 from keras.backend import backend as K
 
 # Add reinforcement models
@@ -28,12 +28,12 @@ class ReinforceAgent():
         self.episode_step = 6000
         self.hidden_layer_size_1 = 128
         self.target_update = 5
-        self.discount_factor = 0.99 #previous: 0.999
-        self.learning_rate = 0.005 #previous: 0.005
+        self.discount_factor = 0.98 #previous: 0.999
+        self.learning_rate = 0.0005 #previous: 0.005
         self.epsilon = 1.0
         self.epsilon_decay = 0.997 #previous: 0.999
         self.epsilon_min = 0.01
-        self.batch_size = 64
+        self.batch_size = 128
         self.memory = deque(maxlen=1000000)
         self.global_step = global_step
         self.global_step_1 = 0
@@ -46,13 +46,12 @@ class ReinforceAgent():
         self.path = pathlib.Path(__file__).parent.resolve()
 
         if self.trained_model:
-            print("../models_saved/2023-01-18_09-07_cell.id-5_<configs.models.ReinforceAgent object at 0x7fc0547f9b80>_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size) + '_' + str(self.global_step))
-            self.model = load_model("models_saved/2023-01-18_09-07_cell.id-5_<configs.models.ReinforceAgent object at 0x7fc0547f9b80>_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size)  + '_' + str(self.global_step))
+            self.model = load_model("models_saved/2023-01-31_18-06_cell.id-6_<configs.models.ReinforceAgent object at 0x7f97bc10ff70>_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size)  + '_' + str(self.global_step))
             self.target_model = self.model
             # with open(self.dirPath+str(self.load_episode)+'.json') as outfile:
             #     param = json.load(outfile)
             #     self.epsilon = param.get('epsilon')
-        else: 
+        else:
             self.model = self.buildModel()
             self.target_model = self.buildModel()
 
@@ -65,7 +64,7 @@ class ReinforceAgent():
         model.add(Dense(self.action_size, kernel_initializer='lecun_uniform'))
         model.add(Activation('linear'))
         model.compile(loss='mse', optimizer=RMSprop(learning_rate=self.learning_rate, rho=0.9, epsilon=1e-06))
-        model.summary()
+        # model.summary()
         return model
 
     def trainModel(self, target):
@@ -99,12 +98,12 @@ class ReinforceAgent():
         # print("Prev.: ", self.global_step_1, ", Act.: ", self.global_step)
         # self.global_step_1 = self.global_step
 
-        gc.collect() 
+        gc.collect()
         # K.clear_session()
 
     def getQvalue(self, reward, next_target):
         return reward + self.discount_factor * np.amax(next_target)
-    
+
     def get_dispatch_rule(self, state):
         self.global_step = self.global_step + 1
         if not self.trained_model:
@@ -124,7 +123,7 @@ class ReinforceAgent():
                 action = np.argmax(self.q_value[0])
                 return action
 
-        elif self.trained_model: 
+        elif self.trained_model:
             state = np.array(state)
             q_value = self.model.predict(state.reshape(1, len(state)), verbose = 0)
             self.q_value = q_value
@@ -144,20 +143,26 @@ class ReinforceAgent():
                     # self.model.save('/models_saved/' + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
                     self.model.save("../models_saved/" + self.timestamp + "_" + 'cell.id-' + str(cell_id) +  '_' + str(self) + "_" + str(self.action_size) + "_" + str(self.state_size) + "_" + str(self.hidden_layer_size_1) + "_" + str(self.batch_size) + "_" + str(self.train_step))
                     print("model_saved")
-                    
+
     def updateTargetModel(self):
         self.target_model.set_weights(self.model.get_weights())
 
-rein_agent_dispatch_0 = ReinforceAgent(57, 3) #current one 
+rein_agent_dispatch_0 = ReinforceAgent(57, 3) #current one
 rein_agent_dispatch_1 = ReinforceAgent(48, 3) #current one
 
 # scenario within paper
-rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, False)
+# rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, False)
 rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(52, 5, False)
-rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(80, 5, False)
-rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(76, 5, False)
-rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(56, 5, False)
+rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(84, 5, False)
+rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(80, 5, False)
+rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(60, 5, False)
 
-rein_agent_dispatch_4 = ReinforceAgent(128, 5, False) #current one
-# rein_agent_dispatch_4 = ReinforceAgent(81, 3, True, 6400) #current one 
+# rein_agent_dispatch_4 = ReinforceAgent(128, 5, False) #current one
+# rein_agent_dispatch_4 = ReinforceAgent(81, 3, True, 6400) #current one
+
+rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, True, 2600)
+# rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(52, 5, True, 1000)
+# rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(84, 5, True, 1000)
+# rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(76, 5, True, 1000)
+# rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(56, 5, True, 1000)
 

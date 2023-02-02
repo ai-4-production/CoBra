@@ -2,9 +2,10 @@
 
 configuration = {
     # "SETUP_FILE": "Layout_FAZI.txt",
-    "SETUP_FILE": "Layout_Scenario_Paper_AI.txt",
-    # "SETUP_FILE": "Layout_Scenario_Paper_EDD.txt",
-    "SIMULATION_RANGE": 12000,
+    # "SETUP_FILE": "Layout_Scenario_Paper_AI.txt",
+    # "SETUP_FILE": "Layout_Scenario_Paper_AI_operation.txt",
+    "SETUP_FILE": "Layout_Scenario_Paper_EDD.txt",
+    "SIMULATION_RANGE": 7200,
     "SEED_MACHINE_INTERRUPTIONS": 29378374,
     "MACHINE_FAILURE_RATE": 4,
     "FAILURE_MINIMAL_LENGTH": 10,
@@ -14,14 +15,14 @@ configuration = {
     "MACHINE_TIME_LOAD_ITEM": 1,
     "MACHINE_TIME_RELEASE_ITEM": 1,
 
-    "SEED_INCOMING_ORDERS": 10278347,
-    "NUMBER_OF_ORDERS": 1500,
+    "SEED_INCOMING_ORDERS": 2578695,
+    "NUMBER_OF_ORDERS": 2000,
     "ORDER_MINIMAL_LENGTH": 0,
     "ORDER_MAXIMAL_LENGTH": 100,
     "SPREAD_ORDER_COMPLEXITY": 0.1,
     # "SPREAD_ORDER_Priority": 1,
 
-    "AGENT_SPEED": 2,
+    "AGENT_SPEED": 15,
     "TIME_FOR_ITEM_PICK_UP": 0.1,
     "TIME_FOR_ITEM_STORE": 0.1,
 
@@ -32,14 +33,14 @@ configuration = {
     "DISTANCES": {
         "BASE_HEIGHT": 1,
         "BASE_WIDTH": 1,
-        "DISTANCE_BETWEEN_CELLS": 0.2,
+        "DISTANCE_BETWEEN_CELLS": 1,
         "SAFE_DISTANCE": 0.1
     },
 
     "SEED_GENERATOR": {
         "SEED_GEN_M_INTERRUPTIONS": 2928337,
-        "SEED_GEN_INC_ORDERS": 124322
-        # "SEED_GEN_INC_ORDERS": 4848373
+        #"SEED_GEN_INC_ORDERS": 122424
+        "SEED_GEN_INC_ORDERS": 484837
     }
 }
 
