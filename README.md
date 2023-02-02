@@ -1,6 +1,8 @@
 # CoBra
 In modern production systems, the ability to flexibly adapt to new circumstances and facilitate robust production is a key feature to be competitive. One possibility that assists in cope with modern production challenges is the use of a state-of-the-art modular production layout and AI optimization methods. 
 This is were CoBra will help, combining open access solutions to leverage production performances. CoBra (Control Brain) utilizes neural networks and deep reinforcement learning to optimize choosen production KPIs and helps to benchmark AI-based approaches against heuristics. 
+
+Lizenz für das Bild kaufen!
 ![CoBra-modified](https://user-images.githubusercontent.com/79931115/214307056-bce4f787-b8bf-46e9-aa3a-fbe54ea41c98.jpg)
 
 
