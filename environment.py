@@ -109,12 +109,12 @@ def simulation(runs=1, show_progress=False, save_log=True,
         config["SEED_MACHINE_INTERUPTIONS"] = interruption_seeds[sim_count].item()
         config["SEED_INCOMING_ORDERS"] = order_seeds[sim_count].item()
         env = simpy.Environment()
-        #env = simpy.rt.RealtimeEnvironment(factor = 0.1)
+        # env = simpy.rt.RealtimeEnvironment(factor = 0.5)
 
         simulation_environment = set_up_sim_env(config, env, configuration, train)
 
         print('----------------------------------------------------------------------------')
-        # Reset Timer
+        # Reset Time
         time_tracker.reset_timer()
         start_time = time.time()
 
@@ -196,6 +196,7 @@ def sim_run_evaluation(sim_env, eval_measures):
 
     print("\nCalculation finished in %d seconds!" % (time.time() - start_time))
     print(time_tracker.time_action_calc, time_tracker.time_smart_action_calc, time_tracker.time_train_calc, time_tracker.time_destination_calc, time_tracker.time_occupancy_calc, time_tracker.time_state_calc)
+    print("time_tracker.action_normal: ", time_tracker.action_normal, ", time_tracker.action_smart: ", time_tracker.action_smart)
     # with open('/times' + '.csv', 'a+', newline='', encoding='utf-8') as file:
     #     writer = csv.writer(file)
     #     writer.writerow(list([time_tracker.time_action_calc, time_tracker.time_smart_action_calc, time_tracker.time_train_calc, time_tracker.time_destination_calc, time_tracker.time_occupancy_calc, time_tracker.time_state_calc]))

@@ -30,6 +30,9 @@ def reset_timer():
     global time_smart_action_calc
     global time_train_calc
 
+    global action_normal
+    global action_smart
+
     global time_prob_2
     global time_prob_2
     global time_prob_3
@@ -45,6 +48,10 @@ def reset_timer():
     time_action_calc = 0
     time_smart_action_calc = 0
     time_train_calc = 0
+
+    action_normal = 0
+    action_smart = 0 
+
 
     time_prob_1 = 0
     time_prob_2 = 0

@@ -29,7 +29,7 @@ class ManufacturingAgent:
 
         self.env = env
         self.simulation_environment = None
-
+        self.init_time = time.time()
         t = time.localtime()
         self.timestamp = time.strftime('_%Y-%m-%d_%H-%M-%S', t)
 
@@ -128,12 +128,16 @@ class ManufacturingAgent:
         if self.ruleset.dynamic:
             next_task, next_order, destination, base_state, state_RL, action, action_RL = self.get_smart_action(cell_state)
         elif self.ruleset.dynamic_dispatch:
+            now = time.time()
             next_task, next_order, destination, base_state, state_RL, action, action_RL, len_useable_with_free_destination = self.get_smart_dispatch_rule(cell_state)
+            time_tracker.time_smart_action_calc += time.time() - now
+            time_tracker.action_smart += 1
         else:
             now = time.time()
             next_task, next_order, destination, base_state = self.get_action(cell_state)
             time_tracker.time_action_calc += time.time() - now
-
+            time_tracker.action_normal += 1
+    
         # Perform next task if there is one~
         if next_task:
             self.current_task = next_task
@@ -344,7 +348,6 @@ class ManufacturingAgent:
             next_order = useable_with_free_destination["order"].iat[0]
             state_RL, action_RL = None, None
         else:
-            now = time.time()
             possible_dispatch_rules = [2,3,4,5,9]
             state_RL = self.get_RL_state(state_numeric, available_destinations)
             # if order threshold is reached, control is taken over by heuristics
@@ -352,8 +355,9 @@ class ManufacturingAgent:
             current_threshold = 0
             # print("Self-cell-ID-", self.cell.id, "Orders: ", len(self.cell.orders_in_cell)-len(orders_in_machine), "Capacity: ", self.cell.cell_capacity - 2*len(self.cell.machines))
             if current_threshold < self.intelligent_limit:
+                # now = time.time()
                 action_RL = smart_agent.get_dispatch_rule(state_RL) #smart agent thinking...
-                time_tracker.time_smart_action_calc += time.time() - now
+                # time_tracker.time_smart_action_calc += time.time() - now
                 #ranking = self.pre_ordering(4, useable_with_free_destination)
                 for ruleset in RuleSet.instances:
                     if ruleset.id == possible_dispatch_rules[action_RL]:
