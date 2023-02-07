@@ -132,6 +132,7 @@ class ManufacturingAgent:
             next_task, next_order, destination, base_state, state_RL, action, action_RL, len_useable_with_free_destination = self.get_smart_dispatch_rule(cell_state)
             time_tracker.time_smart_action_calc += time.time() - now
             time_tracker.action_smart += 1
+
         else:
             now = time.time()
             next_task, next_order, destination, base_state = self.get_action(cell_state)
@@ -357,7 +358,7 @@ class ManufacturingAgent:
             if current_threshold < self.intelligent_limit:
                 # now = time.time()
                 action_RL = smart_agent.get_dispatch_rule(state_RL) #smart agent thinking...
-                # time_tracker.time_smart_action_calc += time.time() - now
+                time_tracker.time_smart_action_calc += time.time() - now
                 #ranking = self.pre_ordering(4, useable_with_free_destination)
                 for ruleset in RuleSet.instances:
                     if ruleset.id == possible_dispatch_rules[action_RL]:
