@@ -29,7 +29,7 @@ class SimulationResults:
             for agent in cell.agents:
                 agent_schema = deepcopy(schema_agents)
                 agent_schema["ruleset"] = agent.ruleset.name.decode("UTF-8")
-                # agent_schema["agent_results"] = agent.result
+                agent_schema["agent_results"] = agent.result
                 cell_schema["agents"].append(agent_schema)
 
             # Fill machine schema

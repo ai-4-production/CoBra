@@ -46,8 +46,16 @@ class ReinforceAgent():
         self.path = pathlib.Path(__file__).parent.resolve()
 
         if self.trained_model:
-            self.model = load_model("models_saved/2023-02-02_17-19_cell.id-6_<configs.models.ReinforceAgent object at 0x7fc45fed0f40>_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size)  + '_' + str(self.global_step))
-            self.target_model = self.model
+            try:
+                self.model = load_model("models_saved/Scenario_1_cell.id-1_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size)  + '_' + str(self.global_step))
+                self.target_model = self.model
+            except:
+                try:
+                    self.model = load_model("models_saved/Scenario_1_cell.id-4_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size)  + '_' + str(self.global_step))
+                    self.target_model = self.model
+                except:
+                    self.model = load_model("models_saved/Scenario_1_cell.id-6_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size)  + '_' + str(self.global_step))
+                    self.target_model = self.model
             # with open(self.dirPath+str(self.load_episode)+'.json') as outfile:
             #     param = json.load(outfile)
             #     self.epsilon = param.get('epsilon')
@@ -147,8 +155,8 @@ class ReinforceAgent():
     def updateTargetModel(self):
         self.target_model.set_weights(self.model.get_weights())
 
-rein_agent_dispatch_0 = ReinforceAgent(57, 3) #current one
-rein_agent_dispatch_1 = ReinforceAgent(48, 3) #current one
+# rein_agent_dispatch_0 = ReinforceAgent(57, 3) #current one
+# rein_agent_dispatch_1 = ReinforceAgent(48, 3) #current one
 
 # scenario within paper
 # rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, False)
@@ -160,9 +168,9 @@ rein_agent_dispatch_1 = ReinforceAgent(48, 3) #current one
 # rein_agent_dispatch_4 = ReinforceAgent(128, 5, False) #current one
 # rein_agent_dispatch_4 = ReinforceAgent(81, 3, True, 6400) #current one
 
-rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, True, 8200)
+rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, True, 1)
 # rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(52, 5, True, 1000)
-# rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(84, 5, True, 1000)
+rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(84, 5, True, 1)
 # rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(76, 5, True, 1000)
-# rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(56, 5, True, 1000)
+rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(60, 5, True, 1)
 

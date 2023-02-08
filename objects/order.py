@@ -236,12 +236,12 @@ def order_arrivals(env: simpy.Environment, sim_env, config: dict):
 
 def get_orders_from_seed(amount: int, seed: int, config: dict):
     """Create a list of random order attributes from seed
-a
     :param amount: (int) The amount of orders to generate
     :param seed: (int) Seed for order arrivals and random attributes
     :param config: (dict) Main configuration dictionary to get setting for generation of orders
     :return order_records: (numpy records) All generated orders with attributes
     """
+    
     np.random.seed(seed)
 
     possible_types = OrderType.instances
@@ -253,7 +253,6 @@ a
     start_times = np.arange(0, config['SIMULATION_RANGE'], config['SIMULATION_RANGE']/config['NUMBER_OF_ORDERS'])
 
     types = np.random.choice(possible_types, amount, p=frequency_factors,  replace=True)
-
     duration_factors = np.asarray([order_type.duration_factor for order_type in types])
     base_lengths_1 = np.random.randint(low=config['ORDER_MINIMAL_LENGTH'], high=config['ORDER_MAXIMAL_LENGTH'], size=amount)
 
