@@ -6,7 +6,7 @@
             "seed_machine_interruptions": 29378374,
             "simulation_results": {
                 "arrived_orders": 2800,
-                "processed_quantity": 2750,
+                "processed_quantity": 2752,
                 "processed_in_time": 86,
                 "processed_in_time_rate": 3.13,
                 "in_time_rate_by_order_type": [
