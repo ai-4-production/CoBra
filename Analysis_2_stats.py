@@ -2,7 +2,9 @@ import os
 import json
 import time
 import numpy as np
-path = os.getcwd() + '/result/Scenario_1_2800/last_runs_02-11-2023_16-10-02_EDD.json'
+path = os.getcwd() + '/result/Scenario_1_2800/last_runs_02-11-2023_15-07-59_RL.json'
+#path = os.getcwd() + '/result/Scenario_1_2800/last_runs_02-11-2023_16-10-33_HP.json'
+#path = os.getcwd() + '/result/last_runs_02-13-2023_08-27-29.json'
 
 numbers = open(path)
 data = json.load(numbers)
@@ -16,31 +18,27 @@ for roots,dirs, files in os.walk(os.getcwd() + '/Benchmark/Data'):
 
 prio_data = []
 length = 0
+proc_in_time = 0
 priorities = [0,1,2]
-lenghts = [26.64, 21.55,13.81,18.93]
+lenghts_low_load = [26.64, 21.55,13.81,18.93]
+load_constant = 40
 product_types = ["Produkt A","Produkt B","Produkt C","Produkt D"]
 
 for m in priorities:
     prio_data = []
+    proc_in_time = 0
     priority, tardiness, lateness, completion_time, throughput_time, time_to_EDD = 0,0,0,0,0,0
     for i in range(len(data["orders"][0]["orders"])):
+        proc_in_time = 0
         type = data["orders"][0]["orders"][i]["type"]
-        # if type == "Produkt A":
-        #     length = 56.64
-        # elif type == "Produkt B":
-        #     length = 51.55
-        # elif type == "Produkt C":
-        #     length = 53.81
-        # elif type == "Produkt D":
-        #     length = 58.93
         if type == "Produkt A":
-            length = 26.64
+            length = lenghts_low_load[0] + load_constant
         elif type == "Produkt B":
-            length = 21.55
+            length = lenghts_low_load[1] + load_constant
         elif type == "Produkt C":
-            length = 13.81
+            length = lenghts_low_load[2] + load_constant
         elif type == "Produkt D":
-            length = 18.93
+            length = lenghts_low_load[3] + load_constant
         priority = data["orders"][0]["orders"][i]["priority"]
         lateness = data["orders"][0]["orders"][i]["item_results"]["lateness"]
         completion_time = data["orders"][0]["orders"][i]["item_results"]["completion_time"]
@@ -49,13 +47,14 @@ for m in priorities:
         lateness = tardiness
         if tardiness < 0:
             tardiness = 0
+            proc_in_time = 1
         if completion_time != 0:
             if data["orders"][0]["orders"][i]["priority"] == m:
-                prio_data.append([priority, tardiness,lateness, completion_time,throughput_time, time_to_EDD])
+                prio_data.append([priority, tardiness,lateness, completion_time,throughput_time, time_to_EDD, proc_in_time])
 
         
     
-    tardiness_1, lateness_1, completion_time_1, throughput_time_1,time_to_EDD_1 = 0,0,0,0,0
+    tardiness_1, lateness_1, completion_time_1, throughput_time_1,time_to_EDD_1,proc_in_time_1 = 0,0,0,0,0,0
     #print low/mid/high priority orders in one graph
     for n in range(len(prio_data)):
         tardiness_1 += prio_data[n][1]
@@ -63,11 +62,13 @@ for m in priorities:
         completion_time_1 += prio_data[n][3]
         throughput_time_1 += prio_data[n][4]
         time_to_EDD_1 += prio_data[n][5]
+        proc_in_time_1 += prio_data[n][6]
     tardiness_average_0 = tardiness_1/len(prio_data)
     lateness_average_0 = lateness_1/len(prio_data)
     completion_time_average_0 = completion_time_1/len(prio_data)
     throughput_time_average_0 = throughput_time_1/len(prio_data)
     time_to_EDD_average_0 = time_to_EDD_1/len(prio_data)
+    proc_in_time_average_0 = proc_in_time_1/len(prio_data)
 
     print("Priority: ", m, " , orders: ", len(prio_data))
     print("tardiness_average: ", tardiness_average_0)
@@ -75,6 +76,7 @@ for m in priorities:
     print("completion_time_average: ", completion_time_average_0)
     print("throughput_time_average: ", throughput_time_average_0)
     print("time_to_EDD_average: ", time_to_EDD_average_0)
+    print("proc_in_time: ", proc_in_time_average_0, ", count: ", proc_in_time_1)
     print("________________________________________________________")
 
 
@@ -84,15 +86,16 @@ tardiness_1, lateness_1, completion_time_1, throughput_time_1, time_to_EDD_1 = 0
 priority, tardiness, lateness, completion_time, throughput_time, time_to_EDD = 0,0,0,0,0,0
 
 for i in range(len(data["orders"][0]["orders"])):
+    proc_in_time = 0
     type = data["orders"][0]["orders"][i]["type"]
     if type == "Produkt A":
-        length = 26.64
+        length = lenghts_low_load[0] + load_constant
     elif type == "Produkt B":
-        length = 21.55
+        length = lenghts_low_load[1] + load_constant
     elif type == "Produkt C":
-        length = 13.81
+        length = lenghts_low_load[2] + load_constant
     elif type == "Produkt D":
-        length = 18.93
+        length = lenghts_low_load[3] + load_constant
     priority = data["orders"][0]["orders"][i]["priority"]
     completion_time = data["orders"][0]["orders"][i]["item_results"]["completion_time"]
     time_to_EDD = data["orders"][0]["orders"][i]["due_to"] - data["orders"][0]["orders"][i]["start"]
@@ -101,8 +104,9 @@ for i in range(len(data["orders"][0]["orders"])):
     lateness = tardiness
     if tardiness < 0:
             tardiness = 0
+            proc_in_time = 1
     if completion_time != 0:
-        prio_data.append([priority, tardiness,lateness, completion_time,throughput_time,time_to_EDD])
+        prio_data.append([priority, tardiness,lateness, completion_time,throughput_time,time_to_EDD, proc_in_time])
             
 #print low/mid/high priority orders in one graph
 for n in range(len(prio_data)):
@@ -111,11 +115,14 @@ for n in range(len(prio_data)):
     completion_time_1 += prio_data[n][3]
     throughput_time_1 += prio_data[n][4]
     time_to_EDD_1 += prio_data[n][5]
+    proc_in_time_1 += prio_data[n][6]
 tardiness_average_0 = tardiness_1/len(prio_data)
 lateness_average_0 = lateness_1/len(prio_data)
 completion_time_average_0 = completion_time_1/len(prio_data)
 throughput_time_average_0 = throughput_time_1/len(prio_data)
 time_to_EDD_average_0 = time_to_EDD_1/len(prio_data)
+proc_in_time_average_0 = proc_in_time_1/len(prio_data)
+
 
 print("All orders: " , len(prio_data))
 print("tardiness_average: ", tardiness_average_0)
@@ -123,6 +130,7 @@ print("lateness_average: ", lateness_average_0)
 print("completion_time_average: ", completion_time_average_0)
 print("throughput_time_average: ", throughput_time_average_0)
 print("time_to_EDD_average_0: ", time_to_EDD_average_0)
+print("proc_in_time: ", proc_in_time_average_0, ", count: ", proc_in_time_1)
 print("________________________________________________________")
 
 
