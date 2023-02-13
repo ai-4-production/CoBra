@@ -131,7 +131,6 @@ class ManufacturingAgent:
             now = time.time()
             next_task, next_order, destination, base_state, state_RL, action, action_RL, len_useable_with_free_destination = self.get_smart_dispatch_rule(cell_state)
             time_tracker.time_smart_action_calc += time.time() - now
-            time_tracker.action_smart += 1
 
         else:
             now = time.time()
@@ -349,6 +348,7 @@ class ManufacturingAgent:
             next_order = useable_with_free_destination["order"].iat[0]
             state_RL, action_RL = None, None
         else:
+            time_tracker.action_smart += 1
             possible_dispatch_rules = [2,3,4,5,9]
             state_RL = self.get_RL_state(state_numeric, available_destinations)
             # if order threshold is reached, control is taken over by heuristics

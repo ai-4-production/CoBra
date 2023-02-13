@@ -1,9 +1,9 @@
 
 ;Type;Machines;Agents;StorageCap;InputCap;OutputCap;Parent;Level
 
-0;Man;[1, 1, 2];[4];4;3;2;4;0
+0;Man;[1, 1, 2];[4,4];4;3;2;4;0
 
-1;Man;[3, 4];[4];3;2;2;4;0
+1;Man;[3, 4];[4,4];3;2;2;4;0
 
 2;Man;[5];[4];2;1;1;5;0
 

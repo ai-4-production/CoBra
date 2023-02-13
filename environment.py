@@ -123,7 +123,7 @@ def simulation(runs=1, show_progress=False, save_log=True,
         if show_progress:
             env.process(show_progress_func(env, simulation_environment))
 
-        env.run(until=config["SIMULATION_RANGE"])
+        env.run(until=(config["SIMULATION_RANGE"]))
 
         print('\nSimulation %d finished in %d seconds!' % (sim_count + 1, time.time() - start_time))
         print("Time Tracker:\nTime for state calculations: %d seconds \nTime for destination calculations: %d seconds" % (time_tracker.time_state_calc, time_tracker.time_destination_calc))
@@ -163,8 +163,14 @@ def sim_run_evaluation(sim_env, eval_measures):
     :param sim_env: Simulation environment object to evaluate
     :param eval_measures: (dict) dictionary containing the measures to be calculated"""
 
-    print("\nCalculate the chosen measures for the finished simulation run!")
+    
+
     start_time = time.time()
+    print("\nCalculation finished in %d seconds!" % (time.time() - start_time))
+    print(time_tracker.time_action_calc, time_tracker.time_smart_action_calc, time_tracker.time_train_calc, time_tracker.time_destination_calc, time_tracker.time_occupancy_calc, time_tracker.time_state_calc)
+    print("time_tracker.action_normal: ", time_tracker.action_normal, ", time_tracker.action_smart: ", time_tracker.action_smart)
+
+    print("\nCalculate the chosen measures for the finished simulation run!")
 
     functionList = {"machine": calculate_measures.machine_measures,
                     "buffer": calculate_measures.buffer_measures,
@@ -194,9 +200,7 @@ def sim_run_evaluation(sim_env, eval_measures):
 
     SimulationResults(sim_env)
 
-    print("\nCalculation finished in %d seconds!" % (time.time() - start_time))
-    print(time_tracker.time_action_calc, time_tracker.time_smart_action_calc, time_tracker.time_train_calc, time_tracker.time_destination_calc, time_tracker.time_occupancy_calc, time_tracker.time_state_calc)
-    print("time_tracker.action_normal: ", time_tracker.action_normal, ", time_tracker.action_smart: ", time_tracker.action_smart)
+    
     # with open('/times' + '.csv', 'a+', newline='', encoding='utf-8') as file:
     #     writer = csv.writer(file)
     #     writer.writerow(list([time_tracker.time_action_calc, time_tracker.time_smart_action_calc, time_tracker.time_train_calc, time_tracker.time_destination_calc, time_tracker.time_occupancy_calc, time_tracker.time_state_calc]))

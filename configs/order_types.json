@@ -4,7 +4,7 @@
             {
               "title": "Produkt A",
               "id": 1,
-              "frequency_factor": 1.5,
+              "frequency_factor": 2.5,
               "duration_factor": 1,
               "composition": {
                 "copper": 1.0,
@@ -16,7 +16,7 @@
             {
               "title": "Produkt B",
               "id": 2,
-              "frequency_factor": 1.5,
+              "frequency_factor": 3,
               "duration_factor": 1,
               "composition": {
                 "copper": 1.0,

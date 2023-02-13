@@ -249,23 +249,23 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     factors_sum = sum(frequency_factors)
     frequency_factors = [factor/factors_sum for factor in frequency_factors]
     # Create attributes
-    start_times_1 = np.random.uniform(low=0, high=config['SIMULATION_RANGE'], size=amount)
-    start_times = np.arange(0, config['SIMULATION_RANGE'], config['SIMULATION_RANGE']/config['NUMBER_OF_ORDERS'])
+    # start_times = np.random.uniform(low=0, high=config['SIMULATION_RANGE'], size=amount)
+    # start_times = np.arange(0, config['SIMULATION_RANGE'], config['SIMULATION_RANGE']/config['NUMBER_OF_ORDERS'])
+    start_times = np.arange(0, (config['SIMULATION_RANGE']-200), (config['SIMULATION_RANGE']-200)/config['NUMBER_OF_ORDERS'])
 
     types = np.random.choice(possible_types, amount, p=frequency_factors,  replace=True)
     duration_factors = np.asarray([order_type.duration_factor for order_type in types])
     base_lengths_1 = np.random.randint(low=config['ORDER_MINIMAL_LENGTH'], high=config['ORDER_MAXIMAL_LENGTH'], size=amount)
-
     # Calculate order prioritities
     base_lengths = np.full(amount, 1)
     for base_length in range(len(base_lengths)):
         lenght = random.randint(0,99)
         if lenght < 20:
             base_lengths[base_length] = 0
-        elif lenght >= 20 and lenght < 50:
-            base_lengths[base_length] = 40
         else:
-            base_lengths[base_length] = 70
+            base_lengths[base_length] = random.randint(30,60)
+        # else:
+        #     base_lengths[base_length] = 70
 
     complexities_1 = np.random.normal(loc=1, scale=config['SPREAD_ORDER_COMPLEXITY'], size=amount)
     complexities = np.full(amount, 1)
@@ -282,9 +282,9 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     
     for priority in range(len(priorities)):
         prio = random.randint(0,99)
-        if prio < 5:
+        if prio < 10:
             priorities[priority] = 2
-        elif prio >= 5 and prio < 20:
+        elif prio >= 10 and prio < 25:
             priorities[priority] = 1
         else:
             priorities[priority] = 0
