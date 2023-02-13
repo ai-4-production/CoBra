@@ -2,7 +2,7 @@ import os
 import json
 import time
 import numpy as np
-path = os.getcwd() + '/result/Scenario_1_2800/last_runs_02-11-2023_15-07-59_RL.json'
+path = os.getcwd() + '/result/Scenario_1_2800/Run_4/last_runs_02-13-2023_16-43-08_RL.json'
 #path = os.getcwd() + '/result/Scenario_1_2800/last_runs_02-11-2023_16-10-33_HP.json'
 #path = os.getcwd() + '/result/last_runs_02-13-2023_08-27-29.json'
 
@@ -70,15 +70,22 @@ for m in priorities:
     time_to_EDD_average_0 = time_to_EDD_1/len(prio_data)
     proc_in_time_average_0 = proc_in_time_1/len(prio_data)
 
-    print("Priority: ", m, " , orders: ", len(prio_data))
-    print("tardiness_average: ", tardiness_average_0)
-    print("lateness_average: ", lateness_average_0)
-    print("completion_time_average: ", completion_time_average_0)
-    print("throughput_time_average: ", throughput_time_average_0)
-    print("time_to_EDD_average: ", time_to_EDD_average_0)
-    print("proc_in_time: ", proc_in_time_average_0, ", count: ", proc_in_time_1)
-    print("________________________________________________________")
-
+    # print("Priority: ", m, " , orders: ", len(prio_data))
+    # print("tardiness_average: ", tardiness_average_0)
+    # print("lateness_average: ", lateness_average_0)
+    # print("completion_time_average: ", completion_time_average_0)
+    # print("throughput_time_average: ", throughput_time_average_0)
+    # print("time_to_EDD_average: ", time_to_EDD_average_0)
+    # print("proc_in_time: ", proc_in_time_average_0, ", count: ", proc_in_time_1)
+    # print("________________________________________________________")
+    print(m) 
+    print(len(prio_data))
+    print(tardiness_average_0)
+    print(lateness_average_0)
+    print(completion_time_average_0)
+    print(throughput_time_average_0)
+    print(proc_in_time_average_0)
+    print(proc_in_time_1)
 
 prio_data = []
 length = 0
@@ -124,14 +131,22 @@ time_to_EDD_average_0 = time_to_EDD_1/len(prio_data)
 proc_in_time_average_0 = proc_in_time_1/len(prio_data)
 
 
-print("All orders: " , len(prio_data))
-print("tardiness_average: ", tardiness_average_0)
-print("lateness_average: ", lateness_average_0)
-print("completion_time_average: ", completion_time_average_0)
-print("throughput_time_average: ", throughput_time_average_0)
-print("time_to_EDD_average_0: ", time_to_EDD_average_0)
-print("proc_in_time: ", proc_in_time_average_0, ", count: ", proc_in_time_1)
-print("________________________________________________________")
+# print("All orders: " , len(prio_data))
+# print("tardiness_average: ", tardiness_average_0)
+# print("lateness_average: ", lateness_average_0)
+# print("completion_time_average: ", completion_time_average_0)
+# print("throughput_time_average: ", throughput_time_average_0)
+# print("time_to_EDD_average_0: ", time_to_EDD_average_0)
+# print("proc_in_time: ", proc_in_time_average_0, ", count: ", proc_in_time_1)
+# print("________________________________________________________")
+print(len(prio_data))
+print(tardiness_average_0)
+print(lateness_average_0)
+print(completion_time_average_0)
+print(throughput_time_average_0)
+print(proc_in_time_average_0)
+print(proc_in_time_1)
+print("_")
 
 
 # for p in product_types:
