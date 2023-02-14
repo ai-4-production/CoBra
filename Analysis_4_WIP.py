@@ -2,7 +2,7 @@ import os
 import json
 import time
 import numpy as np
-path = os.getcwd() + '/result/Scenario_1_2800/last_runs_02-11-2023_16-10-33_HP.json'
+path = os.getcwd() + '/result/Scenario_1_2800/Run_3/last_runs_02-13-2023_17-50-02_RL.json'
 #path = os.getcwd() + '/result/last_runs_02-13-2023_08-27-29.json'
 
 numbers = open(path)

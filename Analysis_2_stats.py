@@ -2,7 +2,7 @@ import os
 import json
 import time
 import numpy as np
-path = os.getcwd() + '/result/Scenario_1_2800/Run_3/last_runs_02-13-2023_17-48-26_FiFo_global.json'
+path = os.getcwd() + '/result/Scenario_1_2800/Run_3/last_runs_02-13-2023_18-30-15_RTL.json'
 #path = os.getcwd() + '/result/Scenario_1_2800/last_runs_02-11-2023_16-10-33_HP.json'
 #path = os.getcwd() + '/result/last_runs_02-13-2023_08-27-29.json'
 
@@ -24,7 +24,7 @@ lenghts_low_load = [26.64, 21.55,13.81,18.93]
 load_constant = 40
 product_types = ["Produkt A","Produkt B","Produkt C","Produkt D"]
 
-
+for m in priorities:
     prio_data = []
     proc_in_time = 0
     priority, tardiness, lateness, completion_time, throughput_time, time_to_EDD = 0,0,0,0,0,0
@@ -114,15 +114,18 @@ for i in range(len(data["orders"][0]["orders"])):
             proc_in_time = 1
     if completion_time != 0:
         prio_data.append([priority, tardiness,lateness, completion_time,throughput_time,time_to_EDD, proc_in_time])
-            
+
+tpt_times = []
 #print low/mid/high priority orders in one graph
 for n in range(len(prio_data)):
     tardiness_1 += prio_data[n][1]
     lateness_1 += prio_data[n][2]
     completion_time_1 += prio_data[n][3]
     throughput_time_1 += prio_data[n][4]
+    tpt_times.append(prio_data[n][4])
     time_to_EDD_1 += prio_data[n][5]
     proc_in_time_1 += prio_data[n][6]
+
 tardiness_average_0 = tardiness_1/len(prio_data)
 lateness_average_0 = lateness_1/len(prio_data)
 completion_time_average_0 = completion_time_1/len(prio_data)
@@ -144,6 +147,7 @@ print(tardiness_average_0)
 print(lateness_average_0)
 print(completion_time_average_0)
 print(throughput_time_average_0)
+print(np.mean(tpt_times))
 print(proc_in_time_average_0)
 print(proc_in_time_1)
 print("_")
