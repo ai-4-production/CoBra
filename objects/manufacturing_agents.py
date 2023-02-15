@@ -134,7 +134,7 @@ class ManufacturingAgent:
 
         else:
             now = time.time()
-            next_task, next_order, destination, base_state = self.get_action(cell_state)
+            next_task, next_order, destination, base_state, len_useable_with_free_destination = self.get_action(cell_state)
             time_tracker.time_action_calc += time.time() - now
             time_tracker.action_normal += 1
     
@@ -171,23 +171,12 @@ class ManufacturingAgent:
             time_tracker.time_destination_calc += time.time() - dest_calc_start
             new_cell_state = self.state_to_numeric(copy(new_cell_state))
 
-
-            # print(len_useable_with_free_destination)
-            # useable_orders = new_cell_state[(new_cell_state["locked"] == 0) & (new_cell_state["in_m_input"] == 0) & (new_cell_state["in_m"] == 0) & (new_cell_state["in_same_cell"] == 1)]
-            # print(len(useable_orders[useable_orders["_destination"] != -1]))
-
-
             if len_useable_with_free_destination > 1:
                 if not self.ruleset.dynamic and not self.ruleset.dynamic_dispatch:
                     action = self.get_heuristics_action_index(cell_state, next_order)
                     self.finished_heuristic_action(cell_state, new_cell_state, base_state, next_order, self.env.now - task_started_at, action, len_useable_with_free_destination)
 
                 if (self.ruleset.dynamic or self.ruleset.dynamic_dispatch) and action_RL != None:  # Check rewards            
-                    #reward function tbd
-                    # print(action_RL)
-                    # print(state_RL)
-                    # print(len_useable_with_free_destination)
-                    # print("_______________________________--")
                     self.finished_smart_action(cell_state, new_cell_state, base_state, state_RL, next_order, action, action_RL, len_useable_with_free_destination)
 
             # Start new main process
@@ -210,12 +199,12 @@ class ManufacturingAgent:
         useable_orders = order[(order["locked"] == 0) & (order["in_m_input"] == 0) & (order["in_m"] == 0) & (order["in_same_cell"] == 1)] 
 
         if useable_orders.empty:
-            return None, None, None, None
+            return None, None, None, None, None
 
         useable_with_free_destination = useable_orders[useable_orders["_destination"] != -1]
 
         if useable_with_free_destination.empty:
-            return None, None, None, None
+            return None, None, None, None, None
 
         elif len(useable_with_free_destination) == 1:
             next_order = useable_with_free_destination["order"].iat[0]
@@ -253,9 +242,9 @@ class ManufacturingAgent:
         destination = useable_with_free_destination[useable_with_free_destination["order"] == next_order].reset_index(drop=True).loc[0, "_destination"]
 
         if destination:
-            return self.env.process(self.item_from_to(next_order, next_order.position, destination)), next_order, destination, state_numeric
+            return self.env.process(self.item_from_to(next_order, next_order.position, destination)), next_order, destination, state_numeric, len(useable_with_free_destination)
         else:
-            return None, None, None, None
+            return None, None, None, None, None
 
     def get_RL_state(self, order_state, available_destinations): # get flatted state vector with chosen information
         try:
