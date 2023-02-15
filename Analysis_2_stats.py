@@ -2,7 +2,7 @@ import os
 import json
 import time
 import numpy as np
-path = os.getcwd() + '/result/Scenario_1_2800/Run_3/last_runs_02-13-2023_18-30-15_RTL.json'
+path = os.getcwd() + '/result/Scenario_1_2800/Run_1/last_runs_02-14-2023_16-56-55_FiFo_local.json'
 #path = os.getcwd() + '/result/Scenario_1_2800/last_runs_02-11-2023_16-10-33_HP.json'
 #path = os.getcwd() + '/result/last_runs_02-13-2023_08-27-29.json'
 
@@ -147,7 +147,6 @@ print(tardiness_average_0)
 print(lateness_average_0)
 print(completion_time_average_0)
 print(throughput_time_average_0)
-print(np.mean(tpt_times))
 print(proc_in_time_average_0)
 print(proc_in_time_1)
 print("_")
