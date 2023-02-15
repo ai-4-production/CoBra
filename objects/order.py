@@ -241,7 +241,7 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     :param config: (dict) Main configuration dictionary to get setting for generation of orders
     :return order_records: (numpy records) All generated orders with attributes
     """
-    seed = random.randint(2433313, 7523423)
+    seed = random.randint(0, 2**32 - 1)
     np.random.seed(seed)
 
     possible_types = OrderType.instances

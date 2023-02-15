@@ -3,8 +3,8 @@
 configuration = {
     # "SETUP_FILE": "Layout_FAZI.txt",
     # "SETUP_FILE": "Layout_Scenario_Paper_AI.txt",
-    "SETUP_FILE": "Layout_Scenario_Paper_AI_operation.txt",
-    # "SETUP_FILE": "Layout_Scenario_Paper_EDD.txt",
+    # "SETUP_FILE": "Layout_Scenario_Paper_AI_operation.txt",
+    "SETUP_FILE": "Layout_Scenario_Paper_EDD.txt",
     # "SETUP_FILE": "Layout_Scenario_Cell_0_train.txt",
     "SIMULATION_RANGE": 7200,
     "SEED_MACHINE_INTERRUPTIONS": 29378374,
