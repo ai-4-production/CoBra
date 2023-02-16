@@ -3,8 +3,8 @@ import json
 import time
 import csv
 import numpy as np
-# path = os.getcwd() + '/result/Scenario_1_2800/Run_3/last_runs_02-13-2023_17-50-02_RL.json'
-path = os.getcwd() + '/result/last_runs_01-30-2023_10-41.json'
+path = os.getcwd() + '/result/Scenario_1_2800/Run_3/last_runs_02-15-2023_18-17-04_RL.json'
+# path = os.getcwd() + '/result/last_runs_01-30-2023_10-41.json'
 
 numbers = open(path)
 data = json.load(numbers)

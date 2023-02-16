@@ -4,7 +4,9 @@ import time
 import numpy as np
 import csv
 from matplotlib import pyplot as plt
-path = os.getcwd() + '/result/Scenario_1_2800/Run_1/last_runs_02-14-2023_16-55-42_RTL.json'
+# path = os.getcwd() + '/result/Scenario_1_2800/Run_2/last_runs_02-15-2023_08-54-08_EDD.json'
+path = os.getcwd() + '/result/last_runs_02-15-2023_15-31-57.json'
+# path = os.getcwd() + '/result/EDD_Prio_relation/last_runs_02-15-2023_18-17-04_RL copy.json'
 
 numbers = open(path)
 data = json.load(numbers)
@@ -53,7 +55,10 @@ for m in priorities:
         due_to_time = data["orders"][0]["orders"][i]["due_to"]-data["orders"][0]["orders"][i]["start"]
         priority = data["orders"][0]["orders"][i]["priority"]
         throughput_time = data["orders"][0]["orders"][i]["item_results"]["transportation_time"]+data["orders"][0]["orders"][i]["item_results"]["time_at_machines"]+data["orders"][0]["orders"][i]["item_results"]["time_in_interface_buffer"]+data["orders"][0]["orders"][i]["item_results"]["time_in_queue_buffer"]+data["orders"][0]["orders"][i]["item_results"]["wait_for_repair_time"]
-        tardiness = data["orders"][0]["orders"][i]["start"]  + throughput_time - length - data["orders"][0]["orders"][i]["due_to"] 
+        if due_to_time == 0:
+            tardiness = data["orders"][0]["orders"][i]["start"]  + throughput_time - length - data["orders"][0]["orders"][i]["due_to"] 
+        else:
+            tardiness = data["orders"][0]["orders"][i]["start"]  + throughput_time - length - data["orders"][0]["orders"][i]["due_to"] 
         lateness = tardiness
         if tardiness < 0:
             tardiness = 0
@@ -67,10 +72,12 @@ for m in priorities:
                     # elif due_to_time > 45 and due_to_time <= 60:
                     #     throughput_times_3.append([throughput_time, tardiness])
                     if due_to_time == 0:
-                        throughput_times_1.append([throughput_time, tardiness])
+                        throughput_times_1.append([throughput_time])
                     else:
-                        throughput_times_2.append([throughput_time, tardiness])
+                        throughput_times_2.append([throughput_time])
                     
-    print("prio: ", m, ", mean: ", np.mean(throughput_times_1, axis = 0), " , len: ",len(throughput_times_1))
-    print("prio: ", m, ", mean: ", np.mean(throughput_times_2, axis = 0), " , len: ",len(throughput_times_2))
+    # print("prio: ", m, ", mean: ", np.mean(throughput_times_1, axis = 0), " , len: ",len(throughput_times_1))
+    # print("prio: ", m, ", mean: ", np.mean(throughput_times_2, axis = 0), " , len: ",len(throughput_times_2))
+    print(m, ", ", np.mean(throughput_times_1, axis = 0) , ", " ,len(throughput_times_1))
+    print(m, ", ", np.mean(throughput_times_2, axis = 0), ", " ,len(throughput_times_2))
     # print("prio: ", m, ", mean: ", np.mean(throughput_times_3, axis = 0), " , len: ",len(throughput_times_3))                    
