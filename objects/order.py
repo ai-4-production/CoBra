@@ -242,7 +242,7 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     :return order_records: (numpy records) All generated orders with attributes
     """
     seed = random.randint(23424, 4334534)
-    np.random.seed(6644565)
+    np.random.seed(4256546)
 
     possible_types = OrderType.instances
     frequency_factors = [order_type.frequency_factor for order_type in possible_types]
