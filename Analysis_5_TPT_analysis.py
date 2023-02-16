@@ -4,7 +4,7 @@ import time
 import numpy as np
 import csv
 from matplotlib import pyplot as plt
-path = os.getcwd() + '/result/last_runs_01-30-2023_10-41.json'
+path = os.getcwd() + '/result/Scenario_1_2800/Run_2/last_runs_02-13-2023_13-41-28_RTL.json'
 
 numbers = open(path)
 data = json.load(numbers)
@@ -57,9 +57,9 @@ for m in priorities:
             if data["orders"][0]["orders"][i]["priority"] == m:
                 prio_data.append([priority, tardiness,lateness, completion_time,throughput_time, time_to_EDD, proc_in_time])
                 throughput_times.append(throughput_time)
-                with open('priority_' + str(m) + '.csv', 'a+', newline='', encoding='utf-8') as file:
+                with open('tpt_priority_' + str(m) + '.csv', 'a+', newline='', encoding='utf-8') as file:
                     writer = csv.writer(file)
-                    writer.writerow([i, throughput_time, tardiness])
+                    writer.writerow([i, throughput_time, tardiness, type])
     for k in range(len(throughput_times)-100):
         throughput_time_avg_k = 0
         for j in range(moving_average):
@@ -109,9 +109,9 @@ for i in range(len(data["orders"][0]["orders"])):
     completion_time = data["orders"][0]["orders"][i]["item_results"]["completion_time"]
     time_to_EDD = data["orders"][0]["orders"][i]["due_to"] - data["orders"][0]["orders"][i]["start"]
     throughput_time = data["orders"][0]["orders"][i]["item_results"]["transportation_time"]+data["orders"][0]["orders"][i]["item_results"]["time_at_machines"]+data["orders"][0]["orders"][i]["item_results"]["time_in_interface_buffer"]+data["orders"][0]["orders"][i]["item_results"]["time_in_queue_buffer"]+data["orders"][0]["orders"][i]["item_results"]["wait_for_repair_time"]
-    with open('priority_total' + '.csv', 'a+', newline='', encoding='utf-8') as file:
-            writer = csv.writer(file)
-            writer.writerow([k, np.average(throughput_times[k])])
+    # with open('priority_total' + '.csv', 'a+', newline='', encoding='utf-8') as file:
+    #         writer = csv.writer(file)
+    #         writer.writerow([k, np.average(throughput_times[k])])
     tardiness = data["orders"][0]["orders"][i]["start"]  + throughput_time - length - data["orders"][0]["orders"][i]["due_to"] 
     lateness = tardiness
     if tardiness < 0:
