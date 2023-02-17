@@ -49,7 +49,7 @@ class ReinforceAgent():
 
         if self.trained_model:
             try:
-                self.model = load_model("models_saved/Scenario_1_cell.id-1_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size)  + '_' + str(self.global_step))
+                self.model = load_model("models_saved/Scenario_1_cell.id-1_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(128)  + '_' + str(self.global_step))
                 self.target_model = self.model
             except:
                 try:
@@ -60,14 +60,17 @@ class ReinforceAgent():
                         self.model = load_model("models_saved/Scenario_1_cell.id-6_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size)  + '_' + str(self.global_step))
                         self.target_model = self.model
                     except:
-                        self.model = load_model("models_saved/Scenario_1_cell.id-0_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size)  + '_' + str(self.global_step))
-                        self.target_model = self.model
-            # with open(self.dirPath+str(self.load_episode)+'.json') as outfile:
-            #     param = json.load(outfile)
-            #     self.epsilon = param.get('epsilon')
+                        try:
+                            self.model = load_model("models_saved/Scenario_1_cell.id-0_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(128)  + '_' + str(self.global_step))
+                            self.target_model = self.model
+                        except: 
+                            self.model = load_model("models_saved/Scenario_1_cell.id-5_FAZI_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(128)  + '_' + str(self.global_step))
+                            self.target_model = self.model
+
         else:
             self.model = self.buildModel()
             self.target_model = self.buildModel()
+        
 
     def buildModel(self):
         model = Sequential()
@@ -106,7 +109,7 @@ class ReinforceAgent():
             Y_batch = np.append(Y_batch, np.array([Y_sample[0]]), axis=0)
             tf.keras.backend.clear_session()
         self.model.fit(X_batch, Y_batch, batch_size=self.batch_size, epochs=1, verbose=0)
-        print(self.model.losses)
+        
         time.sleep(1)
         # with open("training_loss.csv", "w", newline=""):
         #     writer = csv.writer(file)
@@ -180,14 +183,15 @@ class ReinforceAgent():
 # rein_agent_dispatch_4 = ReinforceAgent(128, 5, False) #current one
 # rein_agent_dispatch_4 = ReinforceAgent(81, 3, True, 6400) #current one
 
-rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, True, 1)
-rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(84, 5, True, 1)
-# rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(52, 5, True, 1)
+#operations of scenario_1
+# rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, True, 1)
+# rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(84, 5, True, 1)
+# #rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(52, 5, True, 1)
 rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(80, 5, True, 1)
 rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(60, 5, True, 1)
 
 #scenario_FAZI
-# rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(128, 5, False)
+rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(124, 5, True, 1)
 # rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(52, 5, False)
 # rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(84, 5, False)
 # rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(80, 5, False)
