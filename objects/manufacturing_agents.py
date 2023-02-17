@@ -215,12 +215,14 @@ class ManufacturingAgent:
                     writer = csv.writer(file)
                     writer.writerow(list([id_start, round(self.env.now,2)]))
                 self.init_pos = False
-            with open('../result/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-                writer = csv.writer(file)
-                writer.writerow(list([id_dest, str(dest), round(self.env.now,2)]))
-            with open('../result/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-                writer = csv.writer(file)
-                writer.writerow(list([id_dest_dest, str(dest_dest), round(self.env.now,2)]))
+            if dest != None:
+                with open('../result/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(list([id_dest, str(dest), round(self.env.now,2)]))
+            if dest_dest != None:
+                with open('../result/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(list([id_dest_dest, str(dest_dest), round(self.env.now,2)]))
 
 
 
