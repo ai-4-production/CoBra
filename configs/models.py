@@ -125,6 +125,7 @@ class ReinforceAgent():
         # K.clear_session()
 
     def getQvalue(self, reward, next_target):
+        a = 1
         return reward + self.discount_factor * np.amax(next_target)
 
     def get_dispatch_rule(self, state):
