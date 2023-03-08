@@ -185,15 +185,15 @@ class ReinforceAgent():
 # rein_agent_dispatch_4 = ReinforceAgent(81, 3, True, 6400) #current one
 
 #operations of scenario_1
-# rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, True, 1)
-# rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(84, 5, True, 1)
+rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, True, 1)
+rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(84, 5, True, 1)
 # #rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(52, 5, True, 1)
 rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(80, 5, True, 1)
 rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(60, 5, True, 1)
 
 #scenario_FAZI
-rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(124, 5, True, 1)
-# rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(52, 5, False)
-# rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(84, 5, False)
-# rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(80, 5, False)
-# rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(68, 5, False)
+# rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(124, 5, True, 1)
+# # rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(52, 5, False)
+# # rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(84, 5, False)
+# # rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(80, 5, False)
+# # rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(68, 5, False)
