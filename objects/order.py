@@ -207,7 +207,7 @@ def load_order_types():
     Create instances for order types from order types config json
     """
     load_processing_steps()
-    order_types = json.load(open("../configs/order_types_FAZI.json", encoding="UTF-8"))
+    order_types = json.load(open("../configs/order_types.json", encoding="UTF-8"))
 
     for o_type in order_types['order_types']:
         OrderType(o_type)
