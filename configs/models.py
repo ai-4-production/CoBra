@@ -111,21 +111,12 @@ class ReinforceAgent():
         self.model.fit(X_batch, Y_batch, batch_size=self.batch_size, epochs=1, verbose=0)
         
         time.sleep(1)
-        # with open("training_loss.csv", "w", newline=""):
-        #     writer = csv.writer(file)
-        #     writer.writerow()
 
         time_tracker.time_train_calc = time.time() - now_0
-        # if self.global_step % 10 == 0:
-        #     self.model.save('/models_saved/' + str(self.action_size) + '_' + str(self.state_size) + '_' +str(self.global_step))
-        # print("Prev.: ", self.global_step_1, ", Act.: ", self.global_step)
-        # self.global_step_1 = self.global_step
-
         gc.collect()
         # K.clear_session()
 
     def getQvalue(self, reward, next_target):
-        a = 1
         return reward + self.discount_factor * np.amax(next_target)
 
     def get_dispatch_rule(self, state):
@@ -185,15 +176,15 @@ class ReinforceAgent():
 # rein_agent_dispatch_4 = ReinforceAgent(81, 3, True, 6400) #current one
 
 #operations of scenario_1
-rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, True, 1)
-rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(84, 5, True, 1)
+# rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, True, 1)
+# rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(84, 5, True, 1)
 # #rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(52, 5, True, 1)
 rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(80, 5, True, 1)
 rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(60, 5, True, 1)
 
 #scenario_FAZI
-# rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(124, 5, True, 1)
-# # rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(52, 5, False)
-# # rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(84, 5, False)
-# # rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(80, 5, False)
-# # rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(68, 5, False)
+rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(124, 5, True, 1)
+# rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(52, 5, False)
+# rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(84, 5, False)
+# rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(80, 5, False)
+# rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(68, 5, False)

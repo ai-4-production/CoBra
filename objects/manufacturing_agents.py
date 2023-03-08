@@ -42,6 +42,7 @@ class ManufacturingAgent:
         # Attributes
         self.ruleset = None
         self.ruleset_train = None
+        self.smart_init = True
         for ruleset in RuleSet.instances:
             if ruleset.id == ruleset_id:
                 self.ruleset = ruleset
@@ -49,21 +50,11 @@ class ManufacturingAgent:
                 break
         
         self.ranking_criteria = [criteria["measure"] for criteria in self.ruleset.numerical_criteria]
-
         if not self.ruleset:  # Check if the Agent has a Ruleset selected
             raise Exception(
                 "Atleast one Agent has no ruleset defined. Please choose a ruleset or the agent wont do anything!")
     
-        self.ruleset_assist = None
-        ruleset_assist_id = 4
-        self.intelligent_limit = 1
-        for ruleset in RuleSet.instances:
-            if ruleset.id == ruleset_assist_id:
-                self.ruleset_assist = ruleset
-                  # Reference to the priority ruleset of the agent
-                break
-
-        self.ranking_criteria_assist = [criteria["measure"] for criteria in self.ruleset_assist.numerical_criteria]
+        self.ranking_criteria_assist = None
         self.ruleset_temp = None
 
         self.cell = None
@@ -427,31 +418,14 @@ class ManufacturingAgent:
             time_tracker.action_smart += 1
             possible_dispatch_rules = [2,3,4,5,9]
             state_RL = self.get_RL_state(state_numeric, available_destinations)
-            # if order threshold is reached, control is taken over by heuristics
-            current_threshold = (len(self.cell.orders_in_cell)-len(orders_in_machine))/(self.cell.cell_capacity - 2*len(self.cell.machines))
-            current_threshold = 0
-            # print("Self-cell-ID-", self.cell.id, "Orders: ", len(self.cell.orders_in_cell)-len(orders_in_machine), "Capacity: ", self.cell.cell_capacity - 2*len(self.cell.machines))
-            if current_threshold < self.intelligent_limit:
-                action_RL = smart_agent.get_dispatch_rule(state_RL) #smart agent thinking...
-                for ruleset in RuleSet.instances:
-                    if ruleset.id == possible_dispatch_rules[action_RL]:
-                        self.ruleset_temp = ruleset # Reference to the choosen ruleset of the smart agent
-                        break
-            # FiFo Local rule in case of threshold                    
-            else:
-                print("Threshold reached")
-                action_RL = random.randint(0,1)
-                for ruleset in RuleSet.instances:
-                    if ruleset.id == possible_dispatch_rules[action_RL]:
-                        self.ruleset_temp = ruleset # Reference to the choosen ruleset of the smart agent
-                        break
-
-            # if self.ruleset_temp.id == 9 and (np.sum(available_destinations) != len(useable_orders)):     
-            #     print("1: ",len(useable_orders))
-            #     print("2: ",np.sum(available_destinations))
-            #     print("3: ", len(useable_with_free_destination))
-            #     print("______________________________________________________________________________")
-            #     time.sleep(1)        
+            # if order threshold is reached, control might be taken over by heuristics
+            current_threshold = (len(self.cell.orders_in_cell)-len(orders_in_machine))/(self.cell.cell_capacity - 2*len(self.cell.machines))           
+            action_RL = smart_agent.get_dispatch_rule(state_RL) #smart agent thinking...
+            for ruleset in RuleSet.instances:
+                if ruleset.id == possible_dispatch_rules[action_RL]:
+                    self.ruleset_temp = ruleset # Reference to the choosen ruleset of the smart agent
+                    break
+     
             self.ranking_criteria_assist = [criteria["measure"] for criteria in self.ruleset_temp.numerical_criteria]
             criteria = [criteria["measure"] for criteria in self.ruleset_temp.numerical_criteria]
 
@@ -577,10 +551,10 @@ class ManufacturingAgent:
                 reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, action_RL)                                
             else:
                 reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, action_RL)
-            if self.cell.id == 5:
-                with open('../result/rewards' + self.timestamp + '_' + 'cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-                    writer = csv.writer(file)
-                    writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, round(reward,2), priority, len_usable_orders, action, action_RL]))
+            
+            with open('../result/rewards' + self.timestamp + '_' + 'cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                writer = csv.writer(file)
+                writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, round(reward,2), priority, len_usable_orders, action, action_RL]))
             smart_agent.appendMemory(smart_agent, self.cell.id, state_RL, new_state_RL, action_RL, reward)
 
     def get_processable_orders(self, old_state):
