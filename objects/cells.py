@@ -132,16 +132,20 @@ class Cell:
         :param requester: (Agent object) state requesting agent
         :return cell_state: complete categorical cell state containing state and order attributes"""
 
-        if requester.ruleset.dynamic:
-            criteria = state_attributes.smart_state
-            ranking_criteria = []
-        elif requester.ruleset.dynamic_dispatch:
-            criteria = state_attributes.smart_state
-            ranking_criteria = []
-        else:
-            criteria = state_attributes.normal_state
+        criteria = state_attributes.smart_state
+
+        # if requester.ruleset.dynamic:
+        #     ranking_criteria = []
+        # elif requester.ruleset.dynamic_dispatch:
+        #     ranking_criteria = []
+        # else: 
+        #     ranking_criteria = requester.ranking_criteria
+        ranking_criteria = []
+        try:
             ranking_criteria = requester.ranking_criteria
-        
+        except:
+            pass
+
         # Get occupancy of all available slots within this cell
         now = time.time()
         occupancy_states = pd.DataFrame(self.occupancy(requester, criteria))
