@@ -120,7 +120,7 @@ def reward_action(old_state, new_state, order, action):
     
     return reward
 
-def reward_smart_dispatch(old_state, new_state, order, action, action_RL):
+def reward_smart_dispatch(old_state, new_state, order, action, action_RL, agent_type):
     """Calculate the reward for an agent for the last action he performed
     :return The reward amount"""
 
@@ -133,10 +133,17 @@ def reward_smart_dispatch(old_state, new_state, order, action, action_RL):
 
     reward_due_to, reward_basic, reward_throughput_time_local = 0, 0, 0
     reward_due_to = calc_reward_due_to(old_state, useable_with_free_destination, action)
-    reward_priority = calc_reward_priority(old_state, useable_with_free_destination, action, action_RL) # 0 or 1; 1 if order has high priority
-    reward_throughput_time_local = calc_reward_throughput_time_local(old_state, useable_with_free_destination, action)
-    reward_throughput_time_global = calc_reward_throughput_time_global(old_state, useable_with_free_destination, action)
-    return reward_due_to + reward_priority + reward_throughput_time_local + reward_throughput_time_global
+    reward_priority = calc_reward_priority(old_state, useable_with_free_destination, action, action_RL) 
+    reward_urgency = calc_reward_urgency(old_state, useable_with_free_destination, action) 
+
+    if agent_type == "Dist":
+        reward_throughput_time_global = calc_reward_throughput_time_global(old_state, useable_with_free_destination, action)
+        reward_distance = calc_reward_distance(old_state, useable_with_free_destination, action) 
+        return reward_due_to + reward_priority + reward_throughput_time_global + reward_urgency + reward_distance
+    
+    elif agent_type == "Man":
+        reward_throughput_time_local = calc_reward_throughput_time_local(old_state, useable_with_free_destination, action)
+        return reward_due_to + reward_priority + reward_throughput_time_local + reward_urgency
    
 def reward_heuristic(old_state, new_state, order, action):
     action_RL = 0
@@ -159,17 +166,6 @@ def reward_heuristic(old_state, new_state, order, action):
 
 
 def calc_reward_due_to(old_state, useable_with_free_destination, action):
-    # old_cell_state_due_to = old_state.loc[:, "due_to"]
-    #get due_to values for all orders that have a destination
-    # destination = old_state.loc[:, "_destination"]
-    # available_destinations = []
-    # for i in range(len(destination)): #(2) look for orders on valid places, if not valid; nan
-    #     if destination[i] == -1:
-    #         available_destinations.append(np.nan)
-    #     else:
-    #         available_destinations.append(1)
-    # due_to_values = np.multiply(old_cell_state_due_to, available_destinations)
-
     #check for due to values for all available orders
     due_to_values = useable_with_free_destination.loc[:, "due_to"]
     due_to_values = due_to_values.values
@@ -217,6 +213,34 @@ def calc_reward_due_mean(old_state, action):
         reward_due_to = 0
     return reward_due_to
 
+def calc_reward_urgency(old_state, useable_with_free_destination, action): #get priority indicators for all orders that have a destination; 0 = normal priority; 1 = high priority
+    old_cell_state_due_to = old_state.loc[:, "due_to"]
+    old_cell_state_start = old_state.loc[:, "start"]
+    reward_urgency, reward_urgency_2 = 0, 0
+
+    urgencies = np.subtract(old_cell_state_due_to, old_cell_state_start)
+
+    # check the priority related to the chosen order
+    if urgencies[action].values[0] == 0:
+        reward_urgency = 100
+    
+    urgencies = np.subtract(useable_with_free_destination.loc[:, "due_to"], useable_with_free_destination.loc[:, "start"])
+    urgencies = urgencies.values
+
+    # check if there are other orders with same of different priority
+    count_urgent, count_non_urgent = 0, 0
+    for i in range(len(urgencies)):
+        if urgencies[i] == 0:
+            count_urgent += 1    
+        else: 
+            count_non_urgent += 1
+    
+    if count_urgent >= 1 and urgencies[action].values[0]!= 0:
+        reward_urgency_2 = -100
+
+    return reward_urgency + reward_urgency_2
+
+
 def calc_reward_priority(old_state, useable_with_free_destination, action, action_RL): #get priority indicators for all orders that have a destination; 0 = normal priority; 1 = high priority
     old_cell_priorities = old_state.loc[:, "priority"]
     reward_priority, reward_priority_2 = 0, 0
@@ -231,14 +255,6 @@ def calc_reward_priority(old_state, useable_with_free_destination, action, actio
 
     priorities = useable_with_free_destination.loc[:, "priority"]
     priorities = priorities.values
-    # destination = old_state.loc[:, "_destination"]
-    # available_destinations = []
-    # for i in range(len(destination)): #(2) look for orders on valid places, if not valid; nan
-    #     if destination[i] == -1:
-    #         available_destinations.append(np.nan)
-    #     else:
-    #         available_destinations.append(1)
-    # priorities = np.multiply(old_cell_priorities, available_destinations)
     
     # check if there are other orders with same of different priority
     count_prio_1, count_prio_2 = 0, 0
@@ -255,11 +271,29 @@ def calc_reward_priority(old_state, useable_with_free_destination, action, actio
         if count_prio_1 >= 1 and old_cell_priorities[action].values[0] != 1:
             reward_priority_2 = -100
     
-    if reward_priority_2 == -600 and action_RL == 4:
-        print(action_RL, action)
-        print(old_state.loc[:, ["_destination", "priority", "pos_type", "pos"]])
+    # if reward_priority_2 == -600 and action_RL == 4:
+    #     print(action_RL, action)
+    #     print(old_state.loc[:, ["_destination", "priority", "pos_type", "pos"]])
 
     return reward_priority + reward_priority_2
+
+
+def calc_reward_distance(old_state, useable_with_free_destination, action):
+    # get all available local times of available orders
+    distance = old_state.loc[:, "distance"]
+    distance = distance.values
+    
+    # get min and max for reference
+    distance_min, distance_max = np.min(distance), np.max(distance)
+
+    try:
+        distance_order = old_state.loc[action, "distance"].values[0]
+    except AttributeError:
+        distance_order = old_state.loc[action, "distance"]
+
+    # calculate the reward
+    reward_distance = (2*(distance_max-distance_order)/(distance_max-distance_min) - 1)**5 * 200 #Highest time in cell to awarded, lowest to be punished
+    return reward_distance
 
 def calc_reward_throughput_time_local(old_state, useable_with_free_destination, action):
     # get all available local times of available orders

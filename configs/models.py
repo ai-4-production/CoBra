@@ -1,4 +1,5 @@
 import os
+import stat
 import gc
 import json
 import numpy as np
@@ -102,22 +103,20 @@ class ReinforceAgent():
         return model
 
     def trainModel(self, target):
-        with open('../models_saved/memories/memory_' + str(self.identifier) + '.txt', 'r', newline='', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            memory = list(reader)
-        # data = np.loadtxt('../models_saved/memories/memory_' + str(self.identifier) + '.txt', delimiter=',')
-        
         now_0 = time.time()
-        # mini_batch = random.sample(self.memory, self.batch_size)
+
+        # with open('../models_saved/memories/memory_' + str(self.identifier) + '.txt', 'r', newline='', encoding='utf-8') as f:
+        #     reader = csv.reader(f)
+        #     memory = list(reader)
+        # data = np.loadtxt('../models_saved/memories/memory_' + str(self.identifier) + '.txt', delimiter=',')
+        # mini_batch = random.sample(memory, self.batch_size)
         # mini_batch = random.sample(data, self.batch_size)
-        mini_batch = random.sample(memory, self.batch_size)
+
+        mini_batch = random.sample(self.memory, self.batch_size)
         X_batch = np.empty((0, self.state_size), dtype=int)
         Y_batch = np.empty((0, self.action_size), dtype=int)
         for i in range(self.batch_size):
             states = np.asarray(mini_batch[i][0])
-            print(states)
-            print(range(states))
-            print(states.reshape(1, self.state_size))
             next_states = np.asarray(mini_batch[i][3])
             actions = np.asarray(mini_batch[i][1])
             rewards = np.asarray(mini_batch[i][2])
@@ -126,7 +125,6 @@ class ReinforceAgent():
             next_target = self.model.predict(next_states.reshape(1, len(next_states)), verbose = 0)
             if target:
                 next_target = self.target_model.predict(next_states.reshape(1, len(next_states)), verbose = 0)
-                #self.updateTargetModel()
             # K.clear_session()
             next_q_value = self.getQvalue(rewards, next_target)
 
@@ -137,8 +135,6 @@ class ReinforceAgent():
             tf.keras.backend.clear_session()
         self.model.fit(X_batch, Y_batch, batch_size=self.batch_size, epochs=1, verbose=0)
         
-        time.sleep(1)
-
         time_tracker.time_train_calc = time.time() - now_0
         gc.collect()
         # K.clear_session()
@@ -173,7 +169,6 @@ class ReinforceAgent():
 
     def appendMemory(self, smart_agent, cell_id, former_state, new_state, action, reward):
         self.memory.append((former_state, action, reward, new_state))
-        print((former_state, action, reward, new_state))
         smart_agent.rewards.append(reward)
         with open('../models_saved/memories/memory_' + str(self.identifier) + '.txt', 'a+', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
@@ -188,10 +183,12 @@ class ReinforceAgent():
                 self.train_step += 1
                 smart_agent.train_step_1 += 1
                 if self.train_step % self.save_rate == 0:
+                    print(np.average(smart_agent.rewards))
                     if self.rewards_average_old <= np.average(smart_agent.rewards):
-                        # if cell_id == 0:
-                        #     print("self.rewards_average_old:    ", self.rewards_average_old) 
-                        #     print("np.average(self.rewards):    ", np.average(self.rewards))
+                        os.chdir("..")
+                        os.chmod((str(os.path.abspath(os.curdir)) + "/models_saved/best_models/" + str(self.identifier)), stat.S_IWUSR | stat.S_IRUSR)
+                        os.remove(str(os.path.abspath(os.curdir)) + "/models_saved/best_models/" + str(self.identifier))
+                        print(self.path)
                         self.model.save("../models_saved/best_models/" + str(self.identifier))
                         self.rewards_average_old = np.average(self.rewards)
                         self.rewards = []

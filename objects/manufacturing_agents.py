@@ -437,7 +437,7 @@ class ManufacturingAgent:
         processable_orders = self.get_processable_orders(old_state)
         priority = old_state.loc[action, "priority"].values[0]
         if len_usable_orders > 1:
-            reward = reward_layer.reward_heuristic(old_state, new_state, order, action)
+            reward = reward_layer.reward_heuristic(old_state, new_state, order, action, self.cell.type)
             agent_name = str(self)
             agent_name = agent_name[-14:-1]
             parent = str(self.cell.parent)
@@ -445,10 +445,10 @@ class ManufacturingAgent:
                 parent = parent[-14:-1]
             except:
                 parent = None
-            # if self.cell.id == 6:
-            #     with open('../result/rewards' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-            #         writer = csv.writer(file)
-            #         writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count, round(reward,2), priority, len_usable_orders, action]))
+            
+            with open('../result/rewards' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                writer = csv.writer(file)
+                writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count, round(reward,2), priority, len_usable_orders, action]))
         
         
 
@@ -481,9 +481,9 @@ class ManufacturingAgent:
                 parent = None
                 
             if not self.cell.machines:
-                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, action_RL)                                
+                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, action_RL, self.cell.type)                                
             else:
-                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, action_RL)
+                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, action_RL, self.cell.type)
             if self.cell.id == 6:
                 with open('../result/rewards' + self.timestamp + '_' + 'cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
                     writer = csv.writer(file)
