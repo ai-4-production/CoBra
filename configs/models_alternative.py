@@ -10,10 +10,6 @@ from keras.models import Sequential, load_model
 from keras.optimizers import RMSprop
 from keras.layers import Dense, Dropout, Activation
 
-# Add reinforcement models
-
-
-# Dummy class
 class ReinforceAgent_1():
     def __init__(self, state_size, action_size):
         self.load_model = False

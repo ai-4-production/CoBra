@@ -3,7 +3,7 @@ from logging.config import valid_ident
 from objects.machines import Machine
 from objects.buffer import *
 from objects.rulesets import RuleSet
-import configs.models
+from configs.models import ReinforceAgent
 from utils.consecutive_performable_tasks import consecutive_performable_tasks
 from utils.devisions import div_possible_zero
 from configs.dict_pos_types import dict_pos_types
@@ -32,7 +32,6 @@ class ManufacturingAgent:
         self.init_time = time.time()
         t = time.localtime()
         self.timestamp = time.strftime('_%Y-%m-%d_%H-%M-%S', t)
-
         self.lock = None
         self.count = 0
         self.count_smart = 0
@@ -41,18 +40,27 @@ class ManufacturingAgent:
         
         # Attributes
         self.ruleset = None
-        self.ruleset_train = None
+        self.ruleset_train = False
         self.smart_init = True
+        self.smart_agent = None
+        self.smart_id = None
+        if ruleset_id == 10:
+            self.smart_id = 10
+
         for ruleset in RuleSet.instances:
             if ruleset.id == ruleset_id:
                 self.ruleset = ruleset
-                  # Reference to the priority ruleset of the agent
+                # Reference to the priority ruleset of the agent
                 break
-        
-        self.ranking_criteria = [criteria["measure"] for criteria in self.ruleset.numerical_criteria]
-        if not self.ruleset:  # Check if the Agent has a Ruleset selected
-            raise Exception(
-                "Atleast one Agent has no ruleset defined. Please choose a ruleset or the agent wont do anything!")
+
+        self.state_cols = ["due_to", "priority", "time_in_cell", "start"]
+        self.smart_dispatch_rules =  [2,3,4,5,9]
+        self.smart_dynamic_dispatch = False
+        if ruleset_id != 10:
+            self.ranking_criteria = [criteria["measure"] for criteria in self.ruleset.numerical_criteria]
+            if not self.ruleset:  # Check if the Agent has a Ruleset selected
+                raise Exception(
+                    "Atleast one Agent has no ruleset defined. Please choose a ruleset or the agent wont do anything!")
     
         self.ranking_criteria_assist = None
         self.ruleset_temp = None
@@ -112,18 +120,19 @@ class ManufacturingAgent:
 
         # For each order in state add the destination if this order would be chosen
         dest_calc_start = time.time()
-        cell_state["_destination"] = cell_state.apply(self.add_destinations, axis=1)
+        cell_state["_destination"] = cell_state.apply(self.add_destinations, axis=1) 
         time_tracker.time_destination_calc += time.time() - dest_calc_start   
-        self.ranking_criteria = [criteria["measure"] for criteria in self.ruleset.numerical_criteria]
+        # self.ranking_criteria = [criteria["measure"] for criteria in self.ruleset.numerical_criteria]
+        
+        # set initial smart agent if smart ruleset is chosen by using a unique cell identifier
+        if self.smart_init == True and self.smart_id == 10:
+            self.set_deep_agent(cell_state)
 
         # Get action depending on agent ruleset and cell_state
-        if self.ruleset.dynamic:
-            next_task, next_order, destination, base_state, state_RL, action, action_RL = self.get_smart_action(cell_state)
-        elif self.ruleset.dynamic_dispatch:
+        if self.ruleset.dynamic_dispatch or self.smart_dynamic_dispatch:
             now = time.time()
             next_task, next_order, destination, base_state, state_RL, action, action_RL, len_useable_with_free_destination = self.get_smart_dispatch_rule(cell_state)
             time_tracker.time_smart_action_calc += time.time() - now
-
         else:
             now = time.time()
             next_task, next_order, destination, base_state, len_useable_with_free_destination = self.get_action(cell_state)
@@ -131,91 +140,9 @@ class ManufacturingAgent:
             time_tracker.action_normal += 1
             action = self.get_heuristics_action_index(cell_state, next_order)
 
-        if self.cell.id == 5:
-            agent_name = str(self)
-            agent_name = agent_name[-14:-1]
-            try:
-                priority = cell_state.loc[action, "priority"].values[0]
-            except:
-                priority = None
-
-            dest =  None
-            try:
-                for i in range(len(cell_state)):
-                    if (cell_state.loc[i, "pos"]) == (cell_state.loc[action, "_destination"].values[0]): 
-                        dest_dest = cell_state.loc[i, "pos_type"]
-                        dest_dest_1 = cell_state.loc[i, "pos"]
-            except:
-                dest_dest = None
-                dest_dest_1 = None
-
-            try:
-                id_dest_dest = dest_dest_1.lower_cell.id 
-            except:
-                id_dest_dest = 7
-
-            try:
-                for i in range(len(cell_state)):
-                    if (cell_state.loc[i, "pos"]) == (cell_state.loc[action, "pos"].values[0]): 
-                        dest = cell_state.loc[i, "pos_type"]
-                        dest_1 = cell_state.loc[i, "pos"]
-            except:
-                dest = None
-                dest_1 = None
-
-            try:
-                id_dest = dest_1.lower_cell.id 
-            except:
-                id_dest = 7
-            
-            for i in range(len(cell_state)):
-                if (cell_state.loc[i, "pos"]) == self.position: 
-                    start_pos = cell_state.loc[i, "pos_type"]
-                    start_pos_1 = cell_state.loc[i, "pos"]
-            try:
-                id_start = start_pos_1.lower_cell.id 
-            except:
-                id_start = 7
-            
-            try:
-                next_order_start= round(next_order.start,2)
-            except:
-                next_order_start = None
-            
-            with open('../result/action_operations_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-                writer = csv.writer(file)
-                # writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, priority, next_order, next_order_start, round(self.env.now,2), id_start, str(start_pos),id_dest, str(dest), action]))
-                writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, priority, next_order, next_order_start, round(self.env.now,2), id_start, id_dest, id_dest_dest, str(start_pos) , str(dest), str(dest_dest),action]))
-            
-
-            if dest == "Input":
-                id_dest = 6
-            elif dest == "Output":
-                id_dest = 7
-            elif dest == "Storage":
-                id_dest = 8
-            if dest_dest == "Input":
-                id_dest_dest = 6
-            elif dest_dest == "Output":
-                id_dest_dest = 7
-            elif dest_dest == "Storage":
-                id_dest_dest = 8
-
-            if self.init_pos:
-                with open('../result/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-                    writer = csv.writer(file)
-                    writer.writerow(list([id_start, round(self.env.now,2)]))
-                self.init_pos = False
-            if dest != None:
-                with open('../result/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-                    writer = csv.writer(file)
-                    writer.writerow(list([id_dest, str(dest), round(self.env.now,2)]))
-            if dest_dest != None:
-                with open('../result/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-                    writer = csv.writer(file)
-                    writer.writerow(list([id_dest_dest, str(dest_dest), round(self.env.now,2)]))
-
-
+        # save actions for later analysis
+        # if self.cell.id == 5:
+        #     self.save_action(cell_state, action, next_order)
 
         # Perform next task if there is one~
         if next_task:
@@ -263,6 +190,27 @@ class ManufacturingAgent:
         if self.lock.locked():
             self.lock.release()
 
+    def set_deep_agent(self, cell_state):
+        cell_type = self.cell.type
+        smart_state_len = len(self.state_cols)*len(cell_state)
+        smart_action_len = len(self.smart_dispatch_rules)
+        input_buffer_capacity = self.cell.input_buffer.storage_capacity
+        output_buffer_capacity = self.cell.output_buffer.storage_capacity
+        storage_capacity = self.cell.storage.storage_capacity
+        agent_count = len(self.cell.agents)
+        identifier = f"{cell_type}_{smart_state_len}_{smart_action_len}_{input_buffer_capacity}_{output_buffer_capacity}_{storage_capacity}_{agent_count}"
+        if cell_type == "Dist":
+            for i in range(len(self.cell.childs)):
+                input_buffers = self.cell.childs[i].input_buffer.storage_capacity
+                output_buffers = self.cell.childs[i].output_buffer.storage_capacity
+                identifier += f"_{input_buffers}_{output_buffers}"
+        else:  
+            identifier += f"_{len(self.cell.machines)}"
+    
+        self.smart_agent = ReinforceAgent(smart_state_len, smart_action_len, self.ruleset_train, identifier)
+        self.smart_init = False
+        self.smart_dynamic_dispatch = True
+        # time.sleep(10)
 
     def get_action(self, order_state): #get action with neural network but plain dispatch rules
         """Gets an action by using the priority attributes defined in agents ruleset
@@ -273,14 +221,12 @@ class ManufacturingAgent:
         state_numeric = self.state_to_numeric(copy(order_state))
 
         order = order_state[(order_state["order"].notnull())]
-
         useable_orders = order[(order["locked"] == 0) & (order["in_m_input"] == 0) & (order["in_m"] == 0) & (order["in_same_cell"] == 1)] 
 
         if useable_orders.empty:
             return None, None, None, None, None
-
+        
         useable_with_free_destination = useable_orders[useable_orders["_destination"] != -1]
-
         if useable_with_free_destination.empty:
             return None, None, None, None, None
 
@@ -324,58 +270,38 @@ class ManufacturingAgent:
         else:
             return None, None, None, None, None
 
-    def get_RL_state(self, order_state, available_destinations): # get flatted state vector with chosen information
+    def get_RL_state(self, order_state, available_destinations): 
         try:
-            state_due_to = order_state.loc[:, "due_to"]
-            state_priority = order_state.loc[:, "priority"] 
-            time_in_cell = order_state.loc[:, "time_in_cell"]    
-            time_in_system = order_state.loc[:, "start"]   
-
+            state = order_state[self.state_cols]
         except:
             print("State error")  
-            state_due_to = pd.DataFrame(np.zeros((len(order_state), 1)))
-            state_priority = pd.DataFrame(np.zeros((len(order_state), 1)))
-            time_in_cell = pd.DataFrame(np.zeros((len(order_state), 1)))
-            time_in_system = pd.DataFrame(np.zeros((len(order_state), 1)))
+            state = pd.DataFrame(np.zeros((len(order_state), len(self.state_cols))))
 
-            state_due_to = np.zeros(len(order_state))
-            state_priority = np.zeros(len(order_state))
-            time_in_cell = np.zeros(len(order_state))
-            time_in_system = np.zeros(len(order_state))
+        state_priority = np.multiply(available_destinations, state["priority"])
+        state_order_priority = state_priority / 2
+        state_due_to_available = np.multiply(available_destinations, state["due_to"])
+        time_in_cell_available = np.multiply(available_destinations, state["time_in_cell"])
+        time_in_system_available = np.multiply(available_destinations, state["start"])
 
-        state_priority = np.multiply(available_destinations, state_priority)
-        state_order_priority = state_priority / 2  # 2 equals maximum 
-        state_due_to_available = np.multiply(available_destinations, state_due_to) # only due_to values for orders with destination -> nothing in machine etc.
-        time_in_cell_available = np.multiply(available_destinations, time_in_cell)
-        time_in_system_available = np.multiply(available_destinations, time_in_system)
-        try:
-            max_time_in_cell = max(abs(i) for i in time_in_cell_available)
-        except:
-            print(time_in_cell_available)
+        max_time_in_cell = max(abs(i) for i in time_in_cell_available)
         max_time_in_system = max(abs(i) for i in time_in_system_available)
         max_due_to = max(abs(i) for i in state_due_to_available)
-        
+
+        state_due_to_normalized = np.zeros(len(state_due_to_available))
+        state_time_in_cell_normalized = np.zeros(len(time_in_cell_available))
+        state_time_in_system_normalized = np.zeros(len(time_in_system_available))
+
         if max_due_to != 0:
-            state_due_to_normalized = [x / max_due_to for x in state_due_to_available] # only due_to values for orders with destination -> nothing in machine etc.
-        else:
-            state_due_to_normalized = np.zeros(len(state_due_to_available))
+            state_due_to_normalized = state_due_to_available / max_due_to
 
         if max_time_in_cell != 0:
-            state_time_in_cell_normalized = [x / max_time_in_cell for x in time_in_cell_available]
-        else:
-            state_time_in_cell_normalized = np.zeros(len(time_in_cell_available))
+            state_time_in_cell_normalized = time_in_cell_available / max_time_in_cell
 
         if max_time_in_system != 0:
-            state_time_in_system_normalized = [x / max_time_in_system for x in time_in_system_available]
-        else:
-            state_time_in_system_normalized = np.zeros(len(time_in_system_available))
-        
-        state_RL = []
-        for i in range(len(state_due_to_available)): #(2) look for orders on valid places
-            state_RL.append(state_due_to_normalized[i])
-            state_RL.append(state_time_in_cell_normalized[i])
-            state_RL.append(state_time_in_system_normalized[i])
-            state_RL.append(state_order_priority[i])    
+            state_time_in_system_normalized = time_in_system_available / max_time_in_system
+
+        state_RL = np.vstack((state_due_to_normalized, state_time_in_cell_normalized, 
+                            state_time_in_system_normalized, state_order_priority)).T.ravel().tolist()
 
         return state_RL
 
@@ -395,9 +321,12 @@ class ManufacturingAgent:
         :return task: simpy process to be performed next
         :return next_order: order to be moved
         :return destination: d estination where the order will be brought to"""
-        smart_agent = self.ruleset.reinforce_agent
-        #smart_agent = configs.models.ReinforceAgent(11, 3)
-        #get state with orders on the various slots
+        
+        if self.smart_id == 10:
+            smart_agent = self.smart_agent
+        else:
+            smart_agent = self.ruleset.reinforce_agent
+        
         state_numeric = self.state_to_numeric(copy(order_state))
         available_destinations = self.get_available_destinations(state_numeric)
         order = order_state[(order_state["order"].notnull())]
@@ -416,7 +345,7 @@ class ManufacturingAgent:
             state_RL, action_RL = None, None
         else:
             time_tracker.action_smart += 1
-            possible_dispatch_rules = [2,3,4,5,9]
+            possible_dispatch_rules = self.smart_dispatch_rules
             state_RL = self.get_RL_state(state_numeric, available_destinations)
             # if order threshold is reached, control might be taken over by heuristics
             current_threshold = (len(self.cell.orders_in_cell)-len(orders_in_machine))/(self.cell.cell_capacity - 2*len(self.cell.machines))           
@@ -508,7 +437,7 @@ class ManufacturingAgent:
         processable_orders = self.get_processable_orders(old_state)
         priority = old_state.loc[action, "priority"].values[0]
         if len_usable_orders > 1:
-            reward = reward_layer.reward_heuristic(old_state, new_state, order, action)
+            reward = reward_layer.reward_heuristic(old_state, new_state, order, action, self.cell.type)
             agent_name = str(self)
             agent_name = agent_name[-14:-1]
             parent = str(self.cell.parent)
@@ -516,10 +445,10 @@ class ManufacturingAgent:
                 parent = parent[-14:-1]
             except:
                 parent = None
-            # if self.cell.id == 6:
-            #     with open('../result/rewards' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-            #         writer = csv.writer(file)
-            #         writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count, round(reward,2), priority, len_usable_orders, action]))
+            
+            with open('../result/rewards' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                writer = csv.writer(file)
+                writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count, round(reward,2), priority, len_usable_orders, action]))
         
         
 
@@ -531,7 +460,11 @@ class ManufacturingAgent:
         :param order: (Order object) The moved order from finished taskc
         :param time_passed: (float) Time passed between action decision and finished task
         :param action: (int) The chosen action""" 
-        smart_agent = self.ruleset.reinforce_agent
+        if self.smart_id == 10:
+            smart_agent = self.smart_agent
+        else:
+            smart_agent = self.ruleset.reinforce_agent
+        # smart_agent = self.ruleset.reinforce_agent
         available_destinations = self.get_available_destinations(new_state)
         new_state_RL = self.get_RL_state(new_state, available_destinations)
         # new_state_flat = list(self.state_to_numeric(copy(new_state)).to_numpy().flatten())        
@@ -548,13 +481,13 @@ class ManufacturingAgent:
                 parent = None
                 
             if not self.cell.machines:
-                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, action_RL)                                
+                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, action_RL, self.cell.type)                                
             else:
-                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, action_RL)
-            
-            with open('../result/rewards' + self.timestamp + '_' + 'cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-                writer = csv.writer(file)
-                writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, round(reward,2), priority, len_usable_orders, action, action_RL]))
+                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, action_RL, self.cell.type)
+            if self.cell.id == 6:
+                with open('../result/rewards' + self.timestamp + '_' + 'cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, round(reward,2), priority, len_usable_orders, action, action_RL]))
             smart_agent.appendMemory(smart_agent, self.cell.id, state_RL, new_state_RL, action_RL, reward)
 
     def get_processable_orders(self, old_state):
@@ -1133,3 +1066,89 @@ class ManufacturingAgent:
         order_state.loc[order_state["order"] != 0, "order"] = 1
         time_tracker.time_prob_2 += time.time() - now
         return order_state
+
+
+    def save_action(self, cell_state, action, next_order):
+        agent_name = str(self)
+        agent_name = agent_name[-14:-1]
+        try:
+            priority = cell_state.loc[action, "priority"].values[0]
+        except:
+            priority = None
+
+        dest =  None
+        try:
+            for i in range(len(cell_state)):
+                if (cell_state.loc[i, "pos"]) == (cell_state.loc[action, "_destination"].values[0]): 
+                    dest_dest = cell_state.loc[i, "pos_type"]
+                    dest_dest_1 = cell_state.loc[i, "pos"]
+        except:
+            dest_dest = None
+            dest_dest_1 = None
+
+        try:
+            id_dest_dest = dest_dest_1.lower_cell.id 
+        except:
+            id_dest_dest = 7
+
+        try:
+            for i in range(len(cell_state)):
+                if (cell_state.loc[i, "pos"]) == (cell_state.loc[action, "pos"].values[0]): 
+                    dest = cell_state.loc[i, "pos_type"]
+                    dest_1 = cell_state.loc[i, "pos"]
+        except:
+            dest = None
+            dest_1 = None
+
+        try:
+            id_dest = dest_1.lower_cell.id 
+        except:
+            id_dest = 7
+        
+        for i in range(len(cell_state)):
+            if (cell_state.loc[i, "pos"]) == self.position: 
+                start_pos = cell_state.loc[i, "pos_type"]
+                start_pos_1 = cell_state.loc[i, "pos"]
+        try:
+            id_start = start_pos_1.lower_cell.id 
+        except:
+            id_start = 7
+        
+        try:
+            next_order_start= round(next_order.start,2)
+        except:
+            next_order_start = None
+        
+        with open('../result/action_operations_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            # writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, priority, next_order, next_order_start, round(self.env.now,2), id_start, str(start_pos),id_dest, str(dest), action]))
+            writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, priority, next_order, next_order_start, round(self.env.now,2), id_start, id_dest, id_dest_dest, str(start_pos) , str(dest), str(dest_dest),action]))
+        
+
+        if dest == "Input":
+            id_dest = 6
+        elif dest == "Output":
+            id_dest = 7
+        elif dest == "Storage":
+            id_dest = 8
+        if dest_dest == "Input":
+            id_dest_dest = 6
+        elif dest_dest == "Output":
+            id_dest_dest = 7
+        elif dest_dest == "Storage":
+            id_dest_dest = 8
+
+        if self.init_pos:
+            with open('../result/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                writer = csv.writer(file)
+                writer.writerow(list([id_start, round(self.env.now,2)]))
+            self.init_pos = False
+        if dest != None:
+            with open('../result/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                writer = csv.writer(file)
+                writer.writerow(list([id_dest, str(dest), round(self.env.now,2)]))
+        if dest_dest != None:
+            with open('../result/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                writer = csv.writer(file)
+                writer.writerow(list([id_dest_dest, str(dest_dest), round(self.env.now,2)]))
+
