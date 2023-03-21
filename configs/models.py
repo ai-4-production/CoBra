@@ -170,9 +170,9 @@ class ReinforceAgent():
     def appendMemory(self, smart_agent, cell_id, former_state, new_state, action, reward):
         self.memory.append((former_state, action, reward, new_state))
         smart_agent.rewards.append(reward)
-        with open('../models_saved/memories/memory_' + str(self.identifier) + '.txt', 'a+', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f)
-            writer.writerow((former_state, action, reward, new_state))
+        # with open('../models_saved/memories/memory_' + str(self.identifier) + '.txt', 'a+', newline='', encoding='utf-8') as f:
+        #     writer = csv.writer(f)
+        #     writer.writerow((former_state, action, reward, new_state))
 
 
         if not self.operational_mode:
