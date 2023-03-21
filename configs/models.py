@@ -44,7 +44,7 @@ class ReinforceAgent():
         self.global_step_1 = 0
         self.train_step = 0
         self.train_step_1 = 0
-        self.save_rate = 2
+        self.save_rate = 50
         self.rewards = []
         self.rewards_average_old = -1000
         t = time.localtime()
@@ -184,15 +184,15 @@ class ReinforceAgent():
                 smart_agent.train_step_1 += 1
                 if self.train_step % self.save_rate == 0:
                     print(np.average(smart_agent.rewards))
-                    if self.rewards_average_old <= np.average(smart_agent.rewards):
-                        os.chdir("..")
-                        os.chmod((str(os.path.abspath(os.curdir)) + "/models_saved/best_models/" + str(self.identifier)), stat.S_IWUSR | stat.S_IRUSR)
-                        os.remove(str(os.path.abspath(os.curdir)) + "/models_saved/best_models/" + str(self.identifier))
-                        print(self.path)
-                        self.model.save("../models_saved/best_models/" + str(self.identifier))
-                        self.rewards_average_old = np.average(self.rewards)
-                        self.rewards = []
-                        print("Best_model in cell ", cell_id, " updated")
+                    # if self.rewards_average_old <= np.average(smart_agent.rewards):
+                    #     os.chdir("..")
+                    #     os.chmod(str(os.path.abspath(os.curdir)) + "/models_saved/best_models/" + str(self.identifier), stat.S_IWUSR | stat.S_IRUSR)
+                    #     os.remove(str(os.path.abspath(os.curdir)) + "/models_saved/best_models/" + str(self.identifier))
+                    #     print(self.path)
+                    #     self.model.save("../models_saved/best_models/" + str(self.identifier))
+                    #     self.rewards_average_old = np.average(self.rewards)
+                    #     self.rewards = []
+                    #     print("Best_model in cell ", cell_id, " updated")
                     self.model.save("../models_saved/all_models/" + str(self.identifier) + "_" + self.timestamp + "_" + str(self.train_step))
                     print("model_saved")
                     # self.model.save("../models_saved/all_models/" + self.timestamp + "_" + 'cell.id-' + str(cell_id) +  '_' + str(self) + "_" + str(self.action_size) + "_" + str(self.state_size) + "_" + str(self.hidden_layer_size_1) + "_" + str(self.batch_size) + "_" + str(self.train_step))

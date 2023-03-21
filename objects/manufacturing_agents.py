@@ -470,6 +470,7 @@ class ManufacturingAgent:
         # new_state_flat = list(self.state_to_numeric(copy(new_state)).to_numpy().flatten())        
         self.count_smart = self.count_smart + 1
         priority = old_state.loc[action, "priority"].values[0]
+        distance = old_state.loc[action, "distance"].values[0]
         
         if len_usable_orders  > 1: #if more than one order was apparent. 0,1: no AI necessary
             agent_name = str(self)
@@ -484,10 +485,11 @@ class ManufacturingAgent:
                 reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, action_RL, self.cell.type)                                
             else:
                 reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, action_RL, self.cell.type)
+
             if self.cell.id == 6:
-                with open('../result/rewards' + self.timestamp + '_' + 'cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                with open('../result/rewards' + self.timestamp + '_level_' + str(self.cell.level) + '_cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
                     writer = csv.writer(file)
-                    writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, round(reward,2), priority, len_usable_orders, action, action_RL]))
+                    writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, round(reward,2), priority, distance, len_usable_orders, action, action_RL]))
             smart_agent.appendMemory(smart_agent, self.cell.id, state_RL, new_state_RL, action_RL, reward)
 
     def get_processable_orders(self, old_state):

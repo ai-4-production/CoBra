@@ -222,7 +222,7 @@ def calc_reward_urgency(old_state, useable_with_free_destination, action): #get 
 
     # check the priority related to the chosen order
     if urgencies[action].values[0] == 0:
-        reward_urgency = 100
+        reward_urgency = 200
     
     urgencies = np.subtract(useable_with_free_destination.loc[:, "due_to"], useable_with_free_destination.loc[:, "start"])
     urgencies = urgencies.values
@@ -236,7 +236,7 @@ def calc_reward_urgency(old_state, useable_with_free_destination, action): #get 
             count_non_urgent += 1
     
     if count_urgent >= 1 and urgencies[action].values[0]!= 0:
-        reward_urgency_2 = -100
+        reward_urgency_2 = -200
 
     return reward_urgency + reward_urgency_2
 
@@ -280,19 +280,20 @@ def calc_reward_priority(old_state, useable_with_free_destination, action, actio
 
 def calc_reward_distance(old_state, useable_with_free_destination, action):
     # get all available local times of available orders
-    distance = old_state.loc[:, "distance"]
+    distance = useable_with_free_destination.loc[:, "distance"]
     distance = distance.values
-    
-    # get min and max for reference
-    distance_min, distance_max = np.min(distance), np.max(distance)
-
+    distance_min, distance_max = np.min(distance), np.max(distance) # get min and max for reference
     try:
         distance_order = old_state.loc[action, "distance"].values[0]
     except AttributeError:
         distance_order = old_state.loc[action, "distance"]
-
+    
     # calculate the reward
-    reward_distance = (2*(distance_max-distance_order)/(distance_max-distance_min) - 1)**5 * 200 #Highest time in cell to awarded, lowest to be punished
+    if (distance_max-distance_min) == 0:
+        reward_distance = 0
+    else:
+        reward_distance = (2*(distance_max-distance_order)/(distance_max-distance_min) - 1)**5 * 100 #Highest time in cell to awarded, lowest to be punished
+
     return reward_distance
 
 def calc_reward_throughput_time_local(old_state, useable_with_free_destination, action):
