@@ -174,7 +174,6 @@ class ReinforceAgent():
         #     writer = csv.writer(f)
         #     writer.writerow((former_state, action, reward, new_state))
 
-
         if not self.operational_mode:
             if (smart_agent.global_step % smart_agent.target_update) == 0:
                 smart_agent.updateTargetModel()
