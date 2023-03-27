@@ -7,7 +7,7 @@ configuration = {
     "SETUP_FILE": "Layout_Scenario_Paper_AI_operation_dynamic.txt",
     # "SETUP_FILE": "Layout_Scenario_Paper_EDD.txt",
     # "SETUP_FILE": "Layout_Scenario_Cell_0_train.txt",
-    "SIMULATION_RANGE": 720,
+    "SIMULATION_RANGE": 21000,
     "SEED_MACHINE_INTERRUPTIONS": 29378374,
     "MACHINE_FAILURE_RATE": 4,
     "FAILURE_MINIMAL_LENGTH": 10,
@@ -18,7 +18,7 @@ configuration = {
     "MACHINE_TIME_RELEASE_ITEM": 1,
 
     "SEED_INCOMING_ORDERS": 2578695,
-    "NUMBER_OF_ORDERS":280,
+    "NUMBER_OF_ORDERS":10000,
     "ORDER_MINIMAL_LENGTH": 0,
     "ORDER_MAXIMAL_LENGTH": 100,
     "SPREAD_ORDER_COMPLEXITY": 0.1,
