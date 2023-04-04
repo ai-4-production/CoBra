@@ -249,9 +249,9 @@ def calc_reward_priority(old_state, useable_with_free_destination, action, actio
     if old_cell_priorities[action].values[0] == 0:
         reward_priority = 0
     elif old_cell_priorities[action].values[0] == 1:
-        reward_priority = 100
-    elif old_cell_priorities[action].values[0] == 2:
-        reward_priority = 600
+        reward_priority = 300
+    # elif old_cell_priorities[action].values[0] == 2:
+    #     reward_priority = 600
 
     priorities = useable_with_free_destination.loc[:, "priority"]
     priorities = priorities.values
