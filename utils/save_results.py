@@ -88,6 +88,7 @@ class SimulationResults:
             item_schema["start"] = item.start
             item_schema["due_to"] = item.due_to
             item_schema["priority"] = int(item.priority)
+            item_schema["urgency"] = int(item.urgency)
             item_schema["item_results"] = item.result
             order_results["orders"].append(item_schema)
 
@@ -144,6 +145,7 @@ schema_items = json.loads("""
               "start": null,
               "due_to": null,
               "priority":null,
+              "urgency":null,
               "item_results": null
             }
         """)

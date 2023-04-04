@@ -38,7 +38,7 @@ class ReinforceAgent():
         self.epsilon = 1.0
         self.epsilon_decay = 0.997 #previous: 0.999
         self.epsilon_min = 0.01
-        self.batch_size = 1
+        self.batch_size = 128
         self.memory = deque(maxlen=1000000)
         self.global_step = 0
         self.global_step_1 = 0

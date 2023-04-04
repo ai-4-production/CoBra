@@ -214,30 +214,27 @@ def calc_reward_due_mean(old_state, action):
     return reward_due_to
 
 def calc_reward_urgency(old_state, useable_with_free_destination, action): #get priority indicators for all orders that have a destination; 0 = normal priority; 1 = high priority
-    old_cell_state_due_to = old_state.loc[:, "due_to"]
-    old_cell_state_start = old_state.loc[:, "start"]
+    old_cell_urgencies = old_state.loc[:, "urgency"]
     reward_urgency, reward_urgency_2 = 0, 0
 
-    urgencies = np.subtract(old_cell_state_due_to, old_cell_state_start)
-
     # check the priority related to the chosen order
-    if urgencies[action].values[0] == 0:
-        reward_urgency = 200
-    
-    urgencies = np.subtract(useable_with_free_destination.loc[:, "due_to"], useable_with_free_destination.loc[:, "start"])
+    if old_cell_urgencies[action].values[0] == 0:
+        reward_urgency = 0
+    elif old_cell_urgencies[action].values[0] == 1:
+        reward_urgency = 300
+
+    urgencies = useable_with_free_destination.loc[:, "priority"]
     urgencies = urgencies.values
-
-    # check if there are other orders with same of different priority
-    count_urgent, count_non_urgent = 0, 0
-    for i in range(len(urgencies)):
-        if urgencies[i] == 0:
-            count_urgent += 1    
-        else: 
-            count_non_urgent += 1
     
-    if count_urgent >= 1 and urgencies[action].values[0]!= 0:
-        reward_urgency_2 = -200
-
+    # check if there are other orders with same of different priority
+    count_urgent = 0
+    for i in range(len(urgencies)): 
+        if urgencies[i] == 1: 
+            count_urgent += 1
+    
+    if count_urgent >= 1 and old_cell_urgencies[action].values[0] != 2:
+        reward_urgency_2 = -100
+    print("reward_urgency + reward_urgency_2: ", reward_urgency + reward_urgency_2)
     return reward_urgency + reward_urgency_2
 
 
@@ -269,11 +266,7 @@ def calc_reward_priority(old_state, useable_with_free_destination, action, actio
 
     if count_prio_2 == 0:
         if count_prio_1 >= 1 and old_cell_priorities[action].values[0] != 1:
-            reward_priority_2 = -100
-    
-    # if reward_priority_2 == -600 and action_RL == 4:
-    #     print(action_RL, action)
-    #     print(old_state.loc[:, ["_destination", "priority", "pos_type", "pos"]])
+            reward_priority_2 = -200
 
     return reward_priority + reward_priority_2
 

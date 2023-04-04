@@ -15,7 +15,7 @@ class Order:
     finished_instances = []
 
     def __init__(self, env: simpy.Environment, sim_env, start, due_to,
-                 type, complexity=1, priority=1):
+                 type, complexity=1, priority=0, urgency=0):
         self.env = env
         self.simulation_environment = sim_env
 
@@ -28,6 +28,7 @@ class Order:
         self.due_to = due_to  # Due to date of the order
         self.complexity = complexity  # Numerical value, modifier for processing time within machines
         self.priority = priority # Numerical value, modifier for priority of orders
+        self.urgency = urgency
         # State
         self.started = False  # Order has arrived
         self.overdue = False  # Order is overdue
@@ -230,7 +231,7 @@ def order_arrivals(env: simpy.Environment, sim_env, config: dict):
 
     for order in sorted_list:
         yield env.timeout(order['start'] - last_arrival)
-        new_order = Order(env, sim_env, env.now, order['due_to'], order['type'], complexity=order['complexity'], priority=order['priority'])
+        new_order = Order(env, sim_env, env.now, order['due_to'], order['type'], complexity=order['complexity'], priority=order['priority'], urgency=order['urgency'])
         new_order.order_arrival()
         last_arrival = env.now
 
@@ -258,12 +259,16 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     base_lengths_1 = np.random.randint(low=config['ORDER_MINIMAL_LENGTH'], high=config['ORDER_MAXIMAL_LENGTH'], size=amount)
     # Calculate order prioritities
     base_lengths = np.full(amount, 1)
+    urgencies = np.full(amount, 1)
+    
     for base_length in range(len(base_lengths)):
         lenght = random.randint(0,99)
-        if lenght < 20:
+        if lenght < 25:
             base_lengths[base_length] = 0
+            urgencies[base_length] = 1
         else:
             base_lengths[base_length] = random.randint(30,60)
+            urgencies[base_length] = 0
         # else:
         #     base_lengths[base_length] = 70
 
@@ -279,12 +284,9 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     
     # Calculate order prioritities
     priorities = np.full(amount, 1)
-    
     for priority in range(len(priorities)):
         prio = random.randint(0,99)
-        if prio < 10:
-            priorities[priority] = 2
-        elif prio >= 10 and prio < 25:
+        if prio < 25:
             priorities[priority] = 1
         else:
             priorities[priority] = 0
@@ -292,7 +294,7 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     # Calculate order due_tue dates
     due_tues = start_times + base_lengths * duration_factors
     
-    order_records = np.rec.fromarrays((start_times, due_tues, complexities, priorities, types), names=('start', 'due_to', 'complexity','priority', 'type'))
+    order_records = np.rec.fromarrays((start_times, due_tues, complexities, priorities, types, urgencies), names=('start', 'due_to', 'complexity','priority', 'type', 'urgency'))
 
     return order_records
 
@@ -316,6 +318,9 @@ def get_order_attributes(order, requester, attributes: list, now):
 
     def priority():
         return order.priority
+    
+    def urgency():
+        return order.urgency
 
     def type():
         return order.type.type_id

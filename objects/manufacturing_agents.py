@@ -53,7 +53,7 @@ class ManufacturingAgent:
                 # Reference to the priority ruleset of the agent
                 break
 
-        self.state_cols = ["due_to", "priority", "time_in_cell", "start"]
+        self.state_cols = ["due_to", "priority", "time_in_cell", "start", "distance"]
         self.smart_dispatch_rules =  [2,3,4,5,9]
         self.smart_dynamic_dispatch = False
         if ruleset_id != 10:
@@ -277,11 +277,12 @@ class ManufacturingAgent:
             print("State error")  
             state = pd.DataFrame(np.zeros((len(order_state), len(self.state_cols))))
 
-        state_priority = np.multiply(available_destinations, state["priority"])
-        state_order_priority = state_priority / 2
+        state_order_priority = np.multiply(available_destinations, state["priority"])
+        state_distance = np.multiply(available_destinations, state["distance"])/np.max(state["distance"])
         state_due_to_available = np.multiply(available_destinations, state["due_to"])
         time_in_cell_available = np.multiply(available_destinations, state["time_in_cell"])
         time_in_system_available = np.multiply(available_destinations, state["start"])
+    
 
         max_time_in_cell = max(abs(i) for i in time_in_cell_available)
         max_time_in_system = max(abs(i) for i in time_in_system_available)
@@ -301,7 +302,7 @@ class ManufacturingAgent:
             state_time_in_system_normalized = time_in_system_available / max_time_in_system
 
         state_RL = np.vstack((state_due_to_normalized, state_time_in_cell_normalized, 
-                            state_time_in_system_normalized, state_order_priority)).T.ravel().tolist()
+                            state_time_in_system_normalized, state_order_priority, state_distance)).T.ravel().tolist()
 
         return state_RL
 
