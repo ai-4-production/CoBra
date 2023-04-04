@@ -54,32 +54,6 @@ class ReinforceAgent():
         self.target_model = self.buildModel()
         self.path = pathlib.Path(__file__).parent.resolve()
 
-        # if self.operational_mode:
-        #     try:
-        #         self.model = load_model("models_saved/Scenario_1_cell.id-1_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(128)  + '_' + str(self.global_step))
-        #         self.target_model = self.model
-        #     except:
-        #         try:
-        #             self.model = load_model("models_saved/Scenario_1_cell.id-4_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size)  + '_' + str(self.global_step))
-        #             self.target_model = self.model
-        #         except:
-        #             try:
-        #                 self.model = load_model("models_saved/Scenario_1_cell.id-6_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(self.batch_size)  + '_' + str(self.global_step))
-        #                 self.target_model = self.model
-        #             except:
-        #                 try:
-        #                     self.model = load_model("models_saved/Scenario_1_cell.id-0_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(128)  + '_' + str(self.global_step))
-        #                     self.target_model = self.model
-        #                 except: 
-        #                     try: 
-        #                         self.model = load_model("models_saved/Scenario_1_cell.id-5_FAZI_" + str(self.action_size) + '_' + str(self.state_size) + '_' + str(self.hidden_layer_size_1) + '_'+ str(128)  + '_' + str(self.global_step))
-        #                         self.target_model = self.model
-        #                     except:
-        #                         pass
-        # else:
-        #     self.model = self.buildModel()
-        #     self.target_model = self.buildModel()
-        
         if self.operational_mode:
             try:
                 self.model = load_model("models_saved/best_models/" + str(self.identifier))
