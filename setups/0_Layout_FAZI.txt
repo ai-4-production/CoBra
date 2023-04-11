@@ -1,0 +1,13 @@
+;Type;Machines;Agents;StorageCap;InputCap;OutputCap;Parent;Level
+
+0;Man;[1, 1, 2];[3, 3];4;3;2;5;0
+
+1;Man;[3, 4];[3, 3];3;2;2;5;0
+
+2;Man;[5];[3];2;2;1;5;0
+
+3;Man;[6];[3];0;2;1;5;0
+
+4;Man;[7];[3];2;2;1;5;0
+
+5;Dist;[];[3,3];5;3;3;;1
