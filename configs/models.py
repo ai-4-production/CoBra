@@ -32,19 +32,19 @@ class ReinforceAgent():
         self.action_size = action_size
         self.episode_step = 6000
         self.hidden_layer_size_1 = 128
-        self.target_update = 5
+        self.target_update = 3
         self.discount_factor = 0.98 #previous: 0.999
-        self.learning_rate = 0.0005 #previous: 0.005
-        self.epsilon = 1.0
-        self.epsilon_decay = 0.997 #previous: 0.999
+        self.learning_rate = 0.997 #previous: 0.999
         self.epsilon_min = 0.01
+        self.epsilon = 1
+        self.epsilon_decay = 0.997
         self.batch_size = 128
         self.memory = deque(maxlen=1000000)
         self.global_step = 0
         self.global_step_1 = 0
         self.train_step = 0
         self.train_step_1 = 0
-        self.save_rate = 50
+        self.save_rate = 100
         self.rewards = []
         self.rewards_average_old = -1000
         t = time.localtime()
@@ -56,10 +56,15 @@ class ReinforceAgent():
 
         if self.operational_mode:
             try:
-                self.model = load_model("models_saved/best_models/" + str(self.identifier))
+                self.model = load_model("../models_saved/best_models/" + str(self.identifier))
+                print("Neural network model found for agent with ID: ", self.identifier)
+                time.sleep(1)
             except:
                 self.model = self.buildModel()
-                self.target_model = self.buildModel()    
+                self.target_model = self.buildModel()
+                print("No network found for agent with ID: ", self.identifier) 
+                print("Operational mode is switched to training mode") 
+                self.operational_mode = False  
         else:
             self.model = self.buildModel()
             self.target_model = self.buildModel()
@@ -68,13 +73,21 @@ class ReinforceAgent():
         model = Sequential()
         dropout = 0.01
         model.add(Dense(self.hidden_layer_size_1, input_shape=(self.state_size,), activation='relu', kernel_initializer='lecun_uniform'))
-        model.add(Dense(64, activation='relu', kernel_initializer='lecun_uniform'))
+        model.add(Dense(128, activation='relu', kernel_initializer='lecun_uniform'))
         model.add(Dropout(dropout))
         model.add(Dense(self.action_size, kernel_initializer='lecun_uniform'))
         model.add(Activation('linear'))
         model.compile(loss='mse', optimizer=RMSprop(learning_rate=self.learning_rate, rho=0.9, epsilon=1e-06))
-        # model.summary()
-        return model
+        
+        transfer_weights = False
+        if transfer_weights and self.state_size == 150:
+            self.epsilon = 0.5
+            similar_model = load_model("../models_saved/best_models/" + str(self.identifier))
+            for i, layer in enumerate(model.layers[:-1]):  # Excluding the last layer
+                if isinstance(layer, Dense):
+                    layer.set_weights(similar_model.layers[i].get_weights())
+
+        return model        
 
     def trainModel(self, target):
         now_0 = time.time()
@@ -96,11 +109,12 @@ class ReinforceAgent():
             rewards = np.asarray(mini_batch[i][2])
             q_value = self.model.predict(states.reshape(1, len(states)), verbose = 0)
             self.q_value = q_value
-            next_target = self.model.predict(next_states.reshape(1, len(next_states)), verbose = 0)
-            if target:
-                next_target = self.target_model.predict(next_states.reshape(1, len(next_states)), verbose = 0)
+            next_target = self.target_model.predict(next_states.reshape(1, len(next_states)), verbose = 0)
             # K.clear_session()
-            next_q_value = self.getQvalue(rewards, next_target)
+            
+
+            best_online_action = np.argmax(self.model.predict(next_states.reshape(1, len(next_states)), verbose = 0))
+            next_q_value = self.getQvalue(rewards, next_target, best_online_action)
 
             X_batch = np.append(X_batch, np.array([states.copy()]), axis=0)
             Y_sample = q_value.copy()
@@ -113,8 +127,9 @@ class ReinforceAgent():
         gc.collect()
         # K.clear_session()
 
-    def getQvalue(self, reward, next_target):
-        return reward + self.discount_factor * np.amax(next_target)
+    def getQvalue(self, reward, next_target, best_online_action):
+        return reward + self.discount_factor * np.amax(next_target) # standard Q-learning
+        # return reward + self.discount_factor * next_target[0][best_online_action] # Double Q-Learning
 
     def get_dispatch_rule(self, state):
         self.global_step = self.global_step + 1
@@ -172,30 +187,3 @@ class ReinforceAgent():
 
     def updateTargetModel(self):
         self.target_model.set_weights(self.model.get_weights())
-
-# rein_agent_dispatch_0 = ReinforceAgent(57, 3) #current one
-# rein_agent_dispatch_1 = ReinforceAgent(48, 3) #current one
-
-# scenario within paper
-# rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, False)
-# rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(52, 5, False)
-# rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(84, 5, False)
-# rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(80, 5, False)
-# rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(60, 5, False)
-
-# rein_agent_dispatch_4 = ReinforceAgent(128, 5, False) #current one
-# rein_agent_dispatch_4 = ReinforceAgent(81, 3, True, 6400) #current one
-
-#operations of scenario_1
-# # rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(88, 5, True, 1)
-# rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(84, 5, True, 1)
-# # #rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(52, 5, True, 1)
-# rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(80, 5, True, 1)
-# rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(60, 5, True, 1)
-
-#scenario_FAZI
-# rein_agent_dispatch_scenario_paper_d_1 = ReinforceAgent(124, 5, True, 1)
-# # rein_agent_dispatch_scenario_paper_d_1_1 = ReinforceAgent(52, 5, False)
-# # rein_agent_dispatch_scenario_paper_d_1_2 = ReinforceAgent(84, 5, False)
-# # rein_agent_dispatch_scenario_paper_m_1_1_1 = ReinforceAgent(80, 5, False)
-# # rein_agent_dispatch_scenario_paper_m_1_1_2 = ReinforceAgent(68, 5, False)

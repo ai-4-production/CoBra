@@ -1,7 +1,0 @@
-;Type;Machines;Agents;StorageCap;InputCap;OutputCap;Parent;Level
-
-0;Man;[1,2,3,4];[9];5;2;2;2;0
-
-1;Man;[5,6,7];[9];5;2;2;2;0
-
-2;Dist;[];[9];5;2;2;;1
