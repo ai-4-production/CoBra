@@ -208,7 +208,7 @@ def load_order_types():
     Create instances for order types from order types config json
     """
     load_processing_steps()
-    order_types = json.load(open("../configs/order_types.json", encoding="UTF-8"))
+    order_types = json.load(open("../configs/order_types_paper_2.json", encoding="UTF-8"))
 
     for o_type in order_types['order_types']:
         OrderType(o_type)
@@ -242,8 +242,8 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     :param config: (dict) Main configuration dictionary to get setting for generation of orders
     :return order_records: (numpy records) All generated orders with attributes
     """
-    seed = random.randint(23424, 4334534)
-    np.random.seed(4256546)
+    seed = random.randint(653452, 2355442)
+    np.random.seed(2353645)
 
     possible_types = OrderType.instances
     frequency_factors = [order_type.frequency_factor for order_type in possible_types]

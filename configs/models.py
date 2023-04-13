@@ -53,7 +53,7 @@ class ReinforceAgent():
         self.dqn = False
         self.transfer_weights = False
         self.double_DQN = True
-        self.dueling_DQN = True
+        self.dueling_DQN = False
 
         self.model = self.buildModel(self.dqn)
         self.target_model = self.buildModel(self.dqn)
@@ -76,9 +76,9 @@ class ReinforceAgent():
 
     def buildModel(self, dqn = False):
         # define a plain DQN neural network structure as a feed forward neural network
+        model = Sequential()
         if self.dqn == True:
             print("Compiled DQN model")
-            model = Sequential()
             dropout = 0.01
 
             # add input, output and hidden layers
@@ -123,7 +123,7 @@ class ReinforceAgent():
             transferred_layers = 0
             similar_model = load_model("../models_saved/best_models/" + str(self.identifier))
             print("Transferred network parameters")
-            for i, layer in enumerate(model.layers[:-2]):  # Excluding the last layer
+            for i, layer in enumerate(model.layers[1:-2]):  # Excluding the input and last layer
                 if isinstance(layer, Dense):
                     layer.set_weights(similar_model.layers[i].get_weights())
                     transferred_layers += 1

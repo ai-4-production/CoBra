@@ -40,12 +40,16 @@ class ManufacturingAgent:
         
         # Attributes
         self.ruleset = None
-        self.ruleset_train = False
+        self.ruleset_train = False 
         self.smart_init = True
         self.smart_agent = None
         self.smart_id = None
+
         if ruleset_id == 10:
             self.smart_id = 10
+        elif ruleset_id == 11:
+            self.smart_id = 10
+            self.ruleset_train = True #operational mode activated
 
         for ruleset in RuleSet.instances:
             if ruleset.id == ruleset_id:
@@ -53,8 +57,8 @@ class ManufacturingAgent:
                 # Reference to the priority ruleset of the agent
                 break
 
-        self.state_cols = ["due_to", "priority", "time_in_cell", "start", "distance"]
-        self.smart_dispatch_rules =  [2,3,4,5,9]
+        self.state_cols = ["due_to", "priority", "time_in_cell", "start", "distance", "urgency"]
+        self.smart_dispatch_rules =  [1,2,3,4,9]
         self.smart_dynamic_dispatch = False
         if ruleset_id != 10:
             self.ranking_criteria = [criteria["measure"] for criteria in self.ruleset.numerical_criteria]
@@ -278,6 +282,7 @@ class ManufacturingAgent:
             state = pd.DataFrame(np.zeros((len(order_state), len(self.state_cols))))
 
         state_order_priority = np.multiply(available_destinations, state["priority"])
+        state_urgency = np.multiply(available_destinations, state["priority"])
         state_distance = np.multiply(available_destinations, state["distance"])/np.max(state["distance"])
         state_due_to_available = np.multiply(available_destinations, state["due_to"])
         time_in_cell_available = np.multiply(available_destinations, state["time_in_cell"])
@@ -302,7 +307,7 @@ class ManufacturingAgent:
             state_time_in_system_normalized = time_in_system_available / max_time_in_system
 
         state_RL = np.vstack((state_due_to_normalized, state_time_in_cell_normalized, 
-                            state_time_in_system_normalized, state_order_priority, state_distance)).T.ravel().tolist()
+                            state_time_in_system_normalized, state_distance, state_order_priority, state_urgency)).T.ravel().tolist()
 
         return state_RL
 
@@ -423,7 +428,7 @@ class ManufacturingAgent:
     def get_RL_action_index(self, action): #find corresponding action
         valid_actions = []
         if self.ruleset.id == 10:
-            valid_actions = [2,3,4,5,9] #(1) positions in whole state vector first column that are valid
+            valid_actions = [1,2,3,4,9] #(1) positions in whole state vector first column that are valid
         valid_actions.append(valid_actions[len(valid_actions)-1] + 1)
         action_RL = 0
         i = 0
@@ -437,8 +442,11 @@ class ManufacturingAgent:
         self.count = self.count + 1
         processable_orders = self.get_processable_orders(old_state)
         priority = old_state.loc[action, "priority"].values[0]
+        distance = old_state.loc[action, "distance"].values[0]
+        urgency = old_state.loc[action, "urgency"].values[0]
+
         if len_usable_orders > 1:
-            reward = reward_layer.reward_heuristic(old_state, new_state, order, action, self.cell.type)
+            reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, self.cell.type)
             agent_name = str(self)
             agent_name = agent_name[-14:-1]
             parent = str(self.cell.parent)
@@ -446,10 +454,10 @@ class ManufacturingAgent:
                 parent = parent[-14:-1]
             except:
                 parent = None
-            
-            with open('../result/rewards' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-                writer = csv.writer(file)
-                writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count, round(reward,2), priority, len_usable_orders, action]))
+            if self.cell.id == 7:
+                with open('../result/rewards' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count, round(reward,2), priority, urgency, round(distance,2), len_usable_orders, action]))
         
         
 
@@ -472,7 +480,8 @@ class ManufacturingAgent:
         self.count_smart = self.count_smart + 1
         priority = old_state.loc[action, "priority"].values[0]
         distance = old_state.loc[action, "distance"].values[0]
-        
+        urgency = old_state.loc[action, "urgency"].values[0]
+
         if len_usable_orders  > 1: #if more than one order was apparent. 0,1: no AI necessary
             agent_name = str(self)
             agent_name = agent_name[-14:-1]
@@ -481,16 +490,13 @@ class ManufacturingAgent:
                 parent = parent[-14:-1]
             except:
                 parent = None
-                
-            if not self.cell.machines:
-                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, action_RL, self.cell.type)                                
-            else:
-                reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, action_RL, self.cell.type)
 
-            if self.cell.id == 6:
-                with open('../result/rewards' + self.timestamp + '_level_' + str(self.cell.level) + '_cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-                    writer = csv.writer(file)
-                    writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, round(reward,2), priority, distance, len_usable_orders, action, action_RL]))
+            reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, self.cell.type)
+
+            # if self.cell.id == 7:
+            with open('../result/rewards' + self.timestamp + '_level_' + str(self.cell.level) + '_cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                writer = csv.writer(file)
+                writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, round(reward,0), priority, urgency, round(distance,2), len_usable_orders, action, action_RL]))
             smart_agent.appendMemory(smart_agent, self.cell.id, state_RL, new_state_RL, action_RL, reward)
 
     def get_processable_orders(self, old_state):
