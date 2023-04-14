@@ -21,7 +21,7 @@ for roots,dirs, files in os.walk(os.getcwd() + '/Benchmark/Data'):
 prio_data = []
 length = 0
 proc_in_time = 0
-priorities = [0,1,2]
+priorities = [0,1]
 lenghts_low_load = [26.64, 21.55,13.81,18.93]
 load_constant = 40
 product_types = ["Produkt A","Produkt B","Produkt C","Produkt D"]
