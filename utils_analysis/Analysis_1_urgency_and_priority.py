@@ -4,7 +4,7 @@ import time
 import numpy as np
 path = os.getcwd() 
 os.chdir("..")
-path = os.getcwd() + '/result/last_runs_04-11-2023_14-58-02.json'
+path = os.getcwd() + '/result/lastruns/last_runs_04-11-2023_14-58-02.json'
 numbers = open(path)
 data = json.load(numbers)
 

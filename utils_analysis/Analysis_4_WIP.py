@@ -5,7 +5,7 @@ import csv
 import numpy as np
 
 os.chdir("..")
-path = os.getcwd() + '/result/last_runs_04-05-2023_17-21-42.json'
+path = os.getcwd() + '/result/lastruns/last_runs_04-05-2023_17-21-42.json'
 
 numbers = open(path)
 data = json.load(numbers)

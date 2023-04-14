@@ -61,7 +61,7 @@ def set_up_sim_env(config: dict, env: simpy.Environment, setup, train):
     return sim_env
 
 
-def simulation(runs=1, show_progress=False, save_log=True,
+def simulation(runs=1, show_progress=False, save_log=False,
                change_interruptions=True, change_incoming_orders=True, train=False):
     """Main function of the simulation: Create project setup and run simulation on it"""
     config = configuration_file.configuration
@@ -154,7 +154,7 @@ def simulation(runs=1, show_progress=False, save_log=True,
             schema["simulation_runs"].append(run.results)
             schema["orders"].append(run.order_results)
 
-        with open('../result/last_runs' + timestamp + '.json', 'w') as f:
+        with open('../result/lastruns/last_runs' + timestamp + '.json', 'w') as f:
             json.dump(schema, f, indent=4, ensure_ascii=False)
 
 

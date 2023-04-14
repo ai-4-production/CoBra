@@ -5,7 +5,7 @@ import numpy as np
 import csv
 from matplotlib import pyplot as plt
 os.chdir("..")
-path = os.getcwd() + '/result/last_runs_04-12-2023_17-07-34.json'
+path = os.getcwd() + '/result/lastruns/last_runs_04-12-2023_17-07-34.json'
 
 numbers = open(path)
 data = json.load(numbers)
