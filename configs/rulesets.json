@@ -220,6 +220,16 @@
               }
             },
             {
+              "id": 11,
+              "name": "Deep_RL",
+              "description": "Dynamischer Reinforcement Agent",
+              "rules":
+              {
+                "dynamic_dispatch": true,
+                "reinforcement_agent": "rein_agent_dispatch_4"
+              }
+            },
+            {
               "id": 16,
               "name": "Reinforcement Agent 4",
               "description": "Kalkuliere Action mittels eines Reinforcement Agenten in einer 1x1 Zelle",
