@@ -254,7 +254,15 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     # start_times = np.arange(0, config['SIMULATION_RANGE'], config['SIMULATION_RANGE']/config['NUMBER_OF_ORDERS'])
     start_times = np.arange(0, (config['SIMULATION_RANGE']-200), (config['SIMULATION_RANGE']-200)/config['NUMBER_OF_ORDERS'])
 
-    types = np.random.choice(possible_types, amount, p=frequency_factors,  replace=True)
+    # types = np.random.choice(possible_types, amount, p=frequency_factors,  replace=True)
+
+    types = []
+    type_idx = 0
+    for _ in range(amount):
+        t = possible_types[type_idx]
+        types.append(t)
+        type_idx = (type_idx + 1) % 4 if type_idx < 3 else 0
+
     duration_factors = np.asarray([order_type.duration_factor for order_type in types])
     base_lengths_1 = np.random.randint(low=config['ORDER_MINIMAL_LENGTH'], high=config['ORDER_MAXIMAL_LENGTH'], size=amount)
     # Calculate order prioritities
@@ -263,7 +271,7 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     
     for base_length in range(len(base_lengths)):
         lenght = random.randint(0,99)
-        if lenght < 25:
+        if lenght < 20:
             base_lengths[base_length] = 0
             urgencies[base_length] = 1
         else:
@@ -286,7 +294,7 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     priorities = np.full(amount, 1)
     for priority in range(len(priorities)):
         prio = random.randint(0,99)
-        if prio < 25:
+        if prio < 20:
             priorities[priority] = 1
         else:
             priorities[priority] = 0

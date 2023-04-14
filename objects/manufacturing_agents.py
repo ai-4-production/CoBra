@@ -196,13 +196,14 @@ class ManufacturingAgent:
 
     def set_deep_agent(self, cell_state):
         cell_type = self.cell.type
+        cell_level = self.cell.level
         smart_state_len = len(self.state_cols)*len(cell_state)
         smart_action_len = len(self.smart_dispatch_rules)
         input_buffer_capacity = self.cell.input_buffer.storage_capacity
         output_buffer_capacity = self.cell.output_buffer.storage_capacity
         storage_capacity = self.cell.storage.storage_capacity
         agent_count = len(self.cell.agents)
-        identifier = f"{cell_type}_{smart_state_len}_{smart_action_len}_{input_buffer_capacity}_{output_buffer_capacity}_{storage_capacity}_{agent_count}"
+        identifier = f"{cell_type}_{cell_level}_{smart_state_len}_{smart_action_len}_{input_buffer_capacity}_{output_buffer_capacity}_{storage_capacity}_{agent_count}"
         if cell_type == "Dist":
             for i in range(len(self.cell.childs)):
                 input_buffers = self.cell.childs[i].input_buffer.storage_capacity
@@ -211,7 +212,7 @@ class ManufacturingAgent:
         else:  
             identifier += f"_{len(self.cell.machines)}"
     
-        self.smart_agent = ReinforceAgent(smart_state_len, smart_action_len, self.ruleset_train, identifier)
+        self.smart_agent = ReinforceAgent(smart_state_len, smart_action_len, self.ruleset_train, identifier,self.cell.level)
         self.smart_init = False
         self.smart_dynamic_dispatch = True
         # time.sleep(10)
@@ -454,7 +455,7 @@ class ManufacturingAgent:
                 parent = parent[-14:-1]
             except:
                 parent = None
-            if self.cell.id == 7:
+            if self.cell.id == 8:
                 with open('../result/rewards' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
                     writer = csv.writer(file)
                     writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count, round(reward,2), priority, urgency, round(distance,2), len_usable_orders, action]))
@@ -493,10 +494,10 @@ class ManufacturingAgent:
 
             reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, self.cell.type)
 
-            # if self.cell.id == 7:
-            with open('../result/rewards' + self.timestamp + '_level_' + str(self.cell.level) + '_cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-                writer = csv.writer(file)
-                writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, round(reward,0), priority, urgency, round(distance,2), len_usable_orders, action, action_RL]))
+            if self.cell.id == 7:
+                with open('../result/rewards' + self.timestamp + '_level_' + str(self.cell.level) + '_cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, round(reward,0), priority, urgency, round(distance,2), len_usable_orders, action, action_RL]))
             smart_agent.appendMemory(smart_agent, self.cell.id, state_RL, new_state_RL, action_RL, reward)
 
     def get_processable_orders(self, old_state):
