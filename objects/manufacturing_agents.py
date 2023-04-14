@@ -456,7 +456,7 @@ class ManufacturingAgent:
             except:
                 parent = None
             if self.cell.id == 8:
-                with open('../result/rewards' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                with open('../result/rewards/rewards' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
                     writer = csv.writer(file)
                     writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count, round(reward,2), priority, urgency, round(distance,2), len_usable_orders, action]))
         
@@ -495,7 +495,7 @@ class ManufacturingAgent:
             reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, self.cell.type)
 
             if self.cell.id == 7:
-                with open('../result/rewards' + self.timestamp + '_level_' + str(self.cell.level) + '_cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                with open('../result/rewards/rewards' + self.timestamp + '_level_' + str(self.cell.level) + '_cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
                     writer = csv.writer(file)
                     writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, round(reward,0), priority, urgency, round(distance,2), len_usable_orders, action, action_RL]))
             smart_agent.appendMemory(smart_agent, self.cell.id, state_RL, new_state_RL, action_RL, reward)
@@ -1129,7 +1129,7 @@ class ManufacturingAgent:
         except:
             next_order_start = None
         
-        with open('../result/action_operations_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+        with open('../result/rewards/action_operations_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             # writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, priority, next_order, next_order_start, round(self.env.now,2), id_start, str(start_pos),id_dest, str(dest), action]))
             writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, priority, next_order, next_order_start, round(self.env.now,2), id_start, id_dest, id_dest_dest, str(start_pos) , str(dest), str(dest_dest),action]))
@@ -1149,16 +1149,16 @@ class ManufacturingAgent:
             id_dest_dest = 8
 
         if self.init_pos:
-            with open('../result/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+            with open('../result/operations/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 writer.writerow(list([id_start, round(self.env.now,2)]))
             self.init_pos = False
         if dest != None:
-            with open('../result/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+            with open('../result/operations/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 writer.writerow(list([id_dest, str(dest), round(self.env.now,2)]))
         if dest_dest != None:
-            with open('../result/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+            with open('../result/operations/action_operations_FAZI_' + self.timestamp + '_' + "cell.id-" + str(self.cell.id) + '_agent-' + agent_name + '_level-' + str(self.cell.level) + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 writer.writerow(list([id_dest_dest, str(dest_dest), round(self.env.now,2)]))
 
