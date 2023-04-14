@@ -154,7 +154,7 @@ def simulation(runs=1, show_progress=False, save_log=False,
             schema["simulation_runs"].append(run.results)
             schema["orders"].append(run.order_results)
 
-        with open('../result/lastruns/last_runs' + timestamp + '.json', 'w') as f:
+        with open('../result/last_runs/last_runs' + timestamp + '.json', 'w') as f:
             json.dump(schema, f, indent=4, ensure_ascii=False)
 
 
