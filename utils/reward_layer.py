@@ -120,7 +120,7 @@ def reward_action(old_state, new_state, order, action):
     
     return reward
 
-def reward_smart_dispatch(old_state, new_state, order, action, action_RL, agent_type):
+def reward_smart_dispatch(old_state, new_state, order, action, agent_type):
     """Calculate the reward for an agent for the last action he performed
     :return The reward amount"""
 
@@ -133,7 +133,7 @@ def reward_smart_dispatch(old_state, new_state, order, action, action_RL, agent_
 
     reward_due_to, reward_basic, reward_throughput_time_local = 0, 0, 0
     reward_due_to = calc_reward_due_to(old_state, useable_with_free_destination, action)
-    reward_priority = calc_reward_priority(old_state, useable_with_free_destination, action, action_RL) 
+    reward_priority = calc_reward_priority(old_state, useable_with_free_destination, action) 
     reward_urgency = calc_reward_urgency(old_state, useable_with_free_destination, action) 
 
     if agent_type == "Dist":
@@ -145,7 +145,7 @@ def reward_smart_dispatch(old_state, new_state, order, action, action_RL, agent_
         reward_throughput_time_local = calc_reward_throughput_time_local(old_state, useable_with_free_destination, action)
         return reward_due_to + reward_priority + reward_throughput_time_local + reward_urgency
    
-def reward_heuristic(old_state, new_state, order, action):
+def reward_heuristic(old_state, new_state, order, action, agent_type):
     action_RL = 0
     reward_due_to, reward_basic = 0, 0
 
@@ -157,7 +157,7 @@ def reward_heuristic(old_state, new_state, order, action):
     useable_with_free_destination = useable_orders[useable_orders["_destination"] != -1]
 
     reward_due_to = calc_reward_due_to(old_state, useable_with_free_destination, action) # -300 or 400; if order had lower due_to in average
-    reward_priority = calc_reward_priority(old_state, useable_with_free_destination, action, action_RL) # 0 or 1; 1 if order has high priority
+    reward_priority = calc_reward_priority(old_state, useable_with_free_destination, action) # 0 or 1; 1 if order has high priority
     reward_throughput_time_local = calc_reward_throughput_time_local(old_state,useable_with_free_destination, action)
     reward_throughput_time_global = calc_reward_throughput_time_global(old_state, useable_with_free_destination, action)
     # reward_basic = calc_reward_basic(old_state, new_state, order)
@@ -233,12 +233,12 @@ def calc_reward_urgency(old_state, useable_with_free_destination, action): #get 
             count_urgent += 1
     
     if count_urgent >= 1 and old_cell_urgencies[action].values[0] != 2:
-        reward_urgency_2 = -100
-    print("reward_urgency + reward_urgency_2: ", reward_urgency + reward_urgency_2)
+        reward_urgency_2 = -200
+
     return reward_urgency + reward_urgency_2
 
 
-def calc_reward_priority(old_state, useable_with_free_destination, action, action_RL): #get priority indicators for all orders that have a destination; 0 = normal priority; 1 = high priority
+def calc_reward_priority(old_state, useable_with_free_destination, action): #get priority indicators for all orders that have a destination; 0 = normal priority; 1 = high priority
     old_cell_priorities = old_state.loc[:, "priority"]
     reward_priority, reward_priority_2 = 0, 0
 
@@ -285,7 +285,7 @@ def calc_reward_distance(old_state, useable_with_free_destination, action):
     if (distance_max-distance_min) == 0:
         reward_distance = 0
     else:
-        reward_distance = (2*(distance_max-distance_order)/(distance_max-distance_min) - 1)**5 * 100 #Highest time in cell to awarded, lowest to be punished
+        reward_distance = (2*(distance_max-distance_order)/(distance_max-distance_min) - 1)**5 * 150 #Highest time in cell to awarded, lowest to be punished
 
     return reward_distance
 
@@ -302,7 +302,7 @@ def calc_reward_throughput_time_local(old_state, useable_with_free_destination, 
         time_in_cell_order = old_state.loc[action, "time_in_cell"]
 
     # calculate the reward
-    reward_throughput_time = (1 - 2*(time_in_cell_max-time_in_cell_order)/(time_in_cell_max-time_in_cell_min))**5 * 100 #Highest time in cell to awarded, lowest to be punished
+    reward_throughput_time = (1 - 2*(time_in_cell_max-time_in_cell_order)/(time_in_cell_max-time_in_cell_min))**5 * 150 #Highest time in cell to awarded, lowest to be punished
     return reward_throughput_time
 
 def calc_reward_throughput_time_global(old_state, useable_with_free_destination, action):
@@ -316,93 +316,5 @@ def calc_reward_throughput_time_global(old_state, useable_with_free_destination,
     except AttributeError:
         time_in_cell_order = old_state.loc[action, "start"]
 
-    reward_throughput_time = (1 - 2*(time_in_system_max-time_in_cell_order)/(time_in_system_max-time_in_system_min))**5 * 100 #Highest time in cell to awarded, lowest to be punished
+    reward_throughput_time = (1 - 2*(time_in_system_max-time_in_cell_order)/(time_in_system_max-time_in_system_min))**5 * 150 #Highest time in cell to awarded, lowest to be punished
     return reward_throughput_time
-
-
-
-def calc_reward_basic(old_state, new_state, order):
-    old_pos_type = old_state[old_state["order"] == order]["pos_type"].iloc[0]
-
-    # Penalty for blocked Input
-    if not old_pos_type == "Input":
-        input_full = not old_state[old_state["pos_type"] == "Input"]["free_slots"].iloc[0]
-    else:
-        input_full = False
-
-    if new_state[new_state["order"] == order].empty:
-        # A 2 was placed at the main output of the environment
-        order_in_machine = False
-        order_in_storage = False
-        order_in_interface = False
-        order_in_empty_interface = False
-        storage_full_afterwards = False
-        order_in_defective_machine = False
-        machine_wrong_setup = False
-        order_in_output = True
-        next_task_in_cell = False
-        order_completed = True
-
-    else:
-        # Normal reward calculation. Item is still in state
-        new_pos_type = new_state[new_state["order"] == order]["pos_type"].iloc[0]
-        new_pos = new_state[new_state["order"] == order]["pos"].iloc[0]
-
-        # Reward for item put down in machine
-        order_in_machine = new_pos_type == "Machine-Input"
-
-        # Reward for item put down in storage
-        order_in_storage = new_pos_type == "Storage"
-
-        # Reward for item put down in interface buffer
-        order_in_interface = new_pos_type == "Interface-In"
-
-        # Reward if Interface was previously empty
-        if order_in_interface:
-            order_in_empty_interface = old_state[old_state["pos"] == new_pos]["order"].dropna().empty
-        else:
-            order_in_empty_interface = False
-
-        # Small Penalty if storage is full afterwards
-        if order_in_storage:
-            storage_full_afterwards = not new_state[new_state["order"] == order]["free_slots"].iloc[0]
-        else:
-            storage_full_afterwards = False
-
-        # Penalty for item put down in defect machine or machine in wrong setup
-        if order_in_machine:
-            order_in_defective_machine = new_state[new_state["pos"] == new_pos]["failure"].iloc[0]
-            machine_wrong_setup = order.type.type_id != new_state[new_state["pos"] == new_pos]["current_setup"].iloc[0]
-        else:
-            order_in_defective_machine = False
-            machine_wrong_setup = False
-
-        # Reward for item put down in Cell output
-        order_in_output = new_pos_type == "Output"
-
-        # Penalty for item in output if next task could have been processed within this cell, reward for finished item without next tasks
-        if order_in_output:
-            next_task = new_state[new_state["order"] == order]["next_task"].iloc[0]
-            if "machine_type" in new_state.columns:
-                next_task_in_cell = not new_state[new_state["machine_type"] == next_task].empty
-            else:
-                next_task_in_cell = False
-            order_completed = new_state[new_state["order"] == order]["tasks_finished"].iloc[0]
-        else:
-            next_task_in_cell = False
-            order_completed = False
-
-    # Reward/Penalty amount
-    reward_settings = [(input_full, -50),
-                       (order_in_machine, 100),
-                       (order_in_storage, 20),
-                       (order_in_interface, 50),
-                       (order_in_empty_interface, 40),
-                       (storage_full_afterwards, -10),
-                       (order_in_defective_machine, -20),
-                       (machine_wrong_setup, -10),
-                       (order_in_output, 200),
-                       (next_task_in_cell, -50),
-                       (order_completed, 50)]
-
-    return sum([value for condition, value in reward_settings if condition])    

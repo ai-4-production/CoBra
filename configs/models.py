@@ -24,9 +24,12 @@ history = History()
 #save model option
 
 class ReinforceAgent():
-    def __init__(self, state_size, action_size, operational_mode = False, identifier = None):
+    def __init__(self, state_size, action_size, operational_mode = False, identifier = None, cell_level = None):
         self.identifier = identifier
+        self.cell_level = cell_level
+
         self.operational_mode = operational_mode
+
         self.load_episode = 0
         self.state_size = state_size
         self.action_size = action_size
@@ -48,15 +51,15 @@ class ReinforceAgent():
         self.rewards = []
         self.rewards_average_old = -1000
         t = time.localtime()
-        self.timestamp = time.strftime('%Y-%m-%d_%H-%M', t)
+        self.timestamp = time.strftime('%Y-%m-%d_%H-%M-%S', t)
 
-        self.dqn = False
+        self.dqn = True
         self.transfer_weights = False
-        self.double_DQN = True
+        self.double_DQN = False
         self.dueling_DQN = False
 
-        self.model = self.buildModel(self.dqn)
-        self.target_model = self.buildModel(self.dqn)
+        self.model = self.buildModel()
+        self.target_model = self.buildModel()
         self.path = pathlib.Path(__file__).parent.resolve()
 
         if self.operational_mode:
@@ -65,20 +68,24 @@ class ReinforceAgent():
                 print("Neural network model found for agent with ID: ", self.identifier)
                 time.sleep(1)
             except:
-                self.model = self.buildModel(self.dqn)
-                self.target_model = self.buildModel(self.dqn)
+                self.model = self.buildModel()
+                self.target_model = self.buildModel()
                 print("No network found for agent with ID: ", self.identifier) 
                 print("Operational mode is switched to training mode") 
                 self.operational_mode = False  
         else:
-            self.model = self.buildModel(self.dqn)
-            self.target_model = self.buildModel(self.dqn)
+            self.model = self.buildModel()
+            self.target_model = self.buildModel()
 
-    def buildModel(self, dqn = False):
+    def buildModel(self):
         # define a plain DQN neural network structure as a feed forward neural network
         model = Sequential()
-        if self.dqn == True:
-            print("Compiled DQN model")
+        if self.dqn == True or (self.double_DQN == True and self.dueling_DQN == False):
+            if self.dqn == True:
+                print("Compiled DQN model")
+            elif self.double_DQN == True:
+                print("Compiled double DQN model")
+            
             dropout = 0.01
 
             # add input, output and hidden layers
@@ -243,6 +250,7 @@ class ReinforceAgent():
                 smart_agent.train_step_1 += 1
                 if self.train_step % self.save_rate == 0:
                     print(np.average(smart_agent.rewards))
+                    print(self.timestamp)
                     # if self.rewards_average_old <= np.average(smart_agent.rewards):
                     #     os.chdir("..")
                     #     os.chmod(str(os.path.abspath(os.curdir)) + "/models_saved/best_models/" + str(self.identifier), stat.S_IWUSR | stat.S_IRUSR)
@@ -253,7 +261,7 @@ class ReinforceAgent():
                     #     self.rewards = []
                     #     print("Best_model in cell ", cell_id, " updated")
                     if self.dueling_DQN:
-                        self.model.save("../models_saved/all_models/dueling_" + str(self.identifier) + "_" + self.timestamp + "_" + str(self.train_step))
+                        self.model.save("../models_saved/all_models/dueling_" + str(self.cell_level) + "_" + str(self.identifier) + "_" + self.timestamp + "_" + str(self.train_step))
                     else:
                         self.model.save("../models_saved/all_models/" + str(self.identifier) + "_" + self.timestamp + "_" + str(self.train_step))
                     print("model_saved")

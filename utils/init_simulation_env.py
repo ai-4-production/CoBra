@@ -393,7 +393,7 @@ def generator_from_setup(setup: pd.DataFrame, config: dict, env: simpy.Environme
         else:
             agents = [cells.ManufacturingAgent(config, env, setup.loc[index, "input_obj"],
                                                int(ruleset_id)) for ruleset_id in ast.literal_eval(column["Agents"])]
-
+        
         setup.at[index, "agent_obj"] = agents
 
         # Add machine objects
