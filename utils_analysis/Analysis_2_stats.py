@@ -4,7 +4,7 @@ import time
 import numpy as np
 path = os.getcwd() + '/result/FAZI_transfer/last_runs_03-01-2023_11-13-36.json'
 #path = os.getcwd() + '/result/Scenario_1_2800/last_runs_02-11-2023_16-10-33_HP.json'
-#path = os.getcwd() + '/result/lastruns/last_runs_02-15-2023_18-17-04.json'
+#path = os.getcwd() + '/result/last_runs/last_runs_02-15-2023_18-17-04.json'
 
 numbers = open(path)
 data = json.load(numbers)
