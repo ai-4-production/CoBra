@@ -5,7 +5,7 @@ import csv
 import numpy as np
 
 # os.chdir("..")
-path = os.getcwd() + '/result/last_runs/last_runs_04-14-2023_14-51-02.json'
+path = os.getcwd() + '/result/last_runs/load_analysis/Run_2/last_runs_04-17-2023_10-03-36.json'
 
 numbers = open(path)
 data = json.load(numbers)
@@ -49,10 +49,11 @@ for i in range(len(data["orders"][0]["orders"])):
                 elif priority == 1 and urgency == 1:
                     prio_urgent += 1
         
-        wip.append([wip_count, nprio_nurgent, prio_nurgent, nprio_urgent, prio_urgent])
+        wip.append([wip_count, nprio_nurgent, nprio_urgent, prio_nurgent, prio_urgent])
         with open('WIP' + '.csv', 'a+', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
-            writer.writerow([i, wip_count, nprio_nurgent, prio_nurgent, nprio_urgent, prio_urgent])
+            writer.writerow([i, wip_count, nprio_nurgent, nprio_urgent, prio_nurgent, prio_urgent])
 
 print("Total mean WIP: ", np.mean(wip, axis = 0), " , len: ",len(wip))
+
 
