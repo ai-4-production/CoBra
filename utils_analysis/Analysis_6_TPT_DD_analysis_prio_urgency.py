@@ -5,8 +5,8 @@ import numpy as np
 import csv
 from matplotlib import pyplot as plt
 
-os.chdir("..")
-path = os.getcwd() + '/result/last_runs/last_runs_04-13-2023_17-26-30.json'
+# os.chdir("..")
+path = os.getcwd() + '/result/last_runs/last_runs_04-15-2023_11-52-22.json'
 
 numbers = open(path)
 data = json.load(numbers)
@@ -70,6 +70,5 @@ for m in priorities:
                     throughput_times.append([throughput_time])
                     tardiness_times.append([tardiness])
                     
-        print(m, u," throughput_time    , ", round(np.mean(throughput_times, axis = 0)[0],1) , ", " ,len(throughput_times))
-        print(m, u," tardiness          , ", round(np.mean(tardiness_times, axis = 0)[0],1) , ", " ,len(tardiness_times))
+        print(m,",", u,", throughput_time    , ", round(np.mean(throughput_times, axis = 0)[0],1), ", tardiness, ", round(np.mean(tardiness_times, axis = 0)[0],1), ", " ,len(throughput_times))
         
