@@ -5,8 +5,8 @@ import numpy as np
 import csv
 from matplotlib import pyplot as plt
 
-for roots,dirs, files in os.walk(os.getcwd() + '/result/last_runs/load_analysis/Run_2'):
-    for file in files:
+for roots,dirs, files in os.walk(os.getcwd() + '/result/P_2/Benchmarks/'):
+    for file in sorted(files):
         print("_________________________________")  
         print(file)      
         if os.path.splitext(file)[1] == '.json':
