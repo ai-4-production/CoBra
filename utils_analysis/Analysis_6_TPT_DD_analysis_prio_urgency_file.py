@@ -6,7 +6,8 @@ import csv
 from matplotlib import pyplot as plt
 
 # os.chdir("..")
-path = os.getcwd() + '/result/last_runs/load_analysis/Run_2/last_runs_04-17-2023_16-38-31.json'
+path = os.getcwd() + '/result/last_runs/load_analysis/Run_2/last_runs_04-17-2023_17-58-18.json'
+path = os.getcwd() + '/result/last_runs/last_runs_04-17-2023_17-58-24.json'
 
 numbers = open(path)
 data = json.load(numbers)
@@ -31,6 +32,7 @@ tardiness_times = []
 throughput_times_avg = []
 throughput_time_avg_k = 0
 moving_average = 100
+print("Number of orders: " , range(len(data["orders"][0]["orders"])))
 for m in priorities:
     for u in urgencies:
         prio_data = []

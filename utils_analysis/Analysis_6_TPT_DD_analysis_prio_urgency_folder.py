@@ -67,4 +67,3 @@ for roots,dirs, files in os.walk(os.getcwd() + '/result/last_runs/load_analysis/
                                 tardiness_times.append([tardiness])
                                 
                     print(m,",", u,", throughput_time    , ", round(np.mean(throughput_times, axis = 0)[0],1), ", tardiness, ", round(np.mean(tardiness_times, axis = 0)[0],1), ", " ,len(throughput_times))
-                
