@@ -6,8 +6,8 @@ import csv
 from matplotlib import pyplot as plt
 
 # os.chdir("..")
-path = os.getcwd() + '/result/last_runs/load_analysis/Run_2/last_runs_04-17-2023_17-58-18.json'
-path = os.getcwd() + '/result/last_runs/last_runs_04-17-2023_17-58-24.json'
+path = os.getcwd() + '/result/last_runs/load_analysis/Run_3/last_runs_04-17-2023_16-39-03.json'
+path = os.getcwd() + '/result/last_runs/last_runs_04-18-2023_10-11-16.json'
 
 numbers = open(path)
 data = json.load(numbers)

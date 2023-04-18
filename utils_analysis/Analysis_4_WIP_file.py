@@ -6,7 +6,7 @@ import numpy as np
 
 # os.chdir("..")
 path = os.getcwd() + '/result/last_runs/load_analysis/Run_2/last_runs_04-17-2023_10-04-14.json'
-path = os.getcwd() + '/result/last_runs/last_runs_04-17-2023_18-03-21.json'
+path = os.getcwd() + '/result/last_runs/last_runs_04-18-2023_10-11-00.json'
 
 numbers = open(path)
 data = json.load(numbers)
