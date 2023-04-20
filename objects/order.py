@@ -242,8 +242,8 @@ def get_orders_from_seed(amount: int, seed: int, config: dict):
     :param config: (dict) Main configuration dictionary to get setting for generation of orders
     :return order_records: (numpy records) All generated orders with attributes
     """
-    seed = random.randint(653452, 2355442)
-    np.random.seed(2353645)
+    seed = random.randint(342563, 6454463)
+    np.random.seed(4343245)
 
     possible_types = OrderType.instances
     frequency_factors = [order_type.frequency_factor for order_type in possible_types]
