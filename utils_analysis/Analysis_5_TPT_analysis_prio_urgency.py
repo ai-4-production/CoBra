@@ -5,8 +5,9 @@ import numpy as np
 import csv
 from matplotlib import pyplot as plt
 
-os.chdir("..")
-path = os.getcwd() + '/result/last_runs/last_runs_04-05-2023_17-21-42.json'
+# os.chdir("..")
+
+path = os.getcwd() + '/result/P_2/Training_TPT/last_runs_04-06-2023_10-30-41.json'
 
 numbers = open(path)
 data = json.load(numbers)
@@ -60,6 +61,11 @@ for m in priorities:
             if tardiness < 0:
                 tardiness = 0
                 proc_in_time = 1
+
+            # if m == 1: 
+            #     if u == 0:
+            #         print(i, ", ", throughput_time)
+            #         time.sleep(0.1)
             
             if completion_time != 0:
                 if data["orders"][0]["orders"][i]["priority"] == m and data["orders"][0]["orders"][i]["urgency"] == u:
