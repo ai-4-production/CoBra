@@ -1,0 +1,1127 @@
+{
+    "simulation_runs": [
+        {
+            "run_number": 1,
+            "seed_incoming_orders": 82704353,
+            "seed_machine_interruptions": 29378374,
+            "simulation_results": {
+                "arrived_orders": 10,
+                "processed_quantity": 10,
+                "processed_in_time": 9,
+                "processed_in_time_rate": 90.0,
+                "in_time_rate_by_order_type": [
+                    [
+                        "Produkt A",
+                        100.0
+                    ],
+                    [
+                        "Produkt B",
+                        100.0
+                    ],
+                    [
+                        "Produkt C",
+                        50.0
+                    ],
+                    [
+                        "Produkt D",
+                        100.0
+                    ]
+                ],
+                "processed_by_order_type": [
+                    [
+                        "Produkt A",
+                        3
+                    ],
+                    [
+                        "Produkt B",
+                        3
+                    ],
+                    [
+                        "Produkt C",
+                        2
+                    ],
+                    [
+                        "Produkt D",
+                        2
+                    ]
+                ],
+                "mean_tardiness": 2.48,
+                "mean_lateness": -17.57
+            },
+            "cells": [
+                {
+                    "id": 0,
+                    "level": 0,
+                    "parent": 5,
+                    "cell_results": {
+                        "mean_time_in_cell": 8.25,
+                        "mean_items_in_cell": 0.01,
+                        "capacity": 15,
+                        "storage_utilization": 0.04
+                    },
+                    "agents": [
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 0.2,
+                                "transportation_time": 0.11,
+                                "waiting_time": 0,
+                                "idle_time": 7197.8,
+                                "task_time": 2.2,
+                                "started_tasks": 10,
+                                "avg_task_length": 0.22,
+                                "utilization": 0.0
+                            }
+                        },
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 0,
+                                "transportation_time": 0,
+                                "waiting_time": 0,
+                                "idle_time": 7200,
+                                "task_time": 0,
+                                "started_tasks": 0,
+                                "avg_task_length": 0,
+                                "utilization": 0.0
+                            }
+                        }
+                    ],
+                    "machines": [
+                        {
+                            "type": "Milling",
+                            "machine_results": {
+                                "setup_events": 5,
+                                "setup_time": 5.0,
+                                "idle_time": 5569.63,
+                                "processing_time": 29.05,
+                                "processed_quantity": 5,
+                                "finished_quantity": 5,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        },
+                        {
+                            "type": "Milling",
+                            "machine_results": {
+                                "setup_events": 0,
+                                "setup_time": 0,
+                                "idle_time": 0.0,
+                                "processing_time": 0,
+                                "processed_quantity": 0,
+                                "finished_quantity": 0,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        }
+                    ],
+                    "buffer": [
+                        {
+                            "type": "Input-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1439.9
+                            }
+                        },
+                        {
+                            "type": "Output-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1438.25
+                            }
+                        },
+                        {
+                            "type": "Storage-Buffer",
+                            "capacity": 3,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": NaN
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 1,
+                    "level": 0,
+                    "parent": 5,
+                    "cell_results": {
+                        "mean_time_in_cell": 10.47,
+                        "mean_items_in_cell": 0.01,
+                        "capacity": 15,
+                        "storage_utilization": 0.05
+                    },
+                    "agents": [
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 0.31,
+                                "transportation_time": 0.22,
+                                "waiting_time": 0,
+                                "idle_time": 7196.69,
+                                "task_time": 3.31,
+                                "started_tasks": 15,
+                                "avg_task_length": 0.22,
+                                "utilization": 0.0
+                            }
+                        },
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 0,
+                                "transportation_time": 0,
+                                "waiting_time": 0,
+                                "idle_time": 7200,
+                                "task_time": 0,
+                                "started_tasks": 0,
+                                "avg_task_length": 0,
+                                "utilization": 0.0
+                            }
+                        }
+                    ],
+                    "machines": [
+                        {
+                            "type": "Polishing",
+                            "machine_results": {
+                                "setup_events": 5,
+                                "setup_time": 5.0,
+                                "idle_time": 5588.15,
+                                "processing_time": 16.6,
+                                "processed_quantity": 5,
+                                "finished_quantity": 5,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        },
+                        {
+                            "type": "Milling_2",
+                            "machine_results": {
+                                "setup_events": 5,
+                                "setup_time": 5.0,
+                                "idle_time": 5597.0,
+                                "processing_time": 12.45,
+                                "processed_quantity": 5,
+                                "finished_quantity": 5,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        }
+                    ],
+                    "buffer": [
+                        {
+                            "type": "Input-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1438.19
+                            }
+                        },
+                        {
+                            "type": "Output-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1436.1
+                            }
+                        },
+                        {
+                            "type": "Storage-Buffer",
+                            "capacity": 3,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": NaN
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "level": 0,
+                    "parent": 6,
+                    "cell_results": {
+                        "mean_time_in_cell": 9.08,
+                        "mean_items_in_cell": 0.01,
+                        "capacity": 15,
+                        "storage_utilization": 0.04
+                    },
+                    "agents": [
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 0.2,
+                                "transportation_time": 0.11,
+                                "waiting_time": 0,
+                                "idle_time": 7197.8,
+                                "task_time": 2.2,
+                                "started_tasks": 10,
+                                "avg_task_length": 0.22,
+                                "utilization": 0.0
+                            }
+                        },
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 0,
+                                "transportation_time": 0,
+                                "waiting_time": 0,
+                                "idle_time": 7200,
+                                "task_time": 0,
+                                "started_tasks": 0,
+                                "avg_task_length": 0,
+                                "utilization": 0.0
+                            }
+                        }
+                    ],
+                    "machines": [
+                        {
+                            "type": "Polishing_2",
+                            "machine_results": {
+                                "setup_events": 5,
+                                "setup_time": 5.0,
+                                "idle_time": 6266.31,
+                                "processing_time": 33.2,
+                                "processed_quantity": 5,
+                                "finished_quantity": 5,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        },
+                        {
+                            "type": "Polishing_2",
+                            "machine_results": {
+                                "setup_events": 0,
+                                "setup_time": 0,
+                                "idle_time": 0.0,
+                                "processing_time": 0,
+                                "processed_quantity": 0,
+                                "finished_quantity": 0,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        }
+                    ],
+                    "buffer": [
+                        {
+                            "type": "Input-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1299.88
+                            }
+                        },
+                        {
+                            "type": "Output-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1298.07
+                            }
+                        },
+                        {
+                            "type": "Storage-Buffer",
+                            "capacity": 3,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": NaN
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 3,
+                    "level": 0,
+                    "parent": 6,
+                    "cell_results": {
+                        "mean_time_in_cell": 11.3,
+                        "mean_items_in_cell": 0.01,
+                        "capacity": 15,
+                        "storage_utilization": 0.05
+                    },
+                    "agents": [
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 0.31,
+                                "transportation_time": 0.22,
+                                "waiting_time": 0,
+                                "idle_time": 7196.69,
+                                "task_time": 3.31,
+                                "started_tasks": 15,
+                                "avg_task_length": 0.22,
+                                "utilization": 0.0
+                            }
+                        },
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 0,
+                                "transportation_time": 0,
+                                "waiting_time": 0,
+                                "idle_time": 7200,
+                                "task_time": 0,
+                                "started_tasks": 0,
+                                "avg_task_length": 0,
+                                "utilization": 0.0
+                            }
+                        }
+                    ],
+                    "machines": [
+                        {
+                            "type": "Hardening",
+                            "machine_results": {
+                                "setup_events": 5,
+                                "setup_time": 5.0,
+                                "idle_time": 6288.98,
+                                "processing_time": 16.6,
+                                "processed_quantity": 5,
+                                "finished_quantity": 5,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        },
+                        {
+                            "type": "Labelling",
+                            "machine_results": {
+                                "setup_events": 5,
+                                "setup_time": 5.0,
+                                "idle_time": 6294.51,
+                                "processing_time": 16.6,
+                                "processed_quantity": 5,
+                                "finished_quantity": 5,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        }
+                    ],
+                    "buffer": [
+                        {
+                            "type": "Input-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1298.01
+                            }
+                        },
+                        {
+                            "type": "Output-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1295.75
+                            }
+                        },
+                        {
+                            "type": "Storage-Buffer",
+                            "capacity": 3,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": NaN
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "level": 0,
+                    "parent": 7,
+                    "cell_results": {
+                        "mean_time_in_cell": 4.11,
+                        "mean_items_in_cell": 0.0,
+                        "capacity": 8,
+                        "storage_utilization": 0.03
+                    },
+                    "agents": [
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 0.2,
+                                "transportation_time": 0.13,
+                                "waiting_time": 0,
+                                "idle_time": 7198.2,
+                                "task_time": 1.8,
+                                "started_tasks": 8,
+                                "avg_task_length": 0.23,
+                                "utilization": 0.0
+                            }
+                        }
+                    ],
+                    "machines": [
+                        {
+                            "type": "Quality check",
+                            "machine_results": {
+                                "setup_events": 4,
+                                "setup_time": 4.0,
+                                "idle_time": 4911.27,
+                                "processing_time": 6.64,
+                                "processed_quantity": 4,
+                                "finished_quantity": 4,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        }
+                    ],
+                    "buffer": [
+                        {
+                            "type": "Input-Buffer",
+                            "capacity": 1,
+                            "buffer_results": {
+                                "time_full": 0.47,
+                                "overfill_rate": 0.01,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1444.91
+                            }
+                        },
+                        {
+                            "type": "Output-Buffer",
+                            "capacity": 1,
+                            "buffer_results": {
+                                "time_full": 0.56,
+                                "overfill_rate": 0.01,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1443.89
+                            }
+                        },
+                        {
+                            "type": "Storage-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": NaN
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 5,
+                    "level": 1,
+                    "parent": 7,
+                    "cell_results": {
+                        "mean_time_in_cell": 0.86,
+                        "mean_items_in_cell": 0.0,
+                        "capacity": 20,
+                        "storage_utilization": 0.0
+                    },
+                    "agents": [
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 1.29,
+                                "transportation_time": 0.59,
+                                "waiting_time": 0,
+                                "idle_time": 7195.71,
+                                "task_time": 4.29,
+                                "started_tasks": 15,
+                                "avg_task_length": 0.29,
+                                "utilization": 0.0
+                            }
+                        },
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 0,
+                                "transportation_time": 0,
+                                "waiting_time": 0,
+                                "idle_time": 7200,
+                                "task_time": 0,
+                                "started_tasks": 0,
+                                "avg_task_length": 0,
+                                "utilization": 0.0
+                            }
+                        }
+                    ],
+                    "machines": [],
+                    "buffer": [
+                        {
+                            "type": "Input-Buffer",
+                            "capacity": 3,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1439.95
+                            }
+                        },
+                        {
+                            "type": "Output-Buffer",
+                            "capacity": 3,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1436.05
+                            }
+                        },
+                        {
+                            "type": "Storage-Buffer",
+                            "capacity": 4,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": NaN
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Outgoing",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1439.9
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Outgoing",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1438.19
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Ingoing",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1438.25
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Ingoing",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1436.1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 6,
+                    "level": 1,
+                    "parent": 7,
+                    "cell_results": {
+                        "mean_time_in_cell": 0.86,
+                        "mean_items_in_cell": 0.0,
+                        "capacity": 18,
+                        "storage_utilization": 0.0
+                    },
+                    "agents": [
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 1.29,
+                                "transportation_time": 0.59,
+                                "waiting_time": 0,
+                                "idle_time": 7195.71,
+                                "task_time": 4.29,
+                                "started_tasks": 15,
+                                "avg_task_length": 0.29,
+                                "utilization": 0.0
+                            }
+                        },
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 0,
+                                "transportation_time": 0,
+                                "waiting_time": 0,
+                                "idle_time": 7200,
+                                "task_time": 0,
+                                "started_tasks": 0,
+                                "avg_task_length": 0,
+                                "utilization": 0.0
+                            }
+                        }
+                    ],
+                    "machines": [],
+                    "buffer": [
+                        {
+                            "type": "Input-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1299.93
+                            }
+                        },
+                        {
+                            "type": "Output-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1295.7
+                            }
+                        },
+                        {
+                            "type": "Storage-Buffer",
+                            "capacity": 4,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": NaN
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Outgoing",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1299.88
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Outgoing",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1298.01
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Ingoing",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1298.07
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Ingoing",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1295.75
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 7,
+                    "level": 2,
+                    "parent": null,
+                    "cell_results": {
+                        "mean_time_in_cell": 0.87,
+                        "mean_items_in_cell": 0.0,
+                        "capacity": 25,
+                        "storage_utilization": 0.0
+                    },
+                    "agents": [
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 3.91,
+                                "transportation_time": 1.75,
+                                "waiting_time": 0,
+                                "idle_time": 7191.29,
+                                "task_time": 8.71,
+                                "started_tasks": 24,
+                                "avg_task_length": 0.36,
+                                "utilization": 0.0
+                            }
+                        },
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 0,
+                                "transportation_time": 0,
+                                "waiting_time": 0,
+                                "idle_time": 7200,
+                                "task_time": 0,
+                                "started_tasks": 0,
+                                "avg_task_length": 0,
+                                "utilization": 0.0
+                            }
+                        },
+                        {
+                            "ruleset": "Due_to",
+                            "agent_results": {
+                                "moving_time": 0,
+                                "transportation_time": 0,
+                                "waiting_time": 0,
+                                "idle_time": 7200,
+                                "task_time": 0,
+                                "started_tasks": 0,
+                                "avg_task_length": 0,
+                                "utilization": 0.0
+                            }
+                        }
+                    ],
+                    "machines": [],
+                    "buffer": [
+                        {
+                            "type": "Input-Buffer",
+                            "capacity": 3,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 719.82
+                            }
+                        },
+                        {
+                            "type": "Output-Buffer",
+                            "capacity": 3,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 717.98
+                            }
+                        },
+                        {
+                            "type": "Storage-Buffer",
+                            "capacity": 4,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": NaN
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Outgoing",
+                            "capacity": 1,
+                            "buffer_results": {
+                                "time_full": 0.47,
+                                "overfill_rate": 0.01,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1444.91
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Outgoing",
+                            "capacity": 3,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1439.95
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Outgoing",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1299.93
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Ingoing",
+                            "capacity": 1,
+                            "buffer_results": {
+                                "time_full": 0.56,
+                                "overfill_rate": 0.01,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1443.89
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Ingoing",
+                            "capacity": 3,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1436.05
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Ingoing",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 1295.7
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "orders": [
+        {
+            "run_number": 1,
+            "seed_incoming_orders": 82704353,
+            "orders": [
+                {
+                    "type": "Produkt A",
+                    "start": 0.0,
+                    "due_to": 30.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 20.16,
+                        "tardiness": 0,
+                        "lateness": -9.84,
+                        "transportation_time": 0.32,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 18.22,
+                        "time_in_interface_buffer": 1.62,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 11.62,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt B",
+                    "start": 700.0,
+                    "due_to": 757.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 21.91,
+                        "tardiness": 0,
+                        "lateness": -35.09,
+                        "transportation_time": 0.32,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 19.88,
+                        "time_in_interface_buffer": 1.71,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 13.28,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt C",
+                    "start": 1400.0,
+                    "due_to": 1459.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 24.78,
+                        "tardiness": 0,
+                        "lateness": -34.22,
+                        "transportation_time": 0.46,
+                        "avg_transportation_time": 0.04,
+                        "time_at_machines": 22.08,
+                        "time_in_interface_buffer": 2.24,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 13.28,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt D",
+                    "start": 2100.0,
+                    "due_to": 2138.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 26.46,
+                        "tardiness": 0,
+                        "lateness": -11.54,
+                        "transportation_time": 0.46,
+                        "avg_transportation_time": 0.04,
+                        "time_at_machines": 23.74,
+                        "time_in_interface_buffer": 2.26,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 14.94,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt A",
+                    "start": 2800.0,
+                    "due_to": 2843.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 20.34,
+                        "tardiness": 0,
+                        "lateness": -22.66,
+                        "transportation_time": 0.32,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 18.22,
+                        "time_in_interface_buffer": 1.8,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 11.62,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt B",
+                    "start": 3500.0,
+                    "due_to": 3541.0,
+                    "priority": 1,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 22.0,
+                        "tardiness": 0,
+                        "lateness": -19.0,
+                        "transportation_time": 0.32,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 19.88,
+                        "time_in_interface_buffer": 1.8,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 13.28,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt C",
+                    "start": 4200.0,
+                    "due_to": 4200.0,
+                    "priority": 0,
+                    "urgency": 1,
+                    "item_results": {
+                        "completion_time": 24.8,
+                        "tardiness": 24.8,
+                        "lateness": 24.8,
+                        "transportation_time": 0.46,
+                        "avg_transportation_time": 0.04,
+                        "time_at_machines": 22.08,
+                        "time_in_interface_buffer": 2.26,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 13.28,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt D",
+                    "start": 4900.0,
+                    "due_to": 4938.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 26.46,
+                        "tardiness": 0,
+                        "lateness": -11.54,
+                        "transportation_time": 0.46,
+                        "avg_transportation_time": 0.04,
+                        "time_at_machines": 23.74,
+                        "time_in_interface_buffer": 2.26,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 14.94,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt A",
+                    "start": 5600.0,
+                    "due_to": 5650.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 20.34,
+                        "tardiness": 0,
+                        "lateness": -29.66,
+                        "transportation_time": 0.32,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 18.22,
+                        "time_in_interface_buffer": 1.8,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 11.62,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt B",
+                    "start": 6300.0,
+                    "due_to": 6349.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 22.0,
+                        "tardiness": 0,
+                        "lateness": -27.0,
+                        "transportation_time": 0.32,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 19.88,
+                        "time_in_interface_buffer": 1.8,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 13.28,
+                        "wait_for_repair_time": 0
+                    }
+                }
+            ]
+        }
+    ]
+}
