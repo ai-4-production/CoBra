@@ -19,7 +19,6 @@ for roots,dirs, files in os.walk(os.getcwd() + '/Benchmark/Data'):
         if os.path.splitext(file)[1] == '.json':
             json_file_count += 1   
 
-prio_data = []
 length = 0
 proc_in_time = 0
 priorities = [0,1]
@@ -62,14 +61,13 @@ for m in priorities:
                 tardiness = 0
                 proc_in_time = 1
 
-            # if m == 1: 
-            #     if u == 0:
-            #         print(i, ", ", throughput_time)
-            #         time.sleep(0.1)
+            if data["orders"][0]["orders"][i]["priority"] == 1: 
+                if data["orders"][0]["orders"][i]["urgency"] == 0:
+                    print(i, ", ",m, ", ",u, ", ", throughput_time)
+                    time.sleep(0.1)
             
             if completion_time != 0:
                 if data["orders"][0]["orders"][i]["priority"] == m and data["orders"][0]["orders"][i]["urgency"] == u:
-                    prio_data.append([priority, tardiness,lateness, completion_time,throughput_time, time_to_EDD, proc_in_time])
                     throughput_times.append(throughput_time)
                     with open('tpt_priority_' + str(m) + '_' + str(u) + '.csv', 'a+', newline='', encoding='utf-8') as file:
                         writer = csv.writer(file)

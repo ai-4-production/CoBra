@@ -6,10 +6,9 @@ import csv
 from matplotlib import pyplot as plt
 
 # os.chdir("..")
-path = os.getcwd() + '/result/last_runs/load_analysis/Run_3/last_runs_04-17-2023_16-39-03.json'
-path = os.getcwd() + '/result/last_runs/last_runs_04-20-2023_09-56-18.json'
-path = os.getcwd() + '/result/last_runs_04-12-2023_09-49-15.json'
-path = os.getcwd() + '/result/P_2/Training_TPT/last_runs_04-06-2023_10-30-41.json'
+# path = os.getcwd() + '/result/last_runs/load_analysis/Run_3/last_runs_04-17-2023_16-39-03.json'
+path = os.getcwd() + '/result/last_runs/last_runs_04-21-2023_10-58-42.json'
+# path = os.getcwd() + '/result/last_runs_04-12-2023_09-49-15.json'
 
 numbers = open(path)
 data = json.load(numbers)
@@ -64,11 +63,9 @@ for m in priorities:
             priority = data["orders"][0]["orders"][i]["priority"]
             throughput_time = data["orders"][0]["orders"][i]["item_results"]["transportation_time"]+data["orders"][0]["orders"][i]["item_results"]["time_at_machines"]+data["orders"][0]["orders"][i]["item_results"]["time_in_interface_buffer"]+data["orders"][0]["orders"][i]["item_results"]["time_in_queue_buffer"]+data["orders"][0]["orders"][i]["item_results"]["wait_for_repair_time"]
             tardiness = data["orders"][0]["orders"][i]["start"]  + throughput_time - length - data["orders"][0]["orders"][i]["due_to"] 
-            
-            if m == 1: 
-                if u == 0:
-                    print(throughput_time)
-                    time.sleep(0.1)
+
+            # if completion_time != 0 and data["orders"][0]["orders"][i]["priority"] == 1 and data["orders"][0]["orders"][i]["urgency"] == 0: 
+            #     print(i, ", ",m, ", ",u, ", ", throughput_time)
 
             lateness = tardiness
             if tardiness < 0:
@@ -78,6 +75,6 @@ for m in priorities:
                 if data["orders"][0]["orders"][i]["priority"] == m and data["orders"][0]["orders"][i]["urgency"] == u:
                     throughput_times.append([throughput_time])
                     tardiness_times.append([tardiness])
-                    
+            
         print(m,",", u,", throughput_time    , ", round(np.mean(throughput_times, axis = 0)[0],1), ", tardiness, ", round(np.mean(tardiness_times, axis = 0)[0],1), ", " ,len(throughput_times))
         

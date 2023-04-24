@@ -6,23 +6,16 @@ import numpy as np
 
 
 # count files in directory that needs to be analyzed
-for roots,dirs, files in os.walk(os.getcwd() + '/result/last_runs/load_analysis/Run_2'):
-    for file in files:
+# path = os.getcwd() + '/result/P_2/Training_TPT/last_runs_04-06-2023_10-30-41.json'
+
+for roots,dirs, files in os.walk(os.getcwd() + '/result/P_2/Benchmarks'):
+    for file in sorted(files):
         if os.path.splitext(file)[1] == '.json':
             path = os.path.join(roots, file)
             numbers = open(path)
             data = json.load(numbers)
-            prio_data = []
-            length = 0
-            priorities = [0,1,2]
-            groups = [0, 1]
-            lenghts = [26.64, 21.55,13.81,18.93]
-            product_types = ["Produkt A","Produkt B","Produkt C","Produkt D"]
             wip = []
-            wip_count, prio_0, prio_1, prio_2 = 0,0,0,0
-            completion_time = 0
             print("________________________________________")
-            print(range(len(data["orders"][0]["orders"])))
             for i in range(len(data["orders"][0]["orders"])):
                 if data["orders"][0]["orders"][i]["item_results"]["completion_time"] != 0:
                     wip_count, nprio_nurgent, prio_nurgent, nprio_urgent, prio_urgent = 0, 0, 0, 0, 0
@@ -47,9 +40,9 @@ for roots,dirs, files in os.walk(os.getcwd() + '/result/last_runs/load_analysis/
                                 prio_urgent += 1
                     
                     wip.append([wip_count, nprio_nurgent, nprio_urgent, prio_nurgent, prio_urgent])
-                    with open('WIP' + '.csv', 'a+', newline='', encoding='utf-8') as file:
-                        writer = csv.writer(file)
-                        writer.writerow([i, wip_count, nprio_nurgent, prio_nurgent, nprio_urgent, prio_urgent])
+                    # with open('WIP' + '.csv', 'a+', newline='', encoding='utf-8') as file:
+                    #     writer = csv.writer(file)
+                    #     writer.writerow([i, wip_count, nprio_nurgent, prio_nurgent, nprio_urgent, prio_urgent])
 
-            print("Total mean WIP: ", np.mean(wip, axis = 0), " , len: ",len(wip))
+            print(file, ". Total mean WIP: ", round(np.mean(wip, axis = 0),2), " , len: ",len(wip))
 
