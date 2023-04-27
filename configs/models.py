@@ -36,7 +36,7 @@ class ReinforceAgent():
         self.episode_step = 6000
         self.hidden_layer_size_1 = 128
         self.target_update = 3
-        self.discount_factor = 0.98 #previous: 0.999
+        self.discount_factor = 0.95 #previous: 0.999
         self.learning_rate = 0.005 #previous: 0.999
         self.epsilon_min = 0.01
         self.epsilon = 1

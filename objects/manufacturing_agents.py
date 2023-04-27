@@ -40,7 +40,7 @@ class ManufacturingAgent:
         
         # Attributes
         self.ruleset = None
-        self.ruleset_train = False 
+        self.operational_mode = False 
         self.smart_init = True
         self.smart_agent = None
         self.smart_id = None
@@ -49,7 +49,7 @@ class ManufacturingAgent:
             self.smart_id = 10
         elif ruleset_id == 11:
             self.smart_id = 10
-            self.ruleset_train = True #operational mode activated
+            self.operational_mode = True #operational mode activated
 
         for ruleset in RuleSet.instances:
             if ruleset.id == ruleset_id:
@@ -212,7 +212,7 @@ class ManufacturingAgent:
         else:  
             identifier += f"_{len(self.cell.machines)}"
     
-        self.smart_agent = ReinforceAgent(smart_state_len, smart_action_len, self.ruleset_train, identifier,self.cell.level)
+        self.smart_agent = ReinforceAgent(smart_state_len, smart_action_len, self.operational_mode, identifier,self.cell.level)
         self.smart_init = False
         self.smart_dynamic_dispatch = True
         # time.sleep(10)

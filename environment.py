@@ -166,7 +166,6 @@ def sim_run_evaluation(sim_env, eval_measures):
     
 
     start_time = time.time()
-    print("\nCalculation finished in %d seconds!" % (time.time() - start_time))
     print(time_tracker.time_action_calc, time_tracker.time_smart_action_calc, time_tracker.time_train_calc, time_tracker.time_destination_calc, time_tracker.time_occupancy_calc, time_tracker.time_state_calc)
     print("time_tracker.action_normal: ", time_tracker.action_normal, ", time_tracker.action_smart: ", time_tracker.action_smart)
 
@@ -197,6 +196,8 @@ def sim_run_evaluation(sim_env, eval_measures):
             for obj_to_check in objects:
                 parameters = {'sim_env': sim_env, 'obj': obj_to_check, 'measures': measures}
                 obj_to_check.result = functionList[focus](**parameters)
+    
+    print("\nCalculation finished in %d seconds!" % (time.time() - start_time))
 
     SimulationResults(sim_env)
 
