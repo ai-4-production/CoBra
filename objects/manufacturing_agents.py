@@ -285,30 +285,56 @@ class ManufacturingAgent:
         state_order_priority = np.multiply(available_destinations, state["priority"])
         state_urgency = np.multiply(available_destinations, state["priority"])
         state_distance = np.multiply(available_destinations, state["distance"])/np.max(state["distance"])
-        state_due_to_available = np.multiply(available_destinations, state["due_to"])
-        time_in_cell_available = np.multiply(available_destinations, state["time_in_cell"])
-        time_in_system_available = np.multiply(available_destinations, state["start"])
-    
 
-        max_time_in_cell = max(abs(i) for i in time_in_cell_available)
-        max_time_in_system = max(abs(i) for i in time_in_system_available)
-        max_due_to = max(abs(i) for i in state_due_to_available)
+        current_sim_time = self.env.now
+        # a = np.empty(len(available_destinations)); a.fill(current_sim_time)
 
-        state_due_to_normalized = np.zeros(len(state_due_to_available))
-        state_time_in_cell_normalized = np.zeros(len(time_in_cell_available))
-        state_time_in_system_normalized = np.zeros(len(time_in_system_available))
+        state_due_to_available = np.multiply(available_destinations, (state["due_to"]))
+        time_in_cell_available = np.multiply(available_destinations, (state["time_in_cell"]))
+        time_in_system_available = np.multiply(available_destinations, (state["start"]))
 
-        if max_due_to != 0:
+        max_time_in_cell = max(i for i in time_in_cell_available)
+        max_time_in_system = max(i for i in time_in_system_available)
+        max_due_to = max(i for i in state_due_to_available)
+
+        min_time_in_cell = min(i for i in time_in_cell_available)
+        min_time_in_system = min(i for i in time_in_system_available)
+        min_due_to = min(i for i in state_due_to_available)
+
+        state_due_to_available_normalized, state_due_to_normalized = np.zeros(len(state_due_to_available)), np.zeros(len(state_due_to_available))
+        time_in_cell_available_normalized, state_time_in_cell_normalized = np.zeros(len(time_in_cell_available)), np.zeros(len(time_in_cell_available))
+        time_in_system_available_normalized, state_time_in_system_normalized = np.zeros(len(time_in_system_available)), np.zeros(len(time_in_cell_available))
+
+        if min_due_to != 0:
             state_due_to_normalized = state_due_to_available / max_due_to
-
+            state_due_to_available_normalized = (2*(max_due_to - state_due_to_available)/(max_due_to - min_due_to)) - 1
+            
         if max_time_in_cell != 0:
             state_time_in_cell_normalized = time_in_cell_available / max_time_in_cell
-
+            time_in_cell_available_normalized = 1 - 2*(max_time_in_cell-time_in_cell_available)/(max_time_in_cell - min_time_in_cell)
+            
         if max_time_in_system != 0:
             state_time_in_system_normalized = time_in_system_available / max_time_in_system
-
-        state_RL = np.vstack((state_due_to_normalized, state_time_in_cell_normalized, 
-                            state_time_in_system_normalized, state_distance, state_order_priority, state_urgency)).T.ravel().tolist()
+            time_in_system_available_normalized = 1 - 2*(max_time_in_system - time_in_system_available)/(max_time_in_system - min_time_in_system)
+        
+        # only keep correct values and not -1 values from subtraction
+        state_due_to_available_normalized = np.multiply(available_destinations, state_due_to_available_normalized)
+        time_in_cell_available_normalized = np.multiply(available_destinations, time_in_cell_available_normalized)
+        time_in_system_available_normalized = np.multiply(available_destinations, time_in_system_available_normalized)
+        
+        if max_time_in_system != 0:
+            # print(dir(order_state))
+            # time.sleep(10)
+            print(order_state.loc[:, "pos_type"])
+            print(order_state.loc[:, "pos"])
+            time.sleep(1000)
+            print("state_due_to_normalized:", state_due_to_available_normalized)
+            print("time_in_cell_available_normalized: ", time_in_cell_available_normalized)
+            print("state_time_in_system_normalized:", time_in_system_available_normalized)
+            print("___________________________________________________")
+    
+        state_RL = np.vstack((state_due_to_available_normalized, time_in_cell_available_normalized, 
+                            time_in_system_available_normalized, state_distance, state_order_priority, state_urgency)).T.ravel().tolist()
 
         return state_RL
 
