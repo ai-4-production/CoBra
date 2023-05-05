@@ -2,9 +2,9 @@
 
 configuration = {
     # "SETUP_FILE": "2_Layout_Scenario_Paper_AI.txt",
-    # "SETUP_FILE": "2_Layout_Scenario_Paper_AI_operation.txt",
+    "SETUP_FILE": "2_Layout_Scenario_Paper_AI_dynamic.txt",
     # "SETUP_FILE": "2_Layout_Scenario_Paper_AI_light.txt",
-    "SETUP_FILE": "2_Layout_Scenario_Paper_Heuristic.txt",
+    # "SETUP_FILE": "2_Layout_Scenario_Paper_Heuristic.txt",
     # "SETUP_FILE": "2_Layout_Scenario_Paper_EDD.txt",
 
     "SIMULATION_RANGE": 7200,

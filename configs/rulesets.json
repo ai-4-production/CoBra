@@ -212,7 +212,7 @@
             {
               "id": 10,
               "name": "Deep_RL",
-              "description": "Dynamischer Reinforcement Agent",
+              "description": "Dynamischer Reinforcement Agent Training",
               "rules":
               {
                 "dynamic_dispatch": true,
@@ -222,7 +222,7 @@
             {
               "id": 11,
               "name": "Deep_RL",
-              "description": "Dynamischer Reinforcement Agent",
+              "description": "Dynamischer Reinforcement Agent Operation",
               "rules":
               {
                 "dynamic_dispatch": true,
