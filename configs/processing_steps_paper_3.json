@@ -1,0 +1,40 @@
+{
+  "tasks":
+          [
+            {
+              "id": 1,
+              "title": "Milling",
+              "base_duration": 7
+            },
+            {
+              "id": 2,
+              "title": "Polishing",
+              "base_duration": 4
+            },
+            {
+              "id": 3,
+              "title": "Milling_2",
+              "base_duration": 3
+            },
+            {
+              "id": 4,
+              "title": "Polishing_2",
+              "base_duration": 8
+            },
+            {
+              "id": 5,
+              "title": "Hardening",
+              "base_duration": 4
+            },
+            {
+              "id": 6,
+              "title": "Labelling",
+              "base_duration": 4
+            },
+            {
+              "id": 7,
+              "title": "Quality check",
+              "base_duration": 2
+            }
+          ]
+}
