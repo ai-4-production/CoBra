@@ -82,9 +82,9 @@ class ReinforceAgent():
         model = Sequential()
         if self.dqn == True or (self.double_DQN == True and self.dueling_DQN == False):
             if self.dqn == True:
-                print("Compiled DQN model")
+                print("Compiled new DQN model for agent ", self.identifier)
             elif self.double_DQN == True:
-                print("Compiled double DQN model")
+                print("Compiled new double DQN model for agent ", self.identifier)
             
             dropout = 0.01
 
@@ -99,9 +99,9 @@ class ReinforceAgent():
         # define a dueling DQN neural network structure with an advantage and critic network
         if self.dueling_DQN == True:
             if self.double_DQN == True:
-                print("Compiled dueling double DQN model")
+                print("Compiled new dueling double DQN model for agent ", self.identifier)
             else: 
-                print("Compiled dueling DQN model")
+                print("Compiled new dueling DQN model for agent ", self.identifier)
             input_states = Input(shape=(self.state_size,))
 
             # Common hidden layers

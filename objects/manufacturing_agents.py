@@ -321,17 +321,6 @@ class ManufacturingAgent:
         state_due_to_available_normalized = np.multiply(available_destinations, state_due_to_available_normalized)
         time_in_cell_available_normalized = np.multiply(available_destinations, time_in_cell_available_normalized)
         time_in_system_available_normalized = np.multiply(available_destinations, time_in_system_available_normalized)
-        
-        if max_time_in_system != 0:
-            # print(dir(order_state))
-            # time.sleep(10)
-            print(order_state.loc[:, "pos_type"])
-            print(order_state.loc[:, "pos"])
-            time.sleep(1000)
-            print("state_due_to_normalized:", state_due_to_available_normalized)
-            print("time_in_cell_available_normalized: ", time_in_cell_available_normalized)
-            print("state_time_in_system_normalized:", time_in_system_available_normalized)
-            print("___________________________________________________")
     
         state_RL = np.vstack((state_due_to_available_normalized, time_in_cell_available_normalized, 
                             time_in_system_available_normalized, state_distance, state_order_priority, state_urgency)).T.ravel().tolist()
@@ -520,10 +509,9 @@ class ManufacturingAgent:
 
             reward = reward_layer.reward_smart_dispatch(old_state, new_state, order, action, self.cell.type)
 
-            if self.cell.id == 7:
-                with open('../result/rewards/rewards' + self.timestamp + '_level_' + str(self.cell.level) + '_cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
-                    writer = csv.writer(file)
-                    writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, round(reward,0), priority, urgency, round(distance,2), len_usable_orders, action, action_RL]))
+            with open('../result/rewards/rewards_' + self.timestamp + '_level_' + str(self.cell.level) + '_cell.id-' + str(self.cell.id) + '_agent-' + agent_name +  '_level-' + '_parent-' + parent + '_rule-' + str(self.ruleset.id) +  '.csv', 'a+', newline='', encoding='utf-8') as file:
+                writer = csv.writer(file)
+                writer.writerow(list([self.cell.id, self.ruleset.id, agent_name, self.count_smart, round(reward,0), priority, urgency, round(distance,2), len_usable_orders, action, action_RL]))
             smart_agent.appendMemory(smart_agent, self.cell.id, state_RL, new_state_RL, action_RL, reward)
 
     def get_processable_orders(self, old_state):
