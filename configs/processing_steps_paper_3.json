@@ -19,22 +19,22 @@
             {
               "id": 4,
               "title": "Polishing_2",
-              "base_duration": 8
+              "base_duration": 12
             },
             {
               "id": 5,
               "title": "Hardening",
-              "base_duration": 4
+              "base_duration": 6
             },
             {
               "id": 6,
               "title": "Labelling",
-              "base_duration": 4
+              "base_duration": 6
             },
             {
               "id": 7,
               "title": "Quality check",
-              "base_duration": 2
+              "base_duration": 3
             }
           ]
 }
