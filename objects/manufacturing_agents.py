@@ -40,11 +40,11 @@ class ManufacturingAgent:
         
         # Attributes
         self.ruleset = None
-        self.operational_mode = False 
         self.smart_init = True
         self.smart_agent = None
         self.smart_id = None
 
+        self.operational_mode = False 
         if ruleset_id == 10:
             self.smart_id = 10
         elif ruleset_id == 11:
