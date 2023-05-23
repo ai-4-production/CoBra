@@ -26,7 +26,7 @@ def load_processing_steps():
     directory = os.path.dirname(path).replace("objects", "configs")
     os.chdir(directory)
 
-    processing_steps = json.load(open("processing_steps_paper_2.json", encoding="UTF-8"))
+    processing_steps = json.load(open("processing_steps_paper_3.json", encoding="UTF-8"))
 
     # Hidden dummy processing step for finished orders
     ProcessingStep({"id": -1, "title": "Order finished", "base_duration": 0}, hidden=True)

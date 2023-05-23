@@ -1,0 +1,54 @@
+{
+  "order_types":
+          [
+            {
+              "title": "Produkt A",
+              "id": 1,
+              "frequency_factor": 4,
+              "duration_factor": 1,
+              "composition": {
+                "copper": 1.0,
+                "steel": 1.0,
+                "plastic": 1.0
+              },
+              "work_schedule": [1,2,3]
+            },
+            {
+              "title": "Produkt B",
+              "id": 2,
+              "frequency_factor": 2.5,
+              "duration_factor": 1,
+              "composition": {
+                "copper": 1.0,
+                "steel": 1.0,
+                "plastic": 1.0
+              },
+              "work_schedule": [4,5,6]
+            },
+            {
+              "title": "Produkt C",
+              "id": 3,
+              "frequency_factor": 1,
+              "duration_factor": 1,
+              "composition": {
+                "copper": 1.0,
+                "steel": 1.0,
+                "plastic": 1.0
+              },
+              "work_schedule": [1,2,3,7]
+            },
+            {
+              "title": "Produkt D",
+              "id": 5,
+              "frequency_factor": 1,
+              "duration_factor": 1,
+              "composition": {
+                "copper": 1.0,
+                "steel": 1.0,
+                "plastic": 1.0
+              },
+              "work_schedule": [4,5,6,7]
+            }
+            
+          ]
+}

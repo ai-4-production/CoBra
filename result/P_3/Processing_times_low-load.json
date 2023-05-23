@@ -1,0 +1,1327 @@
+{
+    "simulation_runs": [
+        {
+            "run_number": 1,
+            "seed_incoming_orders": 82704353,
+            "seed_machine_interruptions": 29378374,
+            "simulation_results": {
+                "arrived_orders": 40,
+                "processed_quantity": 40,
+                "processed_in_time": 31,
+                "processed_in_time_rate": 77.5,
+                "in_time_rate_by_order_type": [
+                    [
+                        "Produkt A",
+                        90.0
+                    ],
+                    [
+                        "Produkt B",
+                        80.0
+                    ],
+                    [
+                        "Produkt C",
+                        70.0
+                    ],
+                    [
+                        "Produkt D",
+                        70.0
+                    ]
+                ],
+                "processed_by_order_type": [
+                    [
+                        "Produkt A",
+                        10
+                    ],
+                    [
+                        "Produkt B",
+                        10
+                    ],
+                    [
+                        "Produkt C",
+                        10
+                    ],
+                    [
+                        "Produkt D",
+                        10
+                    ]
+                ],
+                "mean_tardiness": 5.51,
+                "mean_lateness": -10.88
+            },
+            "cells": [
+                {
+                    "id": 0,
+                    "level": 0,
+                    "parent": 3,
+                    "cell_results": {
+                        "mean_time_in_cell": 18.53,
+                        "mean_items_in_cell": 0.26,
+                        "capacity": 21,
+                        "storage_utilization": 1.23
+                    },
+                    "agents": [
+                        {
+                            "ruleset": "FiFo Local",
+                            "agent_results": {
+                                "moving_time": 2.2,
+                                "transportation_time": 1.78,
+                                "waiting_time": 0,
+                                "idle_time": 1421.8,
+                                "task_time": 18.2,
+                                "started_tasks": 80,
+                                "avg_task_length": 0.23,
+                                "utilization": 0.01
+                            }
+                        },
+                        {
+                            "ruleset": "FiFo Local",
+                            "agent_results": {
+                                "moving_time": 0,
+                                "transportation_time": 0,
+                                "waiting_time": 0,
+                                "idle_time": 1440,
+                                "task_time": 0,
+                                "started_tasks": 0,
+                                "avg_task_length": 0,
+                                "utilization": 0.0
+                            }
+                        }
+                    ],
+                    "machines": [
+                        {
+                            "type": "Milling",
+                            "machine_results": {
+                                "setup_events": 20,
+                                "setup_time": 20.0,
+                                "idle_time": 1030.16,
+                                "processing_time": 116.2,
+                                "processed_quantity": 20,
+                                "finished_quantity": 20,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        },
+                        {
+                            "type": "Milling",
+                            "machine_results": {
+                                "setup_events": 0,
+                                "setup_time": 0,
+                                "idle_time": 0.0,
+                                "processing_time": 0,
+                                "processed_quantity": 0,
+                                "finished_quantity": 0,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        },
+                        {
+                            "type": "Polishing",
+                            "machine_results": {
+                                "setup_events": 20,
+                                "setup_time": 20.0,
+                                "idle_time": 1085.5,
+                                "processing_time": 66.4,
+                                "processed_quantity": 20,
+                                "finished_quantity": 20,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        },
+                        {
+                            "type": "Milling_2",
+                            "machine_results": {
+                                "setup_events": 20,
+                                "setup_time": 20.0,
+                                "idle_time": 1106.8,
+                                "processing_time": 49.8,
+                                "processed_quantity": 20,
+                                "finished_quantity": 20,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        }
+                    ],
+                    "buffer": [
+                        {
+                            "type": "Input-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 71.99
+                            }
+                        },
+                        {
+                            "type": "Output-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 71.06
+                            }
+                        },
+                        {
+                            "type": "Storage-Buffer",
+                            "capacity": 3,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": NaN
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 1,
+                    "level": 0,
+                    "parent": 3,
+                    "cell_results": {
+                        "mean_time_in_cell": 26.61,
+                        "mean_items_in_cell": 0.37,
+                        "capacity": 21,
+                        "storage_utilization": 1.76
+                    },
+                    "agents": [
+                        {
+                            "ruleset": "FiFo Local",
+                            "agent_results": {
+                                "moving_time": 2.2,
+                                "transportation_time": 1.78,
+                                "waiting_time": 0,
+                                "idle_time": 1421.8,
+                                "task_time": 18.2,
+                                "started_tasks": 80,
+                                "avg_task_length": 0.23,
+                                "utilization": 0.01
+                            }
+                        },
+                        {
+                            "ruleset": "FiFo Local",
+                            "agent_results": {
+                                "moving_time": 0,
+                                "transportation_time": 0,
+                                "waiting_time": 0,
+                                "idle_time": 1440,
+                                "task_time": 0,
+                                "started_tasks": 0,
+                                "avg_task_length": 0,
+                                "utilization": 0.0
+                            }
+                        }
+                    ],
+                    "machines": [
+                        {
+                            "type": "Polishing_2",
+                            "machine_results": {
+                                "setup_events": 20,
+                                "setup_time": 20.0,
+                                "idle_time": 982.31,
+                                "processing_time": 199.2,
+                                "processed_quantity": 20,
+                                "finished_quantity": 20,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        },
+                        {
+                            "type": "Polishing_2",
+                            "machine_results": {
+                                "setup_events": 0,
+                                "setup_time": 0,
+                                "idle_time": 0.0,
+                                "processing_time": 0,
+                                "processed_quantity": 0,
+                                "finished_quantity": 0,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        },
+                        {
+                            "type": "Hardening",
+                            "machine_results": {
+                                "setup_events": 20,
+                                "setup_time": 20.0,
+                                "idle_time": 1104.88,
+                                "processing_time": 83.0,
+                                "processed_quantity": 20,
+                                "finished_quantity": 20,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        },
+                        {
+                            "type": "Labelling",
+                            "machine_results": {
+                                "setup_events": 20,
+                                "setup_time": 20.0,
+                                "idle_time": 1083.36,
+                                "processing_time": 99.6,
+                                "processed_quantity": 20,
+                                "finished_quantity": 20,
+                                "time_to_repair": 12.11,
+                                "failure_events": 1,
+                                "avg_time_between_failure": 1427.89,
+                                "avg_processing_time_between_failure": 99.6,
+                                "avg_time_to_repair": 12.11,
+                                "availability": 99.16
+                            }
+                        }
+                    ],
+                    "buffer": [
+                        {
+                            "type": "Input-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 70.43
+                            }
+                        },
+                        {
+                            "type": "Output-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 69.14
+                            }
+                        },
+                        {
+                            "type": "Storage-Buffer",
+                            "capacity": 3,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": NaN
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "level": 0,
+                    "parent": 3,
+                    "cell_results": {
+                        "mean_time_in_cell": 4.94,
+                        "mean_items_in_cell": 0.07,
+                        "capacity": 8,
+                        "storage_utilization": 0.86
+                    },
+                    "agents": [
+                        {
+                            "ruleset": "FiFo Local",
+                            "agent_results": {
+                                "moving_time": 1.09,
+                                "transportation_time": 0.67,
+                                "waiting_time": 0,
+                                "idle_time": 1430.91,
+                                "task_time": 9.09,
+                                "started_tasks": 40,
+                                "avg_task_length": 0.23,
+                                "utilization": 0.01
+                            }
+                        }
+                    ],
+                    "machines": [
+                        {
+                            "type": "Quality check",
+                            "machine_results": {
+                                "setup_events": 20,
+                                "setup_time": 20.0,
+                                "idle_time": 1150.55,
+                                "processing_time": 49.8,
+                                "processed_quantity": 20,
+                                "finished_quantity": 20,
+                                "time_to_repair": 0,
+                                "failure_events": 0,
+                                "avg_time_between_failure": 0,
+                                "avg_processing_time_between_failure": 0,
+                                "avg_time_to_repair": 0,
+                                "availability": 100.0
+                            }
+                        }
+                    ],
+                    "buffer": [
+                        {
+                            "type": "Input-Buffer",
+                            "capacity": 1,
+                            "buffer_results": {
+                                "time_full": 2.42,
+                                "overfill_rate": 0.17,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 67.94
+                            }
+                        },
+                        {
+                            "type": "Output-Buffer",
+                            "capacity": 1,
+                            "buffer_results": {
+                                "time_full": 2.83,
+                                "overfill_rate": 0.2,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 67.7
+                            }
+                        },
+                        {
+                            "type": "Storage-Buffer",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": NaN
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 3,
+                    "level": 1,
+                    "parent": null,
+                    "cell_results": {
+                        "mean_time_in_cell": 0.78,
+                        "mean_items_in_cell": 0.02,
+                        "capacity": 23,
+                        "storage_utilization": 0.09
+                    },
+                    "agents": [
+                        {
+                            "ruleset": "FiFo Local",
+                            "agent_results": {
+                                "moving_time": 11.28,
+                                "transportation_time": 5.64,
+                                "waiting_time": 0,
+                                "idle_time": 1408.72,
+                                "task_time": 31.28,
+                                "started_tasks": 100,
+                                "avg_task_length": 0.31,
+                                "utilization": 0.02
+                            }
+                        },
+                        {
+                            "ruleset": "FiFo Local",
+                            "agent_results": {
+                                "moving_time": 0,
+                                "transportation_time": 0,
+                                "waiting_time": 0,
+                                "idle_time": 1440,
+                                "task_time": 0,
+                                "started_tasks": 0,
+                                "avg_task_length": 0,
+                                "utilization": 0.0
+                            }
+                        },
+                        {
+                            "ruleset": "FiFo Local",
+                            "agent_results": {
+                                "moving_time": 0,
+                                "transportation_time": 0,
+                                "waiting_time": 0,
+                                "idle_time": 1440,
+                                "task_time": 0,
+                                "started_tasks": 0,
+                                "avg_task_length": 0,
+                                "utilization": 0.0
+                            }
+                        }
+                    ],
+                    "machines": [],
+                    "buffer": [
+                        {
+                            "type": "Input-Buffer",
+                            "capacity": 3,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 35.85
+                            }
+                        },
+                        {
+                            "type": "Output-Buffer",
+                            "capacity": 3,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 35.52
+                            }
+                        },
+                        {
+                            "type": "Storage-Buffer",
+                            "capacity": 4,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": NaN
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Outgoing",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 71.99
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Outgoing",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 70.43
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Outgoing",
+                            "capacity": 1,
+                            "buffer_results": {
+                                "time_full": 2.42,
+                                "overfill_rate": 0.17,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 67.94
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Ingoing",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 71.06
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Ingoing",
+                            "capacity": 2,
+                            "buffer_results": {
+                                "time_full": 0,
+                                "overfill_rate": 0.0,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 69.14
+                            }
+                        },
+                        {
+                            "type": "Interface-Buffer Ingoing",
+                            "capacity": 1,
+                            "buffer_results": {
+                                "time_full": 2.83,
+                                "overfill_rate": 0.2,
+                                "avg_items_in_storage": 0.0,
+                                "avg_time_in_storage": 67.7
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "orders": [
+        {
+            "run_number": 1,
+            "seed_incoming_orders": 82704353,
+            "orders": [
+                {
+                    "type": "Produkt A",
+                    "start": 0.0,
+                    "due_to": 30.0,
+                    "priority": 1,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 19.09,
+                        "tardiness": 0,
+                        "lateness": -10.91,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 18.22,
+                        "time_in_interface_buffer": 0.67,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 11.62,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt B",
+                    "start": 31.0,
+                    "due_to": 88.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 26.61,
+                        "tardiness": 0,
+                        "lateness": -30.39,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 25.69,
+                        "time_in_interface_buffer": 0.72,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 19.09,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt C",
+                    "start": 62.0,
+                    "due_to": 121.0,
+                    "priority": 1,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 24.39,
+                        "tardiness": 0,
+                        "lateness": -34.61,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 22.91,
+                        "time_in_interface_buffer": 1.18,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 14.11,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt D",
+                    "start": 93.0,
+                    "due_to": 131.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 31.88,
+                        "tardiness": 0,
+                        "lateness": -6.12,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 30.38,
+                        "time_in_interface_buffer": 1.21,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 21.58,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt A",
+                    "start": 124.0,
+                    "due_to": 167.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 19.17,
+                        "tardiness": 0,
+                        "lateness": -23.83,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 18.22,
+                        "time_in_interface_buffer": 0.75,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 11.62,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt B",
+                    "start": 155.0,
+                    "due_to": 196.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 26.63,
+                        "tardiness": 0,
+                        "lateness": -14.37,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 25.69,
+                        "time_in_interface_buffer": 0.74,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 19.09,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt C",
+                    "start": 186.0,
+                    "due_to": 186.0,
+                    "priority": 0,
+                    "urgency": 1,
+                    "item_results": {
+                        "completion_time": 24.41,
+                        "tardiness": 24.41,
+                        "lateness": 24.41,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 22.91,
+                        "time_in_interface_buffer": 1.2,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 14.11,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt D",
+                    "start": 217.0,
+                    "due_to": 255.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 31.88,
+                        "tardiness": 0,
+                        "lateness": -6.12,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 30.38,
+                        "time_in_interface_buffer": 1.21,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 21.58,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt A",
+                    "start": 248.0,
+                    "due_to": 298.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 19.17,
+                        "tardiness": 0,
+                        "lateness": -30.83,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 18.22,
+                        "time_in_interface_buffer": 0.75,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 11.62,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt B",
+                    "start": 279.0,
+                    "due_to": 328.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 26.63,
+                        "tardiness": 0,
+                        "lateness": -22.37,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 25.69,
+                        "time_in_interface_buffer": 0.74,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 19.09,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt C",
+                    "start": 310.0,
+                    "due_to": 345.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 24.41,
+                        "tardiness": 0,
+                        "lateness": -10.59,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 22.91,
+                        "time_in_interface_buffer": 1.2,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 14.11,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt D",
+                    "start": 341.0,
+                    "due_to": 394.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 31.88,
+                        "tardiness": 0,
+                        "lateness": -21.12,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 30.38,
+                        "time_in_interface_buffer": 1.21,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 21.58,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt A",
+                    "start": 372.0,
+                    "due_to": 404.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 19.17,
+                        "tardiness": 0,
+                        "lateness": -12.83,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 18.22,
+                        "time_in_interface_buffer": 0.75,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 11.62,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt B",
+                    "start": 403.0,
+                    "due_to": 456.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 26.63,
+                        "tardiness": 0,
+                        "lateness": -26.37,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 25.69,
+                        "time_in_interface_buffer": 0.74,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 19.09,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt C",
+                    "start": 434.0,
+                    "due_to": 482.0,
+                    "priority": 1,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 24.41,
+                        "tardiness": 0,
+                        "lateness": -23.59,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 22.91,
+                        "time_in_interface_buffer": 1.2,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 14.11,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt D",
+                    "start": 465.0,
+                    "due_to": 500.0,
+                    "priority": 1,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 31.88,
+                        "tardiness": 0,
+                        "lateness": -3.12,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 30.38,
+                        "time_in_interface_buffer": 1.21,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 21.58,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt A",
+                    "start": 496.0,
+                    "due_to": 496.0,
+                    "priority": 0,
+                    "urgency": 1,
+                    "item_results": {
+                        "completion_time": 19.17,
+                        "tardiness": 19.17,
+                        "lateness": 19.17,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 18.22,
+                        "time_in_interface_buffer": 0.75,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 11.62,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt B",
+                    "start": 527.0,
+                    "due_to": 580.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 26.63,
+                        "tardiness": 0,
+                        "lateness": -26.37,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 25.69,
+                        "time_in_interface_buffer": 0.74,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 19.09,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt C",
+                    "start": 558.0,
+                    "due_to": 558.0,
+                    "priority": 1,
+                    "urgency": 1,
+                    "item_results": {
+                        "completion_time": 24.41,
+                        "tardiness": 24.41,
+                        "lateness": 24.41,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 22.91,
+                        "time_in_interface_buffer": 1.2,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 14.11,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt D",
+                    "start": 589.0,
+                    "due_to": 645.0,
+                    "priority": 1,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 31.88,
+                        "tardiness": 0,
+                        "lateness": -24.12,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 30.38,
+                        "time_in_interface_buffer": 1.21,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 21.58,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt A",
+                    "start": 620.0,
+                    "due_to": 660.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 19.17,
+                        "tardiness": 0,
+                        "lateness": -20.83,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 18.22,
+                        "time_in_interface_buffer": 0.75,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 11.62,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt B",
+                    "start": 651.0,
+                    "due_to": 651.0,
+                    "priority": 0,
+                    "urgency": 1,
+                    "item_results": {
+                        "completion_time": 26.63,
+                        "tardiness": 26.63,
+                        "lateness": 26.63,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 25.69,
+                        "time_in_interface_buffer": 0.74,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 19.09,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt C",
+                    "start": 682.0,
+                    "due_to": 722.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 24.41,
+                        "tardiness": 0,
+                        "lateness": -15.59,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 22.91,
+                        "time_in_interface_buffer": 1.2,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 14.11,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt D",
+                    "start": 713.0,
+                    "due_to": 713.0,
+                    "priority": 0,
+                    "urgency": 1,
+                    "item_results": {
+                        "completion_time": 31.88,
+                        "tardiness": 31.88,
+                        "lateness": 31.88,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 30.38,
+                        "time_in_interface_buffer": 1.21,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 21.58,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt A",
+                    "start": 744.0,
+                    "due_to": 796.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 19.17,
+                        "tardiness": 0,
+                        "lateness": -32.83,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 18.22,
+                        "time_in_interface_buffer": 0.75,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 11.62,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt B",
+                    "start": 775.0,
+                    "due_to": 818.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 26.63,
+                        "tardiness": 0,
+                        "lateness": -16.37,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 25.69,
+                        "time_in_interface_buffer": 0.74,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 19.09,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt C",
+                    "start": 806.0,
+                    "due_to": 806.0,
+                    "priority": 0,
+                    "urgency": 1,
+                    "item_results": {
+                        "completion_time": 24.41,
+                        "tardiness": 24.41,
+                        "lateness": 24.41,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 22.91,
+                        "time_in_interface_buffer": 1.2,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 14.11,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt D",
+                    "start": 837.0,
+                    "due_to": 837.0,
+                    "priority": 1,
+                    "urgency": 1,
+                    "item_results": {
+                        "completion_time": 31.88,
+                        "tardiness": 31.88,
+                        "lateness": 31.88,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 30.38,
+                        "time_in_interface_buffer": 1.21,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 21.58,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt A",
+                    "start": 868.0,
+                    "due_to": 925.0,
+                    "priority": 1,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 19.17,
+                        "tardiness": 0,
+                        "lateness": -37.83,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 18.22,
+                        "time_in_interface_buffer": 0.75,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 11.62,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt B",
+                    "start": 899.0,
+                    "due_to": 953.0,
+                    "priority": 1,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 26.63,
+                        "tardiness": 0,
+                        "lateness": -27.37,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 25.69,
+                        "time_in_interface_buffer": 0.74,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 19.09,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt C",
+                    "start": 930.0,
+                    "due_to": 965.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 24.41,
+                        "tardiness": 0,
+                        "lateness": -10.59,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 22.91,
+                        "time_in_interface_buffer": 1.2,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 14.11,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt D",
+                    "start": 961.0,
+                    "due_to": 994.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 43.98,
+                        "tardiness": 10.98,
+                        "lateness": 10.98,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 42.49,
+                        "time_in_interface_buffer": 1.2,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 21.58,
+                        "wait_for_repair_time": 12.11
+                    }
+                },
+                {
+                    "type": "Produkt A",
+                    "start": 992.0,
+                    "due_to": 1035.0,
+                    "priority": 1,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 19.15,
+                        "tardiness": 0,
+                        "lateness": -23.85,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 18.22,
+                        "time_in_interface_buffer": 0.73,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 11.62,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt B",
+                    "start": 1023.0,
+                    "due_to": 1023.0,
+                    "priority": 0,
+                    "urgency": 1,
+                    "item_results": {
+                        "completion_time": 26.63,
+                        "tardiness": 26.63,
+                        "lateness": 26.63,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 25.69,
+                        "time_in_interface_buffer": 0.74,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 19.09,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt C",
+                    "start": 1054.0,
+                    "due_to": 1102.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 24.41,
+                        "tardiness": 0,
+                        "lateness": -23.59,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 22.91,
+                        "time_in_interface_buffer": 1.2,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 14.11,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt D",
+                    "start": 1085.0,
+                    "due_to": 1138.0,
+                    "priority": 1,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 31.88,
+                        "tardiness": 0,
+                        "lateness": -21.12,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 30.38,
+                        "time_in_interface_buffer": 1.21,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 21.58,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt A",
+                    "start": 1116.0,
+                    "due_to": 1153.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 19.17,
+                        "tardiness": 0,
+                        "lateness": -17.83,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 18.22,
+                        "time_in_interface_buffer": 0.75,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 11.62,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt B",
+                    "start": 1147.0,
+                    "due_to": 1196.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 26.63,
+                        "tardiness": 0,
+                        "lateness": -22.37,
+                        "transportation_time": 0.2,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 25.69,
+                        "time_in_interface_buffer": 0.74,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 19.09,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt C",
+                    "start": 1178.0,
+                    "due_to": 1237.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 24.41,
+                        "tardiness": 0,
+                        "lateness": -34.59,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 22.91,
+                        "time_in_interface_buffer": 1.2,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 14.11,
+                        "wait_for_repair_time": 0
+                    }
+                },
+                {
+                    "type": "Produkt D",
+                    "start": 1209.0,
+                    "due_to": 1264.0,
+                    "priority": 0,
+                    "urgency": 0,
+                    "item_results": {
+                        "completion_time": 31.88,
+                        "tardiness": 0,
+                        "lateness": -23.12,
+                        "transportation_time": 0.29,
+                        "avg_transportation_time": 0.03,
+                        "time_at_machines": 30.38,
+                        "time_in_interface_buffer": 1.2,
+                        "time_in_queue_buffer": 0,
+                        "production_time": 21.58,
+                        "wait_for_repair_time": 0
+                    }
+                }
+            ]
+        }
+    ]
+}
