@@ -21,6 +21,7 @@ penalty_prioritized = 1.5
 penalty_rush = 2.0
 
 total_revenue = 0
+
 for order in range(len(data["orders"][0]["orders"])):
     type = data["orders"][0]["orders"][order]["type"]
     priority = data["orders"][0]["orders"][order]["priority"]
